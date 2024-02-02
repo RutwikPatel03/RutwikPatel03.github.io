@@ -1,0 +1,30 @@
+  body {
+    background-color: lightyellow;
+    font-family: -apple-system,BlinkMacSystemFont,segoe ui,Roboto,Oxygen,Ubuntu,Cantarell,open sans,helvetica neue,sans-serif;
+font-size: 18px;
+line-height: 1.6;
+  }
+
+  .maincontent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    align-items: center;
+    height: 80%;
+    text-align: center;
+    margin-top: 200px;
+  }
+
+  .img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: lightyellow;
+  }
+
+  .img1 {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: lightyellow;
+  }
