@@ -8,10 +8,19 @@ const elementToggleFunc = function (elem) {
 // sidebar variables
 const sidebar = document.querySelector("[data-sidebar]");
 const sidebarBtn = document.querySelector("[data-sidebar-btn]");
+const chevronIcon = document.getElementById("chevron-icon");
 
 // sidebar toggle functionality for mobile
 sidebarBtn.addEventListener("click", function () {
   elementToggleFunc(sidebar);
+
+  // Toggle between chevron-down and chevron-up
+  if (sidebar.classList.contains("active")) {
+    chevronIcon.setAttribute("name", "chevron-up");
+  } else {
+    chevronIcon.setAttribute("name", "chevron-down");
+  }
+
 });
 
 // custom select variables
@@ -88,13 +97,15 @@ const pages = document.querySelectorAll("[data-page]");
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-    for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
-        pages[i].classList.add("active");
+    const targetPage = this.getAttribute("data-nav-link");
+
+    for (let j = 0; j < pages.length; j++) {
+      if (pages[j].getAttribute("data-page") === targetPage) {
+        pages[j].classList.add("active");
         navigationLinks[i].classList.add("active");
         window.scrollTo(0, 0);
       } else {
-        pages[i].classList.remove("active");
+        pages[j].classList.remove("active");
         navigationLinks[i].classList.remove("active");
       }
     }
@@ -102,7 +113,9 @@ for (let i = 0; i < navigationLinks.length; i++) {
 }
 
 
+
 function showAlert(event) {
+  elementToggleFunc(sidebar);
   event.preventDefault(); // Prevent the form from submitting
   alert('Please contact us directly at rutwikpatel1313@gmail.com. This functionality is currently unavailable. Thank you!');
 }

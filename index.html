@@ -55,7 +55,7 @@
         <button class="info_more-btn" data-sidebar-btn>
           <span>Show Contacts</span>
 
-          <ion-icon name="chevron-down"></ion-icon>
+          <ion-icon id="chevron-icon" name="chevron-down" style="color: black;"></ion-icon>
         </button>
 
       </div>
@@ -69,7 +69,7 @@
           <li class="contact-item">
 
             <div class="icon-box">
-              <ion-icon name="mail-outline"></ion-icon>
+              <ion-icon name="mail-outline" style="color: black;"></ion-icon>
             </div>
 
             <div class="contact-info">
@@ -83,7 +83,7 @@
           <li class="contact-item">
 
             <div class="icon-box">
-              <ion-icon name="phone-portrait-outline"></ion-icon>
+              <ion-icon name="phone-portrait-outline" style="color: black;"></ion-icon>
             </div>
 
             <div class="contact-info">
@@ -97,7 +97,7 @@
           <li class="contact-item">
 
             <div class="icon-box">
-              <ion-icon name="location-outline"></ion-icon>
+              <ion-icon name="location-outline" style="color: black;"></ion-icon>
             </div>
 
             <div class="contact-info">
@@ -116,25 +116,25 @@
 
           <li class="social-item">
             <a href="https://www.linkedin.com/in/rutwikpatel13" class="social-link" target="_blank" rel="noopener noreferrer">
-              <ion-icon name="logo-linkedin"></ion-icon>
+              <ion-icon name="logo-linkedin" style="color: rgb(13, 10, 187);"></ion-icon>
             </a>
           </li>
 
           <li class="social-item">
             <a href="https://github.com/RutwikPatel13" class="social-link" target="_blank" rel="noopener noreferrer">
-              <ion-icon name="logo-github"></ion-icon>
+              <ion-icon name="logo-github" style="color: black;"></ion-icon>
             </a>
           </li>
 
           <li class="social-item">
             <a href="https://medium.com/@rutwikpatel1313" class="social-link" target="_blank" rel="noopener noreferrer">
-              <ion-icon name="logo-medium"></ion-icon>
+              <ion-icon name="logo-medium" style="color: black;"></ion-icon>
             </a>
           </li>
 
           <li class="social-item">
             <a href="https://www.instagram.com/rutwik1313" class="social-link" target="_blank" rel="noopener noreferrer">
-              <ion-icon name="logo-instagram"></ion-icon>
+              <ion-icon name="logo-instagram" style="color: rgb(207, 8, 187);"></ion-icon>
             </a>
           </li>
 
@@ -163,28 +163,29 @@
         <ul class="navbar-list">
 
           <li class="navbar-item">
-            <button class="navbar-link  active" data-nav-link>About</button>
+            <button class="navbar-link" data-nav-link="About">About</button>
           </li>
-
+          
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Resume</button>
+            <button class="navbar-link" data-nav-link="ExperienceEducation"> Background </button>
           </li>
-
+          
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Portfolio</button>
+            <button class="navbar-link" data-nav-link="Portfolio">Projects</button>
           </li>
-
+          
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Publication</button>
+            <button class="navbar-link" data-nav-link="Publication">Publication</button>
           </li>
-
+          
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Blog</button>
+            <button class="navbar-link" data-nav-link="Blog">Blog</button>
           </li>
-
+          
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Contact</button>
+            <button class="navbar-link" data-nav-link="Contact">Contact</button>
           </li>
+          
 
         </ul>
 
@@ -198,7 +199,7 @@
         - #ABOUT
       -->
 
-      <article class="about  active" data-page="about">
+      <article class="about  active" data-page="About">
 
         <header>
           <h2 class="h2 article-title">About me</h2>
@@ -228,7 +229,7 @@
 
               <div class="service-icon-box">
                 <img src="./assets/images/icon-design.svg
-                " alt="design icon" width="40">
+                " alt="design icon" width="40" >
               </div>
 
               <div class="service-content-box">
@@ -244,7 +245,7 @@
             <li class="service-item">
 
               <div class="service-icon-box">
-                <img src="./assets/images/icon-dev.svg" alt="Web development icon" width="40">
+                <img src="./assets/images/icon-dev.svg" alt="Web development icon" width="40" >
               </div>
 
               <div class="service-content-box">
@@ -303,7 +304,7 @@
         - #RESUME
       -->
 
-      <article class="resume" data-page="resume">
+      <article class="resume" data-page="ExperienceEducation">
 
         <header>
           <h2 class="h2 article-title">Resume</h2>
@@ -313,7 +314,7 @@
 
           <div class="title-wrapper">
             <div class="icon-box">
-              <ion-icon name="book-outline"></ion-icon>
+              <ion-icon name="book-outline" style="color: black;"></ion-icon>
             </div>
 
             <h3 class="h3">Experience</h3>
@@ -377,7 +378,7 @@
 
           <div class="title-wrapper">
             <div class="icon-box">
-              <ion-icon name="book-outline"></ion-icon>
+              <ion-icon name="book-outline" style="color: black;"></ion-icon>
             </div>
 
             <h3 class="h3">Education</h3>
@@ -447,7 +448,7 @@
         - #PORTFOLIO
       -->
 
-      <article class="portfolio" data-page="portfolio">
+      <article class="portfolio" data-page="Portfolio">
 
         <header>
           <h2 class="h2 article-title">Portfolio</h2>
@@ -620,7 +621,7 @@
               </a>
             </li>
 
-            <li class="project-item  active" data-filter-item data-category="web development">
+            <li class="project-item  active" data-filter-item data-category="data science">
               <a href="https://github.com/RutwikPatel13/blur-image-classification" target="_blank">
 
                 <figure class="project-img">
@@ -669,7 +670,7 @@
         - #PUBLICATION
       -->
 
-      <article class="publication" data-page="publication">
+      <article class="publication" data-page="Publication">
 
         <header>
           <h2 class="h2 article-title">Publication</h2>
@@ -821,7 +822,7 @@
         - #BLOG
       -->
 
-      <article class="blog" data-page="blog">
+      <article class="blog" data-page="Blog">
 
         <header>
           <h2 class="h2 article-title">Blog</h2>
@@ -903,7 +904,7 @@
         - #CONTACT
       -->
 
-      <article class="contact" data-page="contact">
+      <article class="contact" data-page="Contact">
 
         <header>
           <h2 class="h2 article-title">Contact</h2>
@@ -926,16 +927,16 @@
           <form class="form" onsubmit="showAlert(event)" data-form>
 
             <div class="input-wrapper">
-              <input type="text" name="fullname" class="form-input" placeholder="Full name"  data-form-input>
+              <input type="text" name="fullname" class="form-input" placeholder="Name"  data-form-input disabled>
 
-              <input type="email" name="email" class="form-input" placeholder="Email address"  data-form-input>
+              <input type="email" name="email" class="form-input" placeholder="Email"  data-form-input disabled>
             </div>
 
-            <textarea name="message" class="form-input" placeholder="Your Message"  data-form-input></textarea>
+            <textarea name="message" class="form-input" placeholder="This formed is disabled. Please contact through email"  data-form-input disabled></textarea>
 
             <button  class="form-btn" type="submit"  data-form-btn >
-              <ion-icon name="paper-plane"></ion-icon>
-              <span>Send Message</span>
+              <ion-icon name="paper-plane" style="color: black;"></ion-icon>
+              <span style="color: black;">Send Message</span>
             </button>
 
           </form>
