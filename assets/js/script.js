@@ -133,7 +133,7 @@ form.addEventListener('submit', function(event) {
   formBtn.setAttribute("disabled", "");
   
   // Send email using EmailJS
-  emailjs.sendForm('service_2jbyniv', 'template_797knrd', form)
+  emailjs.sendForm('service_2jbyniv', 'template_8e7ku3z', form)
     .then(function() {
       // Success
       alert('Message sent successfully! Thank you for contacting me.');
