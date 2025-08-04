@@ -114,11 +114,40 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
 
 
-function showAlert(event) {
-  elementToggleFunc(sidebar);
-  event.preventDefault(); // Prevent the form from submitting
-  alert('Please contact us directly at rutwikpatel1313@gmail.com. This functionality is currently unavailable. Thank you!');
-}
+// Contact form submission handling
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Set timestamp
+  document.getElementById('timestamp').value = new Date().toLocaleString();
+  
+  // Debug: Log form data
+  const formData = new FormData(form);
+  console.log('Form data being sent:');
+  for (let [key, value] of formData.entries()) {
+    console.log(key + ': ' + value);
+  }
+  
+  // Show loading state
+  formBtn.innerHTML = '<ion-icon name="paper-plane" style="color: black;"></ion-icon><span style="color: black;">Sending...</span>';
+  formBtn.setAttribute("disabled", "");
+  
+  // Send email using EmailJS
+  emailjs.sendForm('service_2jbyniv', 'template_797knrd', form)
+    .then(function() {
+      // Success
+      alert('Message sent successfully! Thank you for contacting me.');
+      form.reset();
+      formBtn.innerHTML = '<ion-icon name="paper-plane" style="color: black;"></ion-icon><span style="color: black;">Send Message</span>';
+      formBtn.removeAttribute("disabled");
+    }, function(error) {
+      // Error
+      console.log('EmailJS Error:', error);
+      alert('Failed to send message. Error: ' + (error.text || error.message || 'Unknown error') + '. Please try again or contact me directly at rutwikdh@usc.edu');
+      formBtn.innerHTML = '<ion-icon name="paper-plane" style="color: black;"></ion-icon><span style="color: black;">Send Message</span>';
+      formBtn.removeAttribute("disabled");
+    });
+});
 
 
 
