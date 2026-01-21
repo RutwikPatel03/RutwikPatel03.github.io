@@ -15,7 +15,6 @@ const navItems: { label: string; page: PageType }[] = [
   { label: 'Projects', page: 'Portfolio' },
   { label: 'Publication', page: 'Publication' },
   { label: 'Blog', page: 'Blog' },
-  { label: 'Contact', page: 'Contact' },
 ];
 
 export default function Navbar({ activePage, onPageChange }: NavbarProps) {

@@ -1,6 +1,13 @@
-import Image from 'next/image';
+'use client';
 
-export default function About() {
+import Link from 'next/link';
+import type { PageType } from '@/types';
+
+interface AboutProps {
+  onPageChange?: (page: PageType) => void;
+}
+
+export default function About({ onPageChange }: AboutProps) {
   return (
     <article className="about active" data-page="About">
       <header>
@@ -28,76 +35,110 @@ export default function About() {
         </p>
 
         <p>
-          <b>Technical Skills:</b>
-          <br />
-          <b>Languages:</b> Python, TypeScript, JavaScript, Go, Swift |{' '}
-          <b>Databases:</b> PostgreSQL, MongoDB, MySQL, Chroma
-          <br />
-          <b>Frontend:</b> React, Angular, Next, React Hooks, Redux, Zustand, HTML/CSS, Jest, Cypress, Tailwind, Material UI
-          <br />
-          <b>Backend & APIs:</b> Node.js, Express.js, Django REST, Flask, REST APIs, Microservices, FastAPI, Redis
-          <br />
-          <b>Cloud & DevOps:</b> AWS, GCP, Docker, CI/CD, Terraform |{' '}
-          <b>ML/Data:</b> PyTorch, TensorFlow, LangChain
-        </p>
-
-        <p>
           I&apos;m driven by the challenge of making complex systems efficient and
           accessible. Whether it&apos;s reducing cold start times for mobile apps or
           implementing Explainable AI (XAI) for medical diagnostics, I&apos;m passionate
           about engineering that solves specific, high-impact problems in SaaS, FinTech,
           and Healthcare.
         </p>
-
-        <p>
-          I&apos;m open to connecting with fellow engineers and recruiters to discuss
-          opportunities in Full-time Full Stack development and AI roles. Feel free to
-          message me here or reach out via email.
-        </p>
-
-        <p>📧 rutwikdh@usc.edu</p>
       </section>
 
-      <section className="service">
-        <h3 className="h3 service-title">What I&apos;m doing</h3>
+      {/* Skills Section */}
+      <section className="skills-section">
+        <h3 className="h3 skills-title">Technical Skills</h3>
 
-        <ul className="service-list">
-          <li className="service-item">
-            <div className="service-icon-box">
-              <Image src="/images/icon-design.svg" alt="design icon" width={40} height={40} />
+        <div className="skills-grid">
+          <div className="skill-category">
+            <h4 className="skill-category-title">Languages</h4>
+            <div className="skill-tags">
+              <span className="skill-tag">Python</span>
+              <span className="skill-tag">TypeScript</span>
+              <span className="skill-tag">JavaScript</span>
+              <span className="skill-tag">Go</span>
+              <span className="skill-tag">Swift</span>
             </div>
-            <div className="service-content-box">
-              <h4 className="h4 service-item-title">Web Development</h4>
-              <p className="service-item-text">
-                High-quality development of sites at the professional level.
-              </p>
-            </div>
-          </li>
+          </div>
 
-          <li className="service-item">
-            <div className="service-icon-box">
-              <Image src="/images/icon-dev.svg" alt="Web development icon" width={40} height={40} />
+          <div className="skill-category">
+            <h4 className="skill-category-title">Frontend</h4>
+            <div className="skill-tags">
+              <span className="skill-tag">React</span>
+              <span className="skill-tag">Next.js</span>
+              <span className="skill-tag">Angular</span>
+              <span className="skill-tag">Redux</span>
+              <span className="skill-tag">Tailwind</span>
             </div>
-            <div className="service-content-box">
-              <h4 className="h4 service-item-title">Software Development</h4>
-              <p className="service-item-text">
-                High-quality development and Scripting at the professional level.
-              </p>
-            </div>
-          </li>
+          </div>
 
-          <li className="service-item">
-            <div className="service-icon-box">
-              <Image src="/images/icon-app.svg" alt="mobile app icon" width={40} height={40} />
+          <div className="skill-category">
+            <h4 className="skill-category-title">Backend</h4>
+            <div className="skill-tags">
+              <span className="skill-tag">Node.js</span>
+              <span className="skill-tag">Express</span>
+              <span className="skill-tag">Django</span>
+              <span className="skill-tag">FastAPI</span>
+              <span className="skill-tag">REST APIs</span>
             </div>
-            <div className="service-content-box">
-              <h4 className="h4 service-item-title">Mobile apps</h4>
-              <p className="service-item-text">
-                Professional development of applications for iOS.
-              </p>
+          </div>
+
+          <div className="skill-category">
+            <h4 className="skill-category-title">Databases</h4>
+            <div className="skill-tags">
+              <span className="skill-tag">PostgreSQL</span>
+              <span className="skill-tag">MongoDB</span>
+              <span className="skill-tag">MySQL</span>
+              <span className="skill-tag">Redis</span>
+              <span className="skill-tag">Chroma</span>
             </div>
-          </li>
-        </ul>
+          </div>
+
+          <div className="skill-category">
+            <h4 className="skill-category-title">Cloud & DevOps</h4>
+            <div className="skill-tags">
+              <span className="skill-tag">AWS</span>
+              <span className="skill-tag">GCP</span>
+              <span className="skill-tag">Docker</span>
+              <span className="skill-tag">CI/CD</span>
+              <span className="skill-tag">Terraform</span>
+            </div>
+          </div>
+
+          <div className="skill-category">
+            <h4 className="skill-category-title">AI/ML</h4>
+            <div className="skill-tags">
+              <span className="skill-tag">PyTorch</span>
+              <span className="skill-tag">TensorFlow</span>
+              <span className="skill-tag">LangChain</span>
+              <span className="skill-tag">RAG</span>
+              <span className="skill-tag">XAI</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <div className="cta-content">
+          <p className="cta-text">
+            Open to Full-time Full Stack and AI/ML engineering roles
+          </p>
+          <div className="cta-buttons">
+            <button
+              onClick={() => onPageChange?.('Contact')}
+              className="cta-btn primary"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              Get in Touch
+            </button>
+            <Link href="/ai" className="cta-btn secondary">
+              <span>✨</span>
+              Ask AI About Me
+            </Link>
+          </div>
+        </div>
       </section>
     </article>
   );

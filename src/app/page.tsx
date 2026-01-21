@@ -28,7 +28,7 @@ export default function Home() {
 
         <div className="pages-container">
           <div className={activePage === 'About' ? 'page-visible' : 'page-hidden'}>
-            <About />
+            <About onPageChange={handlePageChange} />
           </div>
           <div className={activePage === 'ExperienceEducation' ? 'page-visible' : 'page-hidden'}>
             <Resume />

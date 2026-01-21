@@ -27,7 +27,7 @@ export default function Sidebar() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <p className="title">Software Developer</p>
+            <p className="title">Software Engineer</p>
           </Link>
           <Link href="/resume.pdf" className="resume-button" target="_blank" download>
             <button className="btn-download">Download Resume</button>
@@ -56,11 +56,6 @@ export default function Sidebar() {
 
         <ul className="contacts-list">
           <li className="contact-item">
-            <div className="icon-box">
-              <svg width="20" height="20" viewBox="0 0 512 512" fill="currentColor">
-                <path d="M464 80H48a16 16 0 00-16 16v320a16 16 0 0016 16h416a16 16 0 0016-16V96a16 16 0 00-16-16zM265.82 284.63a16 16 0 01-19.64 0L89.55 162.81l19.64-25.26L256 251.73l146.81-114.18 19.64 25.26z" />
-              </svg>
-            </div>
             <div className="contact-info">
               <p className="contact-title">Email</p>
               <a href="mailto:rutwikdh@usc.edu" className="contact-link">
@@ -70,11 +65,6 @@ export default function Sidebar() {
           </li>
 
           <li className="contact-item">
-            <div className="icon-box">
-              <svg width="20" height="20" viewBox="0 0 512 512" fill="currentColor">
-                <path d="M164 480c-3.3 0-6.5-1.3-8.9-3.6l-50-48.3c-32.5-31.4-50.1-73.5-50.1-118.1 0-38.6 13.3-75.3 37.5-104 24-28.4 57.3-48.2 94.5-56 8.5-1.8 17-1.8 25.5 0 37.2 7.8 70.5 27.6 94.5 56 24.2 28.7 37.5 65.4 37.5 104 0 44.6-17.6 86.7-50.1 118.1l-50 48.3c-2.4 2.3-5.6 3.6-8.9 3.6h-71.5z" />
-              </svg>
-            </div>
             <div className="contact-info">
               <p className="contact-title">Phone</p>
               <a href="tel:+12139138803" className="contact-link">
@@ -84,11 +74,6 @@ export default function Sidebar() {
           </li>
 
           <li className="contact-item">
-            <div className="icon-box">
-              <svg width="20" height="20" viewBox="0 0 512 512" fill="currentColor">
-                <path d="M256 32C167.67 32 96 96.51 96 176c0 128 160 304 160 304s160-176 160-304c0-79.49-71.67-144-160-144zm0 224a64 64 0 1164-64 64.07 64.07 0 01-64 64z" />
-              </svg>
-            </div>
             <div className="contact-info">
               <p className="contact-title">Location</p>
               <address>San Francisco, USA</address>

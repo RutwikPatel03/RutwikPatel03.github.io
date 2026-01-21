@@ -33,6 +33,10 @@ export const experience = [
       'Addressed performance and scalability bottlenecks by modularizing core, payment services improving latency by 20%.',
       'Spearheaded Event creation workflow using MERN stack with JWT authentication, role-based access control.',
     ],
+    highlights: [
+      { text: 'Main Website', link: 'https://www.world-salon.com' },
+      { text: 'B2B Platform', link: 'https://b2b.world-salon.com' },
+    ],
   },
   {
     company: 'USC Marshall School of Business, Los Angeles, CA',
@@ -74,14 +78,26 @@ export const education = [
 ];
 
 export const projects = [
+  // Live deployed projects first
   {
     title: 'Stock Insight Application (Web)',
     category: 'web development',
     image: '/myimg/Project_Stock_Web.png',
     link: 'https://rutwikpatelassignment3.wl.r.appspot.com/',
-    description: 'Full-stack stock trading platform with Finnhub and Polygon APIs. Achieved 96% performance score through lazy loading, responsive Angular Material design, and optimized API caching.',
+    description: '',
     tech: ['Angular', 'Express', 'MongoDB', 'GCP'],
+    hasLiveDemo: true,
   },
+  {
+    title: 'World Salon Website',
+    category: 'web development',
+    image: '/myimg/world-salon.png',
+    link: 'https://www.world-salon.com',
+    description: '',
+    tech: ['React', 'Node.js', 'MongoDB', 'AWS'],
+    hasLiveDemo: true,
+  },
+  // Other projects
   {
     title: 'Cataract Detection with Explainable AI (XAI)',
     category: 'data science',
@@ -104,14 +120,6 @@ export const projects = [
     image: '/myimg/Project_FakeNews.png',
     description: 'Developed and benchmarked multiple deep learning architectures achieving 93% accuracy. Achieved 94% precision, recall, and F1-score on WELFake and Kaggle datasets with 115K+ articles.',
     tech: ['Python', 'CNN-LSTM', 'BERT', 'RoBERTa'],
-  },
-  {
-    title: 'World Salon Website',
-    category: 'web development',
-    image: '/myimg/world-salon.png',
-    link: 'https://www.world-salon.com',
-    description: 'Event creation platform using MERN stack with JWT authentication and role-based access control.',
-    tech: ['React', 'Node.js', 'MongoDB', 'AWS'],
   },
   {
     title: 'Inventory Management System',
