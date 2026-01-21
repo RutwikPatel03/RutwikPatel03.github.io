@@ -719,6 +719,33 @@ main {
   line-height: 1.6;
 }
 
+/* Feature highlights for shipped features */
+.feature-highlights {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(255, 208, 105, 0.1), rgba(255, 208, 105, 0.05));
+  border-left: 3px solid var(--orange-yellow-crayola);
+  border-radius: 0 8px 8px 0;
+  font-size: var(--fs-7);
+}
+
+.highlights-label {
+  color: var(--orange-yellow-crayola);
+  font-weight: var(--fw-500);
+}
+
+.feature-link {
+  color: var(--white-2);
+  text-decoration: none;
+  transition: var(--transition-1);
+  display: inline;
+}
+
+.feature-link:hover {
+  color: var(--orange-yellow-crayola);
+  text-decoration: underline;
+}
+
 
 /**
  * skills

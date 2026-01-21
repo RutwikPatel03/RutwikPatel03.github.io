@@ -11,12 +11,16 @@ export const experience = [
   {
     company: 'Sigma Computing, New York, NY',
     title: 'Software Engineer Intern',
-    period: 'Sept 2025 - Dec 2025',
+    period: 'Sept 2024 - Dec 2024',
     description: [
-      'Orchestrated better decision-making with formula-based data visualizations, improving data clarity for 60+ orgs.',
-      'Ensured four smooth feature launches by driving work from development through prod and resolving issues pre-release.',
-      'Increased production stability by expanding test coverage, catching regressions early and reducing post-release issues.',
-      'Collaborated with product and design to refine feature behavior and edge cases, reducing overall support tickets.',
+      'Built Conditional Formatting for Containers from scratch, enabling dynamic styling based on formula conditions - now used by 60+ enterprise organizations.',
+      'Implemented Custom Page Headers feature end-to-end, allowing users to add branded headers to workbooks for professional reporting.',
+      'Shipped 4 production features by owning full development lifecycle from design collaboration through deployment and post-release monitoring.',
+      'Expanded test coverage and caught regressions early, improving production stability and reducing post-release issues.',
+    ],
+    highlights: [
+      { text: 'Conditional Formatting for Containers', link: 'https://help.sigmacomputing.com/docs/use-containers-to-organize-workbook-layouts' },
+      { text: 'Custom Page Headers', link: 'https://help.sigmacomputing.com/docs/add-custom-page-headers-to-a-workbook' },
     ],
   },
   {

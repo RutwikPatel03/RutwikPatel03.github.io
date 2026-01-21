@@ -31,6 +31,24 @@ export default function Resume() {
                   </span>
                 ))}
               </p>
+              {/* Feature highlights with links */}
+              {'highlights' in item && item.highlights && (
+                <div className="feature-highlights">
+                  <span className="highlights-label">Features Shipped: </span>
+                  {(item.highlights as Array<{text: string; link: string}>).map((highlight, i) => (
+                    <a
+                      key={i}
+                      href={highlight.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="feature-link"
+                    >
+                      {highlight.text}
+                      {i < (item.highlights as Array<{text: string; link: string}>).length - 1 && ', '}
+                    </a>
+                  ))}
+                </div>
+              )}
             </li>
           ))}
         </ol>

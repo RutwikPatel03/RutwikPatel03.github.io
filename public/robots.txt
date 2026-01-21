@@ -1,0 +1,37 @@
+# Robots.txt for rutwik.dev
+# Software Engineer Portfolio - Rutwik Patel
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://rutwik.dev/sitemap.xml
+
+# Allow all major search engines and AI bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
