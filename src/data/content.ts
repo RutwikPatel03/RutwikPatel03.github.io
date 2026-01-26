@@ -11,7 +11,7 @@ export const experience = [
   {
     company: 'Sigma Computing, New York, NY',
     title: 'Software Engineer Intern',
-    period: 'Sept 2024 - Dec 2024',
+    period: 'Sept 2025 - Dec 2025',
     description: [
       'Built Conditional Formatting for Containers from scratch, enabling dynamic styling based on formula conditions - now used by 60+ enterprise organizations.',
       'Implemented Custom Page Headers feature end-to-end, allowing users to add branded headers to workbooks for professional reporting.',

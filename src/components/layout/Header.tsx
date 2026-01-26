@@ -1,0 +1,156 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { Menu, X, Download, Sparkles } from 'lucide-react';
+import ThemeToggle from '@/components/ui/ThemeToggle';
+
+const navItems = [
+  { name: 'About', href: '#about' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Publications', href: '#publications' },
+  { name: 'Contact', href: '#contact' },
+];
+
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollYProgress } = useScroll();
+  
+  // Transform scroll progress to width percentage
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNavClick = (href: string) => {
+    setIsMenuOpen(false);
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        isScrolled
+          ? 'bg-background/80 backdrop-blur-lg border-b border-border'
+          : 'bg-transparent'
+      )}
+    >
+      {/* Progress bar */}
+      <motion.div
+        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+        style={{ width: progressWidth }}
+      />
+
+      <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-heading text-xl font-semibold text-foreground hover:opacity-80 transition-opacity"
+          >
+            <span className="text-2xl">RP</span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <button
+                key={item.name}
+                onClick={() => handleNavClick(item.href)}
+                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent"
+              >
+                {item.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Desktop CTA Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
+            <Link
+              href="/ai"
+              className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent"
+            >
+              <Sparkles className="w-4 h-4" />
+              Ask AI
+            </Link>
+            <Link
+              href="/resume.pdf"
+              target="_blank"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <Download className="w-4 h-4" />
+              Resume
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden py-4 border-t border-border"
+          >
+            <div className="flex flex-col gap-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => handleNavClick(item.href)}
+                  className="px-4 py-3 text-left text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                >
+                  {item.name}
+                </button>
+              ))}
+              <div className="flex items-center justify-between mt-4 px-4 pt-4 border-t border-border">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
+              <div className="flex gap-2 mt-4 px-4">
+                <Link
+                  href="/ai"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm text-muted-foreground border border-border rounded-lg hover:bg-accent transition-colors"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Ask AI
+                </Link>
+                <Link
+                  href="/resume.pdf"
+                  target="_blank"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  <Download className="w-4 h-4" />
+                  Resume
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </nav>
+    </header>
+  );
+}
+

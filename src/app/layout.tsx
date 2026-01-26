@@ -1,9 +1,16 @@
 import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import SmoothScrollProvider from '@/providers/SmoothScrollProvider';
+import ThemeProvider from '@/providers/ThemeProvider';
 import '@/styles/globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -274,8 +281,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={poppins.variable}>
-        {children}
+      <body className={`${inter.variable} ${poppins.variable} font-sans antialiased`}>
+        <ThemeProvider>
+          <SmoothScrollProvider>
+            {children}
+          </SmoothScrollProvider>
+        </ThemeProvider>
 
         {/* Vercel Analytics & Speed Insights */}
         <Analytics />

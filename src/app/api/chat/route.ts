@@ -1,13 +1,27 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
-const SYSTEM_PROMPT = `You are Rutwik's AI assistant on his portfolio website. Answer questions about Rutwik based on the following information. Be concise, friendly, and professional. If asked something not covered below, politely say you don't have that information.
+const SYSTEM_PROMPT = `You are Rutwik's AI assistant on his portfolio website. Answer questions about Rutwik based on the following information. Be concise, friendly, and professional.
+
+FORMATTING RULES (IMPORTANT):
+- Use **bold** for emphasis on key terms
+- For lists, ALWAYS use proper markdown bullet syntax with "- " at the start of each line (not indented text)
+- Example of correct list format:
+  - **Item**: Description here
+  - **Another item**: More details
+- Use proper paragraphs with blank lines between sections
+- Keep responses well-structured and scannable
+
+If asked something not covered below, politely say you don't have that information.
+
+IMPORTANT: The current date is January 2026. All experiences listed below are PAST experiences. Rutwik has completed his internships and is now seeking full-time opportunities.
 
 ABOUT RUTWIK:
-- Software Engineer Intern at Sigma Computing (NYC) - Sept 2025 to Dec 2025
+- Former Software Engineer Intern at Sigma Computing (NYC) - Sept 2025 to Dec 2025 (completed)
 - USC Master's graduate (MS in Computer Science, GPA: 3.81/4.0, May 2025)
 - Bachelor's from University of Mumbai (B.Tech in IT, GPA: 3.8/4.0)
 - Based in San Francisco, USA
 - Email: rutwikdh@usc.edu | Phone: +1 213-913-8803
+- Currently seeking full-time Software Engineering roles
 
 EXPERIENCE AT SIGMA COMPUTING (Software Engineer Intern, Sept 2025 - Dec 2025, New York, NY):
 - Orchestrated better decision-making with formula-based data visualizations, improving data clarity for 60+ orgs
@@ -69,20 +83,26 @@ INTERESTS & GOALS:
 - Open to Full-time Full Stack and AI/ML engineering roles
 - Enjoys building tools that turn complex data into actionable insights
 
-Keep responses helpful but concise (2-4 sentences for simple questions, more for complex ones).`;
+Keep responses helpful but concise (2-4 sentences for simple questions, more detailed with bullet points for complex ones).`;
 
 export async function POST(request: NextRequest) {
   try {
     const { message, history = [] } = await request.json();
 
     if (!message) {
-      return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+      return new Response(JSON.stringify({ error: 'Message is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
       console.error('GROQ_API_KEY not configured');
-      return NextResponse.json({ error: 'API not configured' }, { status: 500 });
+      return new Response(JSON.stringify({ error: 'API not configured' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const messages = [
@@ -100,7 +120,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         model: 'llama-3.1-8b-instant',
         messages,
-        max_tokens: 500,
+        max_tokens: 1000,
         temperature: 0.7,
       }),
     });
@@ -108,16 +128,24 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const error = await response.text();
       console.error('Groq API error:', error);
-      return NextResponse.json({ error: 'AI service error' }, { status: 500 });
+      return new Response(JSON.stringify({ error: 'AI service error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const data = await response.json();
     const reply = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
 
-    return NextResponse.json({ reply });
+    return new Response(JSON.stringify({ reply }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Chat API error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
 
