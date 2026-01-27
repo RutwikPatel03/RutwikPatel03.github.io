@@ -128,7 +128,7 @@ export default function Hero() {
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden border-4 border-border bg-muted">
               <Image
                 src="/myimg/me.jpg"
-                alt="Rutwik Patel"
+                alt="Rutwik Patel - Software Engineer at Sigma Computing, USC MS Computer Science Graduate, Full-Stack Developer specializing in React, TypeScript, Python, and AI/ML"
                 fill
                 className="object-cover"
                 priority

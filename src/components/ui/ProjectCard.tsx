@@ -34,7 +34,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         )}
         <Image
           src={project.image}
-          alt={project.title}
+          alt={project.imageAlt || `${project.title} - ${project.category} project by Rutwik Patel`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />

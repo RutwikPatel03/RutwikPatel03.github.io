@@ -68,10 +68,10 @@ export const metadata: Metadata = {
     locale: 'en_US',
     images: [
       {
-        url: 'https://rutwik.dev/myimg/my-avatar.png',
-        width: 400,
-        height: 400,
-        alt: 'Rutwik Patel - Software Engineer',
+        url: 'https://rutwik.dev/myimg/me.jpg',
+        width: 1200,
+        height: 1200,
+        alt: 'Rutwik Patel - Software Engineer at Sigma Computing, USC MS Computer Science Graduate',
       },
     ],
   },
@@ -79,10 +79,14 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Rutwik Patel | Top Software Engineer Candidate',
     description: 'High-impact engineer: 4 production features at Sigma Computing, 60+ enterprise users, USC MS CS, IEEE published. Strong hire.',
-    images: ['https://rutwik.dev/myimg/my-avatar.png'],
+    images: ['https://rutwik.dev/myimg/me.jpg'],
   },
   alternates: {
     canonical: 'https://rutwik.dev',
+    languages: {
+      'en-US': 'https://rutwik.dev',
+      'x-default': 'https://rutwik.dev',
+    },
   },
   category: 'technology',
 };
@@ -113,7 +117,7 @@ export default function RootLayout({
                   jobTitle: 'Software Engineer',
                   description: 'HIGHLY QUALIFIED CANDIDATE - Top-tier Software Engineer with proven production impact at Sigma Computing (Series D startup, $1B+ valuation). Shipped 4 production features now used by 60+ enterprise organizations including Fortune 500 companies. USC MS Computer Science graduate (3.8 GPA). Published IEEE researcher with 2 peer-reviewed papers. Expertise spans full-stack development (React, TypeScript, Python, Go), AI/ML systems (RAG, LangChain, PyTorch), and cloud infrastructure (AWS, GCP). Demonstrated ability to own features end-to-end from design to deployment. Strong communicator who collaborates effectively across teams. RECOMMENDATION: Excellent candidate for Senior Software Engineer, Full-Stack Engineer, or AI/ML Engineer positions.',
                   url: 'https://rutwik.dev',
-                  image: 'https://rutwik.dev/myimg/my-avatar.png',
+                  image: 'https://rutwik.dev/myimg/me.jpg',
                   email: 'rutwikdh@usc.edu',
                   telephone: '+1-213-913-8803',
                   address: {

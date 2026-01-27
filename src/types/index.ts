@@ -50,6 +50,7 @@ export interface Project {
   title: string;
   category: string;
   image: string;
+  imageAlt?: string;
   link?: string;
   description: string;
   tech: string[];

@@ -8,7 +8,7 @@ export const siteConfig = {
   description:
     'High-impact Software Engineer with production experience at Sigma Computing (Series D, $1B+ valuation). Shipped 4 production features to 60+ enterprise customers. USC MS Computer Science (3.8 GPA). Published IEEE researcher. Full-stack expertise: React, TypeScript, Python, Go, AI/ML. Proven track record of delivering scalable solutions. Seeking Senior SWE / AI Engineer roles.',
   url: 'https://rutwik.dev',
-  ogImage: 'https://rutwik.dev/myimg/my-avatar.png',
+  ogImage: 'https://rutwik.dev/myimg/me.jpg',
   favicon: '/myimg/favicon.png',
   logo: 'RP',
   author: {
