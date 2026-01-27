@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/Button';
-import { Mail, Phone, MapPin, Send, Linkedin, Github } from 'lucide-react';
-import { contactInfo as baseContactInfo, socialLinks as socialConfig, siteConfig } from '@/constants';
+import { Mail, Phone, MapPin, Send, Linkedin, Github, CheckCircle, XCircle, X } from 'lucide-react';
+import { contactInfo as baseContactInfo, socialLinks as socialConfig } from '@/constants';
 
 // Map contact info with icons
 const contactInfo = baseContactInfo.map((item) => ({
@@ -17,9 +17,17 @@ const socialLinks = [
   { icon: Github, label: 'GitHub', href: socialConfig.github },
 ];
 
+type ToastType = 'success' | 'error' | null;
+
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState<{ type: ToastType; message: string } | null>(null);
+
+  const showToast = (type: ToastType, message: string) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 5000);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,10 +38,27 @@ export default function Contact() {
     if (!formData.name || !formData.email || !formData.message) return;
 
     setIsSubmitting(true);
-    const mailtoLink = `mailto:${siteConfig.author.email}?subject=Contact from ${formData.name}&body=${encodeURIComponent(formData.message)}%0A%0AFrom: ${formData.email}`;
-    window.open(mailtoLink, '_blank');
-    setIsSubmitting(false);
-    setFormData({ name: '', email: '', message: '' });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showToast('success', 'Message sent successfully! I\'ll get back to you soon.');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        showToast('error', data.error || 'Failed to send message. Please try again.');
+      }
+    } catch {
+      showToast('error', 'Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -154,6 +179,35 @@ export default function Contact() {
           </motion.div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 50, x: '-50%' }}
+            className={`fixed bottom-6 left-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg ${
+              toast.type === 'success'
+                ? 'bg-green-500/90 text-white'
+                : 'bg-red-500/90 text-white'
+            }`}
+          >
+            {toast.type === 'success' ? (
+              <CheckCircle className="w-5 h-5 flex-shrink-0" />
+            ) : (
+              <XCircle className="w-5 h-5 flex-shrink-0" />
+            )}
+            <span className="text-sm font-medium">{toast.message}</span>
+            <button
+              onClick={() => setToast(null)}
+              className="ml-2 p-1 hover:bg-white/20 rounded transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
