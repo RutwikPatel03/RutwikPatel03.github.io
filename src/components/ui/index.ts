@@ -11,6 +11,8 @@ export {
   BentoCardContent,
 } from './BentoGrid';
 export { default as ThemeToggle } from './ThemeToggle';
+export { ProjectCard } from './ProjectCard';
+export { SectionHeader } from './SectionHeader';
 
 // Re-export types
 export type { BadgeProps } from './Badge';

@@ -1,43 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Menu, X, Download, Sparkles } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
-
-const navItems = [
-  { name: 'About', href: '#about' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Publications', href: '#publications' },
-  { name: 'Contact', href: '#contact' },
-];
+import { navItems, externalLinks, siteConfig } from '@/constants';
+import { useScrollToSection, useScrolled } from '@/hooks';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const isScrolled = useScrolled(50);
+  const scrollToSection = useScrollToSection();
   const { scrollYProgress } = useScroll();
-  
+
   // Transform scroll progress to width percentage
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToSection(href);
   };
 
   return (
@@ -62,7 +45,7 @@ export default function Header() {
             href="/"
             className="flex items-center gap-2 font-heading text-xl font-semibold text-foreground hover:opacity-80 transition-opacity"
           >
-            <span className="text-2xl">RP</span>
+            <span className="text-2xl">{siteConfig.logo}</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -82,14 +65,14 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             <Link
-              href="/ai"
+              href={externalLinks.aiChat}
               className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent"
             >
               <Sparkles className="w-4 h-4" />
               Ask AI
             </Link>
             <Link
-              href="/resume.pdf"
+              href={externalLinks.resume}
               target="_blank"
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
             >
@@ -131,14 +114,14 @@ export default function Header() {
               </div>
               <div className="flex gap-2 mt-4 px-4">
                 <Link
-                  href="/ai"
+                  href={externalLinks.aiChat}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm text-muted-foreground border border-border rounded-lg hover:bg-accent transition-colors"
                 >
                   <Sparkles className="w-4 h-4" />
                   Ask AI
                 </Link>
                 <Link
-                  href="/resume.pdf"
+                  href={externalLinks.resume}
                   target="_blank"
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
                 >

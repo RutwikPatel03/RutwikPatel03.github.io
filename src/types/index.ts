@@ -1,8 +1,49 @@
+// ===========================================
+// Navigation & Page Types
+// ===========================================
+
 export type PageType = 'About' | 'ExperienceEducation' | 'Portfolio' | 'Publication' | 'Blog' | 'Contact';
+
+// ===========================================
+// Chat Types
+// ===========================================
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
+}
+
+// ===========================================
+// Content Types
+// ===========================================
+
+export interface Skills {
+  programmingLanguages: readonly string[];
+  databases: readonly string[];
+  frontend: readonly string[];
+  backend: readonly string[];
+  devops: readonly string[];
+  machineLearning: readonly string[];
+}
+
+export interface ExperienceHighlight {
+  text: string;
+  link: string;
+}
+
+export interface Experience {
+  company: string;
+  title: string;
+  period: string;
+  description: string[];
+  highlights?: ExperienceHighlight[];
+}
+
+export interface Education {
+  school: string;
+  degree: string;
+  period: string;
+  description: string;
 }
 
 export interface Project {
@@ -10,13 +51,9 @@ export interface Project {
   category: string;
   image: string;
   link?: string;
-}
-
-export interface TimelineItem {
-  company: string;
-  title: string;
-  period: string;
-  description: string[];
+  description: string;
+  tech: string[];
+  hasLiveDemo?: boolean;
 }
 
 export interface Publication {
@@ -38,4 +75,7 @@ export interface BlogPost {
   date?: string;
   description: string;
 }
+
+// Legacy alias for backward compatibility
+export type TimelineItem = Experience;
 

@@ -4,16 +4,17 @@ import { useState, FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Button } from '@/components/ui/Button';
 import { Mail, Phone, MapPin, Send, Linkedin, Github } from 'lucide-react';
+import { contactInfo as baseContactInfo, socialLinks as socialConfig, siteConfig } from '@/constants';
 
-const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'rutwikdh@usc.edu', href: 'mailto:rutwikdh@usc.edu' },
-  { icon: Phone, label: 'Phone', value: '+1 213-913-8803', href: 'tel:+12139138803' },
-  { icon: MapPin, label: 'Location', value: 'San Francisco, CA', href: null },
-];
+// Map contact info with icons
+const contactInfo = baseContactInfo.map((item) => ({
+  ...item,
+  icon: item.type === 'email' ? Mail : item.type === 'phone' ? Phone : MapPin,
+}));
 
 const socialLinks = [
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/rutwikpatel13' },
-  { icon: Github, label: 'GitHub', href: 'https://github.com/RutwikPatel13' },
+  { icon: Linkedin, label: 'LinkedIn', href: socialConfig.linkedin },
+  { icon: Github, label: 'GitHub', href: socialConfig.github },
 ];
 
 export default function Contact() {
@@ -29,7 +30,7 @@ export default function Contact() {
     if (!formData.name || !formData.email || !formData.message) return;
 
     setIsSubmitting(true);
-    const mailtoLink = `mailto:rutwikdh@usc.edu?subject=Contact from ${formData.name}&body=${encodeURIComponent(formData.message)}%0A%0AFrom: ${formData.email}`;
+    const mailtoLink = `mailto:${siteConfig.author.email}?subject=Contact from ${formData.name}&body=${encodeURIComponent(formData.message)}%0A%0AFrom: ${formData.email}`;
     window.open(mailtoLink, '_blank');
     setIsSubmitting(false);
     setFormData({ name: '', email: '', message: '' });
