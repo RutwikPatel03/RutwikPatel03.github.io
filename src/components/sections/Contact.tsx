@@ -16,7 +16,7 @@ const socialLinks = [
   { icon: Github, label: 'GitHub', href: 'https://github.com/RutwikPatel13' },
 ];
 
-export default function ContactNew() {
+export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 

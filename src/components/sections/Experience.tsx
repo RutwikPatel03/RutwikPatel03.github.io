@@ -5,7 +5,7 @@ import { experience, education } from '@/data/content';
 import { Badge } from '@/components/ui/Badge';
 import { Briefcase, GraduationCap, ExternalLink } from 'lucide-react';
 
-export default function ExperienceNew() {
+export default function Experience() {
   return (
     <section id="experience" className="py-24 px-4 sm:px-6 lg:px-8 bg-muted/20">
       <div className="mx-auto max-w-4xl">

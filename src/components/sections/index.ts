@@ -1,8 +1,8 @@
 // Section Components barrel export
 export { default as Hero } from './Hero';
-export { default as AboutNew } from './AboutNew';
-export { default as ExperienceNew } from './ExperienceNew';
-export { default as ProjectsNew } from './ProjectsNew';
-export { default as PublicationsNew } from './PublicationsNew';
-export { default as ContactNew } from './ContactNew';
+export { default as About } from './About';
+export { default as Experience } from './Experience';
+export { default as Projects } from './Projects';
+export { default as Publications } from './Publications';
+export { default as Contact } from './Contact';
 

@@ -53,7 +53,7 @@ const stats = [
   { value: '12+', label: 'Production Features Shipped E2E' },
 ];
 
-export default function AboutNew() {
+export default function About() {
   return (
     <section id="about" className="py-24 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">

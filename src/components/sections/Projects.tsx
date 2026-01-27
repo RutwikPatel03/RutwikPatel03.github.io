@@ -10,7 +10,7 @@ import { Eye } from 'lucide-react';
 
 const categories = ['All', 'Web development', 'Data Science', 'iOS'];
 
-export default function ProjectsNew() {
+export default function Projects() {
   const [activeFilter, setActiveFilter] = useState('All');
 
   const filteredProjects = projects.filter(

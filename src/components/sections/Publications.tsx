@@ -6,7 +6,7 @@ import { publications } from '@/data/content';
 import { Badge } from '@/components/ui/Badge';
 import { ExternalLink, Calendar, BookOpen } from 'lucide-react';
 
-export default function PublicationsNew() {
+export default function Publications() {
   return (
     <section id="publications" className="py-24 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">

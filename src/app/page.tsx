@@ -1,11 +1,11 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
-import AboutNew from '@/components/sections/AboutNew';
-import ExperienceNew from '@/components/sections/ExperienceNew';
-import ProjectsNew from '@/components/sections/ProjectsNew';
-import PublicationsNew from '@/components/sections/PublicationsNew';
-import ContactNew from '@/components/sections/ContactNew';
+import About from '@/components/sections/About';
+import Experience from '@/components/sections/Experience';
+import Projects from '@/components/sections/Projects';
+import Publications from '@/components/sections/Publications';
+import Contact from '@/components/sections/Contact';
 
 export default function Home() {
   return (
@@ -13,11 +13,11 @@ export default function Home() {
       <Header />
       <main className="min-h-screen">
         <Hero />
-        <AboutNew />
-        <ExperienceNew />
-        <ProjectsNew />
-        <PublicationsNew />
-        <ContactNew />
+        <About />
+        <Experience />
+        <Projects />
+        <Publications />
+        <Contact />
       </main>
       <Footer />
     </>
