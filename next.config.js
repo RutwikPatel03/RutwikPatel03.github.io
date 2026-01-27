@@ -6,6 +6,16 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
+  // Optimize module imports for better tree-shaking
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{member}}',
+    },
+  },
+  // Experimental optimizations
+  experimental: {
+    optimizePackageImports: ['motion/react', 'lucide-react'],
+  },
   // Security and performance headers
   async headers() {
     return [

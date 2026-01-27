@@ -108,6 +108,8 @@ export default function RootLayout({
         {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preconnect for third-party resources - 80ms LCP savings */}
+        <link rel="preconnect" href="https://assets.apollo.io" crossOrigin="anonymous" />
 
         {/* Search Engine Verification - Add your verification codes here */}
         {/* <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" /> */}
