@@ -62,11 +62,17 @@ export default function ChatInterface() {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
+  // Auto-resize textarea - use requestAnimationFrame to avoid forced reflow
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 200)}px`;
-    }
+    const textarea = inputRef.current;
+    if (!textarea) return;
+
+    // Batch DOM reads and writes to avoid layout thrashing
+    requestAnimationFrame(() => {
+      textarea.style.height = 'auto';
+      const newHeight = Math.min(textarea.scrollHeight, 200);
+      textarea.style.height = `${newHeight}px`;
+    });
   }, [input]);
 
   useEffect(() => {

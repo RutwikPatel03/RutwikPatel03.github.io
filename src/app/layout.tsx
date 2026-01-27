@@ -10,12 +10,16 @@ import '@/styles/globals.css';
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+  display: 'swap', // Prevent FOIT (Flash of Invisible Text)
+  preload: true,
 });
 
 const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600'], // Removed 300 - rarely used, saves ~12KB
   variable: '--font-poppins',
+  display: 'swap', // Prevent FOIT
+  preload: true,
 });
 
 export const metadata: Metadata = {
