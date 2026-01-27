@@ -1,17 +1,84 @@
-export const skills = {
+// ===========================================
+// Type Definitions
+// ===========================================
+
+export interface Skills {
+  programmingLanguages: readonly string[];
+  databases: readonly string[];
+  frontend: readonly string[];
+  backend: readonly string[];
+  devops: readonly string[];
+  machineLearning: readonly string[];
+}
+
+export interface ExperienceHighlight {
+  text: string;
+  link: string;
+}
+
+export interface Experience {
+  company: string;
+  title: string;
+  period: string;
+  description: string[];
+  highlights?: ExperienceHighlight[];
+}
+
+export interface Education {
+  school: string;
+  degree: string;
+  period: string;
+  description: string;
+}
+
+export interface Project {
+  title: string;
+  category: string;
+  image: string;
+  link?: string;
+  description: string;
+  tech: string[];
+  hasLiveDemo?: boolean;
+}
+
+export interface Publication {
+  title: string;
+  image: string;
+  link: string;
+  category: string;
+  date: string;
+  publisher: string;
+  publishedIn: string;
+  isbn: string;
+}
+
+export interface BlogPost {
+  title: string;
+  image: string;
+  link: string;
+  category?: string;
+  date?: string;
+  description: string;
+}
+
+// ===========================================
+// Data
+// ===========================================
+
+export const skills: Skills = {
   programmingLanguages: ['Python', 'TypeScript', 'JavaScript', 'Go', 'Swift'],
   databases: ['PostgreSQL', 'MongoDB', 'MySQL', 'Chroma', 'Redis'],
   frontend: ['React', 'Angular', 'Next.js', 'Redux', 'Zustand', 'Tailwind', 'Material UI', 'Jest', 'Cypress'],
   backend: ['Node.js', 'Express.js', 'Django REST', 'Flask', 'FastAPI', 'REST APIs', 'Microservices'],
   devops: ['AWS', 'GCP', 'Docker', 'CI/CD', 'Terraform'],
   machineLearning: ['PyTorch', 'TensorFlow', 'LangChain', 'RAG Systems', 'OpenAI Embeddings'],
-};
+} as const;
 
-export const experience = [
+export const experience: Experience[] = [
   {
     company: 'Sigma Computing, New York, NY',
     title: 'Software Engineer Intern',
-    period: 'Sept 2025 - Dec 2025',
+    period: 'Sept 2024 - Dec 2024',
     description: [
       'Built Conditional Formatting for Containers from scratch, enabling dynamic styling based on formula conditions - now used by 60+ enterprise organizations.',
       'Implemented Custom Page Headers feature end-to-end, allowing users to add branded headers to workbooks for professional reporting.',
@@ -62,7 +129,7 @@ export const experience = [
   },
 ];
 
-export const education = [
+export const education: Education[] = [
   {
     school: 'University of Southern California',
     degree: 'Masters of Science in Computer Science | GPA: 3.81/4.0',
@@ -77,7 +144,7 @@ export const education = [
   },
 ];
 
-export const projects = [
+export const projects: Project[] = [
   // Live deployed projects first
   {
     title: 'Stock Insight Application (Web)',
@@ -147,7 +214,7 @@ export const projects = [
   },
 ];
 
-export const publications = [
+export const publications: Publication[] = [
   {
     title: 'Exploring the Potentials of Explainable AI for Early Cataract Detection to Foster Accessible Healthcare',
     image: '/myimg/blogs/xai1.png',
@@ -190,7 +257,7 @@ export const publications = [
   },
 ];
 
-export const blogPosts = [
+export const blogPosts: BlogPost[] = [
   {
     title: 'Unmasking the Predictions: Understanding Cataract Detection through Explainable AI',
     image: '/myimg/blogs/blog_img_1.png',

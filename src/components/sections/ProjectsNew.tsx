@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { projects } from '@/data/content';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { ExternalLink, Github, Eye } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 const categories = ['All', 'Web development', 'Data Science', 'iOS'];
 
