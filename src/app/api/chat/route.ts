@@ -1,4 +1,26 @@
 import { NextRequest } from 'next/server';
+import {
+  successResponse,
+  ApiErrors,
+  validateString,
+  checkRateLimit,
+} from '@/lib/api';
+
+// ===========================================
+// Configuration
+// ===========================================
+
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = 'llama-3.1-8b-instant';
+const MAX_TOKENS = 1000;
+const TEMPERATURE = 0.7;
+const MAX_HISTORY_MESSAGES = 10;
+const RATE_LIMIT = 20; // requests per window
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+
+// ===========================================
+// System Prompt
+// ===========================================
 
 const SYSTEM_PROMPT = `You are Rutwik's AI assistant on his portfolio website. Answer questions about Rutwik based on the following information. Be concise, friendly, and professional.
 
@@ -87,65 +109,77 @@ Keep responses helpful but concise (2-4 sentences for simple questions, more det
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, history = [] } = await request.json();
+    // Get client IP for rate limiting
+    const clientIp = request.headers.get('x-forwarded-for') || 'anonymous';
 
-    if (!message) {
-      return new Response(JSON.stringify({ error: 'Message is required' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    // Check rate limit
+    const rateLimit = checkRateLimit(clientIp, RATE_LIMIT, RATE_LIMIT_WINDOW);
+    if (!rateLimit.allowed) {
+      return ApiErrors.tooManyRequests('Rate limit exceeded. Please try again later.');
     }
 
+    // Parse and validate request body
+    const body = await request.json();
+    const { message, history = [] } = body;
+
+    // Validate message
+    const messageError = validateString(message, 'message', { minLength: 1, maxLength: 2000 });
+    if (messageError) {
+      return ApiErrors.badRequest(messageError);
+    }
+
+    // Check API key configuration
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
       console.error('GROQ_API_KEY not configured');
-      return new Response(JSON.stringify({ error: 'API not configured' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return ApiErrors.serviceUnavailable('AI service not configured');
     }
 
+    // Build messages array
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
-      ...history.slice(-10),
+      ...history.slice(-MAX_HISTORY_MESSAGES),
       { role: 'user', content: message },
     ];
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    // Call Groq API
+    const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
+        model: GROQ_MODEL,
         messages,
-        max_tokens: 1000,
-        temperature: 0.7,
+        max_tokens: MAX_TOKENS,
+        temperature: TEMPERATURE,
       }),
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Groq API error:', error);
-      return new Response(JSON.stringify({ error: 'AI service error' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const errorText = await response.text();
+      console.error('Groq API error:', response.status, errorText);
+
+      if (response.status === 429) {
+        return ApiErrors.tooManyRequests('AI service rate limit exceeded');
+      }
+
+      return ApiErrors.serviceUnavailable('AI service temporarily unavailable');
     }
 
     const data = await response.json();
     const reply = data.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
 
-    return new Response(JSON.stringify({ reply }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return successResponse({ reply });
   } catch (error) {
     console.error('Chat API error:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+
+    if (error instanceof SyntaxError) {
+      return ApiErrors.badRequest('Invalid JSON in request body');
+    }
+
+    return ApiErrors.internalError('An unexpected error occurred');
   }
 }
 

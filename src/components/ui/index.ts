@@ -13,6 +13,9 @@ export {
 export { default as ThemeToggle } from './ThemeToggle';
 export { ProjectCard } from './ProjectCard';
 export { SectionHeader } from './SectionHeader';
+export { ErrorBoundary } from './ErrorBoundary';
+export { Skeleton, SkeletonCard, SkeletonText, SkeletonAvatar, SkeletonButton } from './Skeleton';
+export { Spinner, LoadingOverlay } from './Spinner';
 
 // Re-export types
 export type { BadgeProps } from './Badge';
