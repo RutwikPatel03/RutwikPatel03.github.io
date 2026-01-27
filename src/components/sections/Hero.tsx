@@ -132,6 +132,9 @@ export default function Hero() {
                 fill
                 className="object-cover"
                 priority
+                fetchPriority="high"
+                sizes="(max-width: 640px) 256px, 320px"
+                quality={85}
               />
             </div>
             {/* Decorative ring */}

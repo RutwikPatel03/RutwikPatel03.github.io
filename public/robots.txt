@@ -1,18 +1,52 @@
 # Robots.txt for rutwik.dev
 # Software Engineer Portfolio - Rutwik Patel
+# Last updated: 2025-01-27
 
+# Default rule for all bots
 User-agent: *
 Allow: /
+Crawl-delay: 1
 
-# Sitemap location
+# Sitemap locations
 Sitemap: https://rutwik.dev/sitemap.xml
 
-# Allow all major search engines and AI bots
+# ===========================================
+# Search Engine Crawlers
+# ===========================================
+
+# Google
 User-agent: Googlebot
 Allow: /
+User-agent: Googlebot-Image
+Allow: /
+User-agent: Googlebot-Video
+Allow: /
 
+# Bing
 User-agent: Bingbot
 Allow: /
+User-agent: MSNBot
+Allow: /
+
+# Yahoo
+User-agent: Slurp
+Allow: /
+
+# Yandex
+User-agent: YandexBot
+Allow: /
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# ===========================================
+# AI Crawlers (Allowed for portfolio visibility)
+# ===========================================
 
 User-agent: GPTBot
 Allow: /
@@ -34,4 +68,29 @@ Allow: /
 
 User-agent: Google-Extended
 Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+# ===========================================
+# Social Media Crawlers
+# ===========================================
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# ===========================================
+# Disallowed paths (none currently)
+# ===========================================
+# Disallow: /api/
+# Disallow: /private/
 

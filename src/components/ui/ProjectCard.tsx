@@ -37,6 +37,9 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           alt={project.imageAlt || `${project.title} - ${project.category} project by Rutwik Patel`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          loading="lazy"
+          quality={80}
         />
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">

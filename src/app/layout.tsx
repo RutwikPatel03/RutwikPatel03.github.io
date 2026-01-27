@@ -101,6 +101,14 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/myimg/favicon.png" type="image/x-icon" />
 
+        {/* Preconnect for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Search Engine Verification - Add your verification codes here */}
+        {/* <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" /> */}
+        {/* <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" /> */}
+
         {/* JSON-LD Structured Data for Search Engines & AI Bots */}
         <script
           type="application/ld+json"

@@ -108,7 +108,7 @@ export const projects: Project[] = [
   {
     title: 'World Salon Website',
     category: 'web development',
-    image: '/myimg/world-salon.png',
+    image: '/myimg/world-salon.jpg',
     imageAlt: 'World Salon Platform - Speaker sourcing and event management website built with React, Node.js, MongoDB, AWS by Rutwik Patel',
     link: 'https://www.world-salon.com',
     description: '',
