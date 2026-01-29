@@ -5,8 +5,24 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Download, MapPin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useTypewriter } from '@/hooks';
+
+const TITLES = [
+  'Software Engineer',
+  'Full Stack Developer',
+  'AI Enthusiast',
+  'Problem Solver',
+  'USC CS Graduate',
+];
 
 export default function Hero() {
+  const { text } = useTypewriter({
+    words: TITLES,
+    typeSpeed: 80,
+    deleteSpeed: 40,
+    delayBetweenWords: 2500,
+  });
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Background gradient */}
@@ -61,14 +77,15 @@ export default function Hero() {
               </span>
             </motion.h1>
 
-            {/* Title */}
+            {/* Title with Typewriter Effect */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="mt-4 text-xl sm:text-2xl text-muted-foreground"
+              className="mt-4 text-xl sm:text-2xl text-muted-foreground h-8 sm:h-9"
             >
-              Software Engineer
+              <span>{text}</span>
+              <span className="inline-block w-0.5 h-6 sm:h-7 bg-blue-500 ml-1 animate-pulse" />
             </motion.p>
 
             {/* Description */}

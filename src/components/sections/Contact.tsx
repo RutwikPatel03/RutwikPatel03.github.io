@@ -3,8 +3,9 @@
 import { useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/Button';
+import { CopyButton } from '@/components/ui/CopyButton';
 import { Mail, Phone, MapPin, Send, Linkedin, Github, CheckCircle, XCircle, X } from 'lucide-react';
-import { contactInfo as baseContactInfo, socialLinks as socialConfig } from '@/constants';
+import { contactInfo as baseContactInfo, socialLinks as socialConfig, siteConfig } from '@/constants';
 
 // Map contact info with icons
 const contactInfo = baseContactInfo.map((item) => ({
@@ -97,15 +98,24 @@ export default function Contact() {
                   <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
                     <item.icon className="w-5 h-5 text-muted-foreground" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-sm text-muted-foreground">{item.label}</p>
-                    {item.href ? (
-                      <a href={item.href} className="text-foreground hover:text-blue-500 transition-colors">
-                        {item.value}
-                      </a>
-                    ) : (
-                      <p className="text-foreground">{item.value}</p>
-                    )}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {item.href ? (
+                        <a href={item.href} className="text-foreground hover:text-blue-500 transition-colors">
+                          {item.value}
+                        </a>
+                      ) : (
+                        <p className="text-foreground">{item.value}</p>
+                      )}
+                      {item.type === 'email' && (
+                        <CopyButton
+                          text={siteConfig.author.email}
+                          label="Copy"
+                          className="text-xs px-2 py-1"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Menu, X, Download, Sparkles } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { VisitorStats } from '@/components/ui/VisitorStats';
 import { navItems, externalLinks, siteConfig } from '@/constants';
 import { useScrollToSection, useScrolled } from '@/hooks';
 
@@ -63,6 +64,8 @@ export default function Header() {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
+            <VisitorStats variant="minimal" />
+            <div className="w-px h-4 bg-border" />
             <ThemeToggle />
             <Link
               href={externalLinks.aiChat}
