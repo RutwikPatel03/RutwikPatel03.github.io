@@ -6,7 +6,7 @@ import { Linkedin, Github, Mail } from 'lucide-react';
 const socialLinks = [
   { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/rutwikpatel13' },
   { icon: Github, label: 'GitHub', href: 'https://github.com/RutwikPatel13' },
-  { icon: Mail, label: 'Email', href: 'mailto:rutwikdh@usc.edu' },
+  { icon: Mail, label: 'Email', href: 'mailto:rutwikpatel1313@gmail.com' },
 ];
 
 const navLinks = [

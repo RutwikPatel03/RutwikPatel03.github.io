@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         from: 'Portfolio Contact <onboarding@resend.dev>',
-        to: process.env.CONTACT_EMAIL || 'rutwikdh@usc.edu',
+        to: process.env.CONTACT_EMAIL || 'rutwikpatel1313@gmail.com',
         reply_to: email,
         subject: `Portfolio Contact: ${name}`,
         html: `

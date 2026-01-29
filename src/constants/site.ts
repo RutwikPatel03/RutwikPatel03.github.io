@@ -13,7 +13,7 @@ export const siteConfig = {
   logo: 'RP',
   author: {
     name: 'Rutwik Patel',
-    email: 'rutwikdh@usc.edu',
+    email: 'rutwikpatel1313@gmail.com',
     phone: '+1 213-913-8803',
     location: 'San Francisco, CA',
   },
