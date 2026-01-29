@@ -1,108 +1,85 @@
-# Rutwik Patel - Portfolio Website
+# Rutwik Patel - Portfolio
 
-A modern, responsive portfolio website built with Next.js 14, TypeScript, and Tailwind CSS.
+My personal portfolio website built with Next.js, TypeScript, and Tailwind CSS.
 
-🌐 **Live Site:** [rutwikpatel.com](https://rutwikpatel.com)
+**Live:** [rutwik.dev](https://rutwik.dev)
 
-## ✨ Features
+## Features
 
-- **Responsive Design** - Optimized for all screen sizes
-- **Dark/Light Mode** - Theme toggle with system preference detection
-- **Typing Animation** - Dynamic hero section with typewriter effect
-- **Global Visitor Counter** - Real-time visitor tracking using Upstash Redis
-- **Copy Email Button** - One-click email copy with animated feedback
-- **AI Chat** - Interactive AI assistant powered by Groq
-- **Contact Form** - Email integration with Resend
-- **Smooth Animations** - Framer Motion powered transitions
-- **SEO Optimized** - Meta tags and Open Graph support
+- Responsive design that works on all devices
+- Dark and light mode with system preference detection
+- Typing animation on the hero section
+- Global visitor counter using Upstash Redis
+- One-click email copy button
+- AI chat assistant powered by Groq
+- Contact form with email notifications via Resend
+- Smooth page transitions with Framer Motion
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
-- **Database:** Upstash Redis (visitor counter)
-- **Email:** Resend
-- **AI:** Groq API
-- **Deployment:** Vercel
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Upstash Redis
+- Resend
+- Groq API
+- Vercel
 
-## 🚀 Getting Started
+## Getting Started
 
-### Prerequisites
+Make sure you have Node.js 18+ installed.
 
-- Node.js 18+
-- npm or yarn
+Clone the repo and install dependencies:
 
-### Installation
+```bash
+git clone https://github.com/RutwikPatel03/RutwikPatel03.github.io.git
+cd RutwikPatel03.github.io
+npm install
+```
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/RutwikPatel03/RutwikPatel03.github.io.git
-   cd RutwikPatel03.github.io
-   ```
+Create a `.env.local` file in the root directory:
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```env
+GROQ_API_KEY=your_groq_api_key
+RESEND_API_KEY=your_resend_api_key
+CONTACT_EMAIL=your_email@example.com
+KV_REST_API_URL=your_upstash_redis_url
+KV_REST_API_TOKEN=your_upstash_redis_token
+```
 
-3. Create a `.env.local` file with the following variables:
-   ```env
-   # Groq API Key for AI Chat
-   GROQ_API_KEY=your_groq_api_key
+Start the development server:
 
-   # Resend API Key for Contact Form
-   RESEND_API_KEY=your_resend_api_key
+```bash
+npm run dev
+```
 
-   # Email to receive contact form submissions
-   CONTACT_EMAIL=your_email@example.com
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-   # Upstash Redis (for visitor counter)
-   KV_REST_API_URL=your_upstash_redis_url
-   KV_REST_API_TOKEN=your_upstash_redis_token
-   ```
-
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
-├── app/                 # Next.js App Router pages
-│   ├── api/            # API routes (chat, contact, stats)
-│   └── ...
-├── components/
-│   ├── layout/         # Header, Footer
-│   ├── sections/       # Hero, About, Experience, Projects, etc.
-│   └── ui/             # Reusable UI components
-├── constants/          # Site configuration and data
-├── hooks/              # Custom React hooks
-├── lib/                # Utility functions and clients
-└── styles/             # Global styles
+├── app/            # Pages and API routes
+├── components/     # React components
+├── constants/      # Site config and data
+├── hooks/          # Custom hooks
+├── lib/            # Utilities
+└── styles/         # Global styles
 ```
 
-## 📜 Available Scripts
+## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run type-check` | Run TypeScript compiler check |
+- `npm run dev` - Start dev server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run linter
+- `npm run type-check` - Check TypeScript types
 
-## 📄 License
+## License
 
-This project is open source and available under the [MIT License](LICENSE).
+MIT
 
-## 📬 Contact
+## Contact
 
-- **Email:** rutwikpatel1313@gmail.com
-- **LinkedIn:** [linkedin.com/in/rutwikpatel13](https://linkedin.com/in/rutwikpatel13)
-- **GitHub:** [github.com/RutwikPatel13](https://github.com/RutwikPatel13)
+Feel free to reach out at rutwikpatel1313@gmail.com
