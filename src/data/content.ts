@@ -96,6 +96,16 @@ export const education: Education[] = [
 export const projects: Project[] = [
   // Live deployed projects first
   {
+    title: 'Netflix Clone',
+    category: 'web development',
+    image: '/myimg/Project_Netflix_Clone.png',
+    imageAlt: 'Netflix Clone - Full-stack streaming platform UI clone with user authentication and movie browsing built with Next.js, TypeScript, Tailwind CSS, and Supabase by Rutwik Patel',
+    link: 'https://netflix-clone-opal-six-93.vercel.app',
+    description: 'Full-stack Netflix clone with user authentication, movie browsing, My List, and trailer playback using TMDB API.',
+    tech: ['Next.js', 'TypeScript', 'Tailwind', 'Supabase'],
+    hasLiveDemo: true,
+  },
+  {
     title: 'Stock Insight Application (Web)',
     category: 'web development',
     image: '/myimg/Project_Stock_Web.png',

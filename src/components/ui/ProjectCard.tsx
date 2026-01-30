@@ -12,7 +12,24 @@ interface ProjectCardProps {
   index?: number;
 }
 
+// Generate live screenshot URL using Microlink API
+function getLiveScreenshotUrl(url: string): string {
+  const params = new URLSearchParams({
+    url,
+    screenshot: 'true',
+    meta: 'false',
+    embed: 'screenshot.url',
+    waitForTimeout: '3000',
+  });
+  return `https://api.microlink.io/?${params.toString()}`;
+}
+
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
+  // Use live screenshot for projects with hasLiveDemo and a valid link
+  const imageSrc = project.hasLiveDemo && project.link
+    ? getLiveScreenshotUrl(project.link)
+    : project.image;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,13 +50,14 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           </div>
         )}
         <Image
-          src={project.image}
+          src={imageSrc}
           alt={project.imageAlt || `${project.title} - ${project.category} project by Rutwik Patel`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           loading="lazy"
           quality={80}
+          unoptimized={project.hasLiveDemo && !!project.link}
         />
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
