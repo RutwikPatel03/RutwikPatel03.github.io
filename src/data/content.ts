@@ -131,9 +131,10 @@ export const projects: Project[] = [
     category: 'data science',
     image: '/myimg/Project_Cataract.png',
     imageAlt: 'Cataract Detection AI System - CNN-based medical imaging with GradCAM explainability achieving 97% accuracy, IEEE published research by Rutwik Patel',
-    link: 'https://github.com/RutwikPatel13/Cataract_Detection_with_XAI',
+    link: 'https://cataractdetectionwithxai.streamlit.app/',
     description: 'Led team of 3 to develop CNN-based cataract detection system achieving 97% accuracy with explainable AI integration. Integrated GradCAM for visualizing model decisions.',
-    tech: ['React', 'Python', 'CNN', 'XAI libraries'],
+    tech: ['Streamlit', 'Python', 'CNN', 'GradCAM'],
+    hasLiveDemo: true,
   },
   {
     title: 'RAG-based Q&A App',
