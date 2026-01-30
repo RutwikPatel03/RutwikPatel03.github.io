@@ -4,13 +4,13 @@ import { useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/Button';
 import { CopyButton } from '@/components/ui/CopyButton';
-import { Mail, Phone, MapPin, Send, Linkedin, Github, CheckCircle, XCircle, X } from 'lucide-react';
+import { Mail, MapPin, Send, Linkedin, Github, CheckCircle, XCircle, X } from 'lucide-react';
 import { contactInfo as baseContactInfo, socialLinks as socialConfig, siteConfig } from '@/constants';
 
 // Map contact info with icons
 const contactInfo = baseContactInfo.map((item) => ({
   ...item,
-  icon: item.type === 'email' ? Mail : item.type === 'phone' ? Phone : MapPin,
+  icon: item.type === 'email' ? Mail : MapPin,
 }));
 
 const socialLinks = [

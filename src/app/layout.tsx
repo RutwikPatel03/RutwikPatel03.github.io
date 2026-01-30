@@ -133,7 +133,6 @@ export default function RootLayout({
                   url: 'https://rutwik.dev',
                   image: 'https://rutwik.dev/myimg/me.jpg',
                   email: 'rutwikpatel1313@gmail.com',
-                  telephone: '+1-213-913-8803',
                   address: {
                     '@type': 'PostalAddress',
                     addressLocality: 'San Francisco',

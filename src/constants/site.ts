@@ -14,7 +14,6 @@ export const siteConfig = {
   author: {
     name: 'Rutwik Patel',
     email: 'rutwikpatel1313@gmail.com',
-    phone: '+1 213-913-8803',
     location: 'San Francisco, CA',
   },
 } as const;
@@ -39,12 +38,6 @@ export const contactInfo = [
     label: 'Email',
     value: siteConfig.author.email,
     href: `mailto:${siteConfig.author.email}`,
-  },
-  {
-    type: 'phone' as const,
-    label: 'Phone',
-    value: siteConfig.author.phone,
-    href: `tel:${siteConfig.author.phone.replace(/\s|-/g, '')}`,
   },
   {
     type: 'location' as const,

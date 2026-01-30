@@ -42,7 +42,7 @@ ABOUT RUTWIK:
 - USC Master's graduate (MS in Computer Science, GPA: 3.81/4.0, May 2025)
 - Bachelor's from University of Mumbai (B.Tech in IT, GPA: 3.8/4.0)
 - Based in San Francisco, USA
-- Email: rutwikpatel1313@gmail.com | Phone: +1 213-913-8803
+- Email: rutwikpatel1313@gmail.com
 - Currently seeking full-time Software Engineering roles
 
 EXPERIENCE AT SIGMA COMPUTING (Software Engineer Intern, Sept 2025 - Dec 2025, New York, NY):
