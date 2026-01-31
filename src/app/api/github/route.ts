@@ -3,29 +3,9 @@ import { NextResponse } from 'next/server';
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
 const GITHUB_USERNAME = 'RutwikPatel13';
 
-interface ContributionDay {
-  contributionCount: number;
-  date: string;
-  color: string;
-}
 
-interface ContributionWeek {
-  contributionDays: ContributionDay[];
-}
 
-interface GitHubResponse {
-  data: {
-    user: {
-      contributionsCollection: {
-        contributionCalendar: {
-          totalContributions: number;
-          weeks: ContributionWeek[];
-        };
-      };
-      createdAt: string;
-    };
-  };
-}
+
 
 const query = `
   query($username: String!, $from: DateTime, $to: DateTime) {
@@ -72,7 +52,7 @@ export async function GET(request: Request) {
 
   try {
     // Build date range for the year if specified
-    let variables: { username: string; from?: string; to?: string } = {
+    const variables: { username: string; from?: string; to?: string } = {
       username: GITHUB_USERNAME
     };
 

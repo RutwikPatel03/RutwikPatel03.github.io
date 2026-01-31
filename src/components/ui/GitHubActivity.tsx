@@ -39,8 +39,6 @@ function getContributionLevel(count: number): number {
   return 4;
 }
 
-const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
 function ContributionGraph({ weeks }: { weeks: ContributionWeek[] }) {
   // Get month labels with their positions
   const getMonthPositions = () => {
@@ -169,6 +167,7 @@ export default function GitHubActivity() {
 
   useEffect(() => {
     fetchGitHubData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleYearChange = (year: number) => {
