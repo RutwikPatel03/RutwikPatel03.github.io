@@ -29,12 +29,12 @@ export default function Experience() {
         <div className="mb-16">
           <div className="flex items-center gap-2 mb-8">
             <Briefcase className="w-5 h-5 text-blue-500" />
-            <h3 className="font-heading text-xl font-semibold text-foreground">Work Experience</h3>
+            <h3 className="font-heading text-lg sm:text-xl font-semibold text-foreground">Work Experience</h3>
           </div>
 
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-border -translate-x-1/2" />
+            {/* Timeline line - always on left for mobile simplicity */}
+            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-1/2" />
 
             {experience.map((item, index) => (
               <motion.div
@@ -43,22 +43,22 @@ export default function Experience() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`relative pl-8 md:pl-0 pb-12 last:pb-0 ${
+                className={`relative pl-6 sm:pl-8 md:pl-0 pb-10 sm:pb-12 last:pb-0 ${
                   index % 2 === 0 ? 'md:pr-[50%] md:text-right' : 'md:pl-[50%] md:text-left'
                 }`}
               >
                 {/* Timeline dot */}
-                <div className={`absolute left-0 md:left-1/2 top-0 w-3 h-3 rounded-full bg-blue-500 border-4 border-background -translate-x-1/2`} />
+                <div className="absolute left-0 md:left-1/2 top-0 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-500 border-2 sm:border-4 border-background -translate-x-1/2" />
 
                 <div className={`${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
-                  <Badge variant="outline" className="mb-2">{item.period}</Badge>
-                  <h4 className="font-heading text-lg font-semibold text-foreground mt-1">{item.company}</h4>
-                  <p className="text-muted-foreground font-medium">{item.title}</p>
-                  
-                  <ul className={`mt-3 space-y-2 text-sm text-muted-foreground ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                  <Badge variant="outline" className="mb-2 text-xs">{item.period}</Badge>
+                  <h4 className="font-heading text-base sm:text-lg font-semibold text-foreground mt-1">{item.company}</h4>
+                  <p className="text-sm sm:text-base text-muted-foreground font-medium">{item.title}</p>
+
+                  <ul className={`mt-3 space-y-2 text-xs sm:text-sm text-muted-foreground ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
                     {item.description.map((desc, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className={`text-muted-foreground/50 ${index % 2 === 0 ? 'md:order-last' : ''}`}>•</span>
+                        <span className={`text-muted-foreground/50 shrink-0 ${index % 2 === 0 ? 'md:order-last' : ''}`}>•</span>
                         <span>{desc}</span>
                       </li>
                     ))}
@@ -91,7 +91,7 @@ export default function Experience() {
         <div>
           <div className="flex items-center gap-2 mb-8">
             <GraduationCap className="w-5 h-5 text-purple-500" />
-            <h3 className="font-heading text-xl font-semibold text-foreground">Education</h3>
+            <h3 className="font-heading text-lg sm:text-xl font-semibold text-foreground">Education</h3>
           </div>
 
           <div className="space-y-6">
@@ -102,13 +102,13 @@ export default function Experience() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative pl-8 border-l border-border"
+                className="relative pl-6 sm:pl-8 border-l border-border"
               >
-                <div className="absolute left-0 top-0 w-3 h-3 rounded-full bg-purple-500 border-4 border-background -translate-x-1/2" />
-                <Badge variant="outline" className="mb-2">{item.period}</Badge>
-                <h4 className="font-heading text-lg font-semibold text-foreground mt-1">{item.school}</h4>
-                <p className="text-muted-foreground font-medium">{item.degree}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
+                <div className="absolute left-0 top-0 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-purple-500 border-2 sm:border-4 border-background -translate-x-1/2" />
+                <Badge variant="outline" className="mb-2 text-xs">{item.period}</Badge>
+                <h4 className="font-heading text-base sm:text-lg font-semibold text-foreground mt-1">{item.school}</h4>
+                <p className="text-sm sm:text-base text-muted-foreground font-medium">{item.degree}</p>
+                <p className="mt-2 text-xs sm:text-sm text-muted-foreground">{item.description}</p>
               </motion.div>
             ))}
           </div>

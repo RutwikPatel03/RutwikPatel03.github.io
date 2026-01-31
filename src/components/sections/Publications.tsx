@@ -27,7 +27,7 @@ export default function Publications() {
         </motion.div>
 
         {/* Publications Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {publications.map((pub, index) => (
             <motion.a
               key={pub.title}
@@ -40,9 +40,9 @@ export default function Publications() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group relative overflow-hidden rounded-xl border border-border bg-muted/30 backdrop-blur-sm hover:border-border/80 transition-all"
             >
-              <div className="flex flex-col sm:flex-row gap-4 p-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-3 sm:p-4">
                 {/* Publication Image */}
-                <div className="relative w-full sm:w-32 h-24 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+                <div className="relative w-full sm:w-32 h-32 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
                   <Image
                     src={pub.image}
                     alt={pub.title}
@@ -53,22 +53,22 @@ export default function Publications() {
 
                 {/* Publication Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="outline" className="text-xs">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <Badge variant="outline" className="text-[10px] sm:text-xs">
                       {pub.publisher}
                     </Badge>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
                       <Calendar className="w-3 h-3" />
                       {pub.date}
                     </div>
                   </div>
 
-                  <h3 className="font-heading font-semibold text-foreground group-hover:text-blue-500 transition-colors line-clamp-2">
+                  <h3 className="font-heading text-sm sm:text-base font-semibold text-foreground group-hover:text-blue-500 transition-colors line-clamp-2">
                     {pub.title}
                   </h3>
 
-                  <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                    <BookOpen className="w-3 h-3" />
+                  <div className="mt-2 flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                    <BookOpen className="w-3 h-3 shrink-0" />
                     <span className="line-clamp-1">{pub.publishedIn}</span>
                   </div>
 

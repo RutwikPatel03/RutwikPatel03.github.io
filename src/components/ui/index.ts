@@ -18,6 +18,7 @@ export { Skeleton, SkeletonCard, SkeletonText, SkeletonAvatar, SkeletonButton } 
 export { Spinner, LoadingOverlay } from './Spinner';
 export { CopyButton } from './CopyButton';
 export { VisitorStats } from './VisitorStats';
+export { default as GitHubActivity } from './GitHubActivity';
 
 // Re-export types
 export type { BadgeProps } from './Badge';

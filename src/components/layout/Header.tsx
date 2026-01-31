@@ -28,8 +28,8 @@ export default function Header() {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled
-          ? 'bg-background/80 backdrop-blur-lg border-b border-border'
+        isScrolled || isMenuOpen
+          ? 'bg-background/95 backdrop-blur-lg border-b border-border'
           : 'bg-transparent'
       )}
     >
@@ -99,9 +99,9 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden py-4 border-t border-border"
+            className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border shadow-lg"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 p-4">
               {navItems.map((item) => (
                 <button
                   key={item.name}
@@ -118,6 +118,7 @@ export default function Header() {
               <div className="flex gap-2 mt-4 px-4">
                 <Link
                   href={externalLinks.aiChat}
+                  onClick={() => setIsMenuOpen(false)}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm text-muted-foreground border border-border rounded-lg hover:bg-accent transition-colors"
                 >
                   <Sparkles className="w-4 h-4" />
@@ -126,6 +127,7 @@ export default function Header() {
                 <Link
                   href={externalLinks.resume}
                   target="_blank"
+                  onClick={() => setIsMenuOpen(false)}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
                 >
                   <Download className="w-4 h-4" />

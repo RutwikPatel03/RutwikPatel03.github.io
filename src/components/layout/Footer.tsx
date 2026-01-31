@@ -22,27 +22,27 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border bg-background">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div>
-            <Link href="/" className="font-heading text-xl font-semibold text-foreground">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+          {/* Brand - full width on mobile */}
+          <div className="col-span-2 sm:col-span-1">
+            <Link href="/" className="font-heading text-lg sm:text-xl font-semibold text-foreground">
               Rutwik Patel
             </Link>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
               Focused on impact, not just code.
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <h4 className="font-medium text-foreground mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+            <h4 className="text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">Quick Links</h4>
+            <ul className="space-y-1.5 sm:space-y-2">
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.name}
                   </a>
@@ -53,18 +53,18 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="font-medium text-foreground mb-4">Connect</h4>
-            <div className="flex gap-3">
+            <h4 className="text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">Connect</h4>
+            <div className="flex gap-2 sm:gap-3">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                   aria-label={link.label}
                 >
-                  <link.icon className="w-4 h-4" />
+                  <link.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </a>
               ))}
             </div>
@@ -72,8 +72,8 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-border">
-          <p className="text-center text-sm text-muted-foreground">
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
+          <p className="text-center text-xs sm:text-sm text-muted-foreground">
             © {currentYear} Rutwik Patel. All rights reserved.
           </p>
         </div>

@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import { BentoGrid, BentoCard, BentoCardHeader, BentoCardTitle, BentoCardDescription, BentoCardContent } from '@/components/ui/BentoGrid';
 import { Badge } from '@/components/ui/Badge';
+import GitHubActivity from '@/components/ui/GitHubActivity';
 import { skills } from '@/data/content';
 import { Code2, Database, Cloud, Brain, Layers, Globe } from 'lucide-react';
 
@@ -80,7 +81,7 @@ export default function About() {
               <BentoCardTitle>Who I Am</BentoCardTitle>
             </BentoCardHeader>
             <BentoCardContent>
-              <BentoCardDescription className="text-base leading-relaxed">
+              <BentoCardDescription className="text-sm sm:text-base leading-relaxed">
                 I&apos;m a Software Engineer and USC Master&apos;s graduate focused on building scalable full-stack systems and applied AI solutions.
                 <br /><br />
                 I&apos;ve shipped production features at Sigma Computing used by 60+ enterprise customers, where I worked on cloud analytics UI, formula-based styling, and TypeScript performance optimizations to reduce user friction. Previously at World Salon, I re-architected payment microservices, improving performance by 20%, and integrated Stripe to support monetized event workflows.
@@ -100,16 +101,19 @@ export default function About() {
               <BentoCardTitle>Impact</BentoCardTitle>
             </BentoCardHeader>
             <BentoCardContent>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6">
                 {stats.map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-                    <div className="text-xs text-muted-foreground">{stat.label}</div>
+                  <div key={stat.label} className="text-center p-2 sm:p-0">
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">{stat.value}</div>
+                    <div className="text-[10px] sm:text-xs text-muted-foreground leading-tight">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </BentoCardContent>
           </BentoCard>
+
+          {/* GitHub Activity Card */}
+          <GitHubActivity />
 
           {/* Skills Cards */}
           {skillCategories.map((category) => (

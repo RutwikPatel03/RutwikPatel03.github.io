@@ -81,7 +81,7 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-12">
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -90,23 +90,23 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
             className="space-y-6"
           >
-            <h3 className="font-heading text-xl font-semibold text-foreground">Contact Info</h3>
-            
+            <h3 className="font-heading text-lg sm:text-xl font-semibold text-foreground">Contact Info</h3>
+
             <div className="space-y-4">
               {contactInfo.map((item) => (
-                <div key={item.label} className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-muted-foreground" />
+                <div key={item.label} className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-muted flex items-center justify-center">
+                    <item.icon className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-muted-foreground">{item.label}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs sm:text-sm text-muted-foreground">{item.label}</p>
                     <div className="flex items-center gap-2 flex-wrap">
                       {item.href ? (
-                        <a href={item.href} className="text-foreground hover:text-blue-500 transition-colors">
+                        <a href={item.href} className="text-sm sm:text-base text-foreground hover:text-blue-500 transition-colors break-all">
                           {item.value}
                         </a>
                       ) : (
-                        <p className="text-foreground">{item.value}</p>
+                        <p className="text-sm sm:text-base text-foreground">{item.value}</p>
                       )}
                       {item.type === 'email' && (
                         <CopyButton
@@ -122,18 +122,18 @@ export default function Contact() {
             </div>
 
             {/* Social Links */}
-            <div className="pt-6">
-              <h4 className="text-sm font-medium text-muted-foreground mb-4">Find me on</h4>
-              <div className="flex gap-3">
+            <div className="pt-4 sm:pt-6">
+              <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-3 sm:mb-4">Find me on</h4>
+              <div className="flex gap-2 sm:gap-3">
                 {socialLinks.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                   >
-                    <link.icon className="w-5 h-5" />
+                    <link.icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </a>
                 ))}
               </div>
@@ -147,7 +147,7 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <div>
                 <input
                   type="text"
@@ -155,7 +155,7 @@ export default function Contact() {
                   placeholder="Your name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-muted border border-border text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
                   required
                 />
               </div>
@@ -166,7 +166,7 @@ export default function Contact() {
                   placeholder="Your email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-muted border border-border text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
                   required
                 />
               </div>
@@ -177,11 +177,11 @@ export default function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={5}
-                  className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-muted border border-border text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
                   required
                 />
               </div>
-              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+              <Button type="submit" size="lg" className="w-full text-sm sm:text-base" disabled={isSubmitting}>
                 <Send className="w-4 h-4" />
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </Button>
@@ -190,30 +190,30 @@ export default function Contact() {
         </div>
       </div>
 
-      {/* Toast Notification */}
+      {/* Toast Notification - responsive positioning */}
       <AnimatePresence>
         {toast && (
           <motion.div
             initial={{ opacity: 0, y: 50, x: '-50%' }}
             animate={{ opacity: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, y: 50, x: '-50%' }}
-            className={`fixed bottom-6 left-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg ${
+            className={`fixed bottom-4 sm:bottom-6 left-1/2 z-50 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg shadow-lg max-w-[90vw] sm:max-w-md ${
               toast.type === 'success'
                 ? 'bg-green-500/90 text-white'
                 : 'bg-red-500/90 text-white'
             }`}
           >
             {toast.type === 'success' ? (
-              <CheckCircle className="w-5 h-5 flex-shrink-0" />
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
             ) : (
-              <XCircle className="w-5 h-5 flex-shrink-0" />
+              <XCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
             )}
-            <span className="text-sm font-medium">{toast.message}</span>
+            <span className="text-xs sm:text-sm font-medium line-clamp-2">{toast.message}</span>
             <button
               onClick={() => setToast(null)}
-              className="ml-2 p-1 hover:bg-white/20 rounded transition-colors"
+              className="ml-1 sm:ml-2 p-1 hover:bg-white/20 rounded transition-colors shrink-0"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </motion.div>
         )}

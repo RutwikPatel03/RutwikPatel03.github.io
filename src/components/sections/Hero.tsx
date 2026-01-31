@@ -114,20 +114,20 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5 }}
-              className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4"
+              className="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4"
             >
-              <Button size="lg" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
+              <Button size="lg" className="w-full sm:w-auto" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
                 Get in Touch
                 <ArrowRight className="w-4 h-4" />
               </Button>
-              <Link href="/ai">
-                <Button variant="outline" size="lg">
+              <Link href="/ai" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   <Sparkles className="w-4 h-4" />
                   Ask AI About Me
                 </Button>
               </Link>
-              <Link href="/resume.pdf" target="_blank">
-                <Button variant="ghost" size="lg">
+              <Link href="/resume.pdf" target="_blank" className="w-full sm:w-auto">
+                <Button variant="ghost" size="lg" className="w-full sm:w-auto">
                   <Download className="w-4 h-4" />
                   Resume
                 </Button>

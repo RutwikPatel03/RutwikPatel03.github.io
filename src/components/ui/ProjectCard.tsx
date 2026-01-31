@@ -73,19 +73,19 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
       </div>
 
       {/* Project Info */}
-      <div className="p-4">
-        <h3 className="font-heading font-semibold text-foreground group-hover:text-blue-500 transition-colors">
+      <div className="p-3 sm:p-4">
+        <h3 className="font-heading text-sm sm:text-base font-semibold text-foreground group-hover:text-blue-500 transition-colors">
           {project.title}
         </h3>
-        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+        <p className="mt-1 text-xs sm:text-sm text-muted-foreground line-clamp-2">
           {project.description || project.category}
         </p>
 
         {/* Tech Stack */}
         {project.tech && project.tech.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
+          <div className="mt-2 sm:mt-3 flex flex-wrap gap-1 sm:gap-1.5">
             {project.tech.slice(0, 4).map((tech) => (
-              <Badge key={tech} variant="outline" className="text-xs">
+              <Badge key={tech} variant="outline" className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5">
                 {tech}
               </Badge>
             ))}
