@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 import { BentoCard, BentoCardHeader, BentoCardTitle, BentoCardContent } from './BentoGrid';
 import { Skeleton } from './Skeleton';
@@ -40,6 +40,15 @@ function getContributionLevel(count: number): number {
 }
 
 function ContributionGraph({ weeks }: { weeks: ContributionWeek[] }) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to the beginning (January) on mount and when weeks change
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = 0;
+    }
+  }, [weeks]);
+
   // Get month labels with their positions
   const getMonthPositions = () => {
     const positions: { month: string; weekIndex: number }[] = [];
@@ -70,7 +79,7 @@ function ContributionGraph({ weeks }: { weeks: ContributionWeek[] }) {
   return (
     <div className="w-full">
       {/* Scrollable container for mobile, centered on desktop */}
-      <div className="overflow-x-auto pb-2 flex justify-center">
+      <div ref={scrollContainerRef} className="overflow-x-auto pb-2 flex justify-center">
         <div className="inline-block min-w-max">
           {/* Month labels row */}
           <div className="flex text-xs text-muted-foreground mb-1" style={{ paddingLeft: '28px' }}>
