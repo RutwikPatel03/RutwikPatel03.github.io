@@ -28,9 +28,11 @@ export default function Header() {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled || isMenuOpen
-          ? 'bg-background/95 backdrop-blur-lg border-b border-border'
-          : 'bg-transparent'
+        isScrolled
+          ? 'bg-background/80 backdrop-blur-lg border-b border-border'
+          : isMenuOpen
+            ? 'bg-background backdrop-blur-lg border-b border-border'
+            : 'bg-transparent'
       )}
     >
       {/* Progress bar */}
@@ -99,7 +101,7 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border shadow-lg"
+            className="md:hidden absolute top-16 left-0 right-0 bg-background backdrop-blur-lg border-b border-border shadow-lg"
           >
             <div className="flex flex-col gap-2 p-4">
               {navItems.map((item) => (
