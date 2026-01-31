@@ -78,9 +78,10 @@ function ContributionGraph({ weeks }: { weeks: ContributionWeek[] }) {
 
   return (
     <div className="w-full">
-      {/* Scrollable container for mobile, centered on desktop */}
-      <div ref={scrollContainerRef} className="overflow-x-auto pb-2 flex justify-center">
-        <div className="inline-block min-w-max">
+      {/* Scrollable container - left-aligned for proper scroll, centered via wrapper on desktop */}
+      <div className="flex justify-start sm:justify-center">
+        <div ref={scrollContainerRef} className="overflow-x-auto pb-2">
+          <div className="inline-block min-w-max">
           {/* Month labels row */}
           <div className="flex text-xs text-muted-foreground mb-1" style={{ paddingLeft: '28px' }}>
             {monthPositions.map((pos, i) => {
@@ -134,6 +135,7 @@ function ContributionGraph({ weeks }: { weeks: ContributionWeek[] }) {
                 </div>
               ))}
             </div>
+          </div>
           </div>
         </div>
       </div>
