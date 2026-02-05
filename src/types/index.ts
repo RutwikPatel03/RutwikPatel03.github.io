@@ -77,6 +77,16 @@ export interface BlogPost {
   description: string;
 }
 
+export interface Testimonial {
+  name: string;
+  title: string;
+  company: string;
+  relationship: string;
+  date: string;
+  text: string;
+  image?: string;
+}
+
 // Legacy alias for backward compatibility
 export type TimelineItem = Experience;
 

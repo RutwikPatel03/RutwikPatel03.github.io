@@ -5,10 +5,11 @@ import type {
   Project,
   Publication,
   BlogPost,
+  Testimonial,
 } from '@/types';
 
 // Re-export types for backward compatibility
-export type { Skills, Experience, Education, Project, Publication, BlogPost } from '@/types';
+export type { Skills, Experience, Education, Project, Publication, BlogPost, Testimonial } from '@/types';
 
 // ===========================================
 // Data
@@ -231,6 +232,33 @@ export const blogPosts: BlogPost[] = [
     image: '/myimg/blogs/comming_soon_img.jpeg',
     link: '',
     description: 'Blog upcoming topics: Federated Learning, XAI implementation, Machine Learning topics',
+  },
+];
+
+export const testimonials: Testimonial[] = [
+  {
+    name: 'Jonathan Zhang',
+    title: 'Frontend Engineer',
+    company: 'Sigma Computing',
+    relationship: 'Jonathan was Rutwik\'s mentor',
+    date: 'December 15, 2025',
+    text: 'I mentored Rutwik during his internship at Sigma. Rutwik is a diligent and professional engineer who continually impressed us with his ability to move at a blistering pace without sacrificing quality. During his 12 weeks, he independently shipped a highly-requested feature to customers and onboarded to 4 other feature projects in which he made significant contributions. He incorporates feedback fast, and I would be glad to work with Rutwik again down the line.',
+  },
+  {
+    name: 'Karen A. Green',
+    title: 'Program Manager, The Business of Energy Initiative',
+    company: 'USC Marshall School of Business',
+    relationship: 'Karen A. managed Rutwik directly',
+    date: 'November 19, 2025',
+    text: 'I am pleased to recommend Rutwik. Throughout our work together, he consistently demonstrated strong analytical thinking, exceptional problem-solving abilities, and an impressive capacity to learn complex concepts quickly. He works collaboratively, communicates clearly, and approaches challenges with persistence and intellectual curiosity. I am confident that Rutwik will be a valuable asset to any team and will excel in any role that demands technical skill, creativity, and dedication.',
+  },
+  {
+    name: 'Nancy Chen',
+    title: 'Postdoctoral Fellow in Entrepreneurship',
+    company: 'USC Marshall School of Business',
+    relationship: 'Nancy managed Rutwik directly',
+    date: 'November 19, 2024',
+    text: 'I had the pleasure of working with Rutwik, and I can confidently say they are an exceptional professional. He has consistently demonstrated remarkable responsibility, always taking ownership of their tasks and delivering high-quality results. Rutwik\'s independence sets him apart—he requires minimal guidance and is always proactive in identifying and addressing challenges. He has a solution-oriented mindset, approaching problems creatively and efficiently, which has been invaluable in achieving the goals of our research. Rutwik also has impressive expertise in natural language processing, leveraging his knowledge to deliver innovative and effective solutions. His ability to combine technical skills with a results-driven approach makes him a standout contributor. I wholeheartedly recommend Rutwik to anyone looking for a dedicated, capable, and skilled team member. His professionalism and expertise will undoubtedly make him an asset to any organization.',
   },
 ];
 

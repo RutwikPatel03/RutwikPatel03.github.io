@@ -13,6 +13,9 @@ const Experience = dynamic(() => import('@/components/sections/Experience'), {
 const Projects = dynamic(() => import('@/components/sections/Projects'), {
   loading: () => <div className="min-h-[600px]" />,
 });
+const Testimonials = dynamic(() => import('@/components/sections/Testimonials'), {
+  loading: () => <div className="min-h-[400px]" />,
+});
 const Publications = dynamic(() => import('@/components/sections/Publications'), {
   loading: () => <div className="min-h-[400px]" />,
 });
@@ -29,6 +32,7 @@ export default function Home() {
         <About />
         <Experience />
         <Projects />
+        <Testimonials />
         <Publications />
         <Contact />
       </main>
