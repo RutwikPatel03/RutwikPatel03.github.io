@@ -106,6 +106,16 @@ export const projects: Project[] = [
     hasLiveDemo: true,
   },
   {
+    title: 'Airbnb-Lite - Hotel Booking API',
+    category: 'web development',
+    image: '/myimg/Project_Airbnb-Lite.png',
+    imageAlt: 'Airbnb-Lite API - Full-featured hotel booking backend with FastAPI, PostgreSQL, JWT auth, room management, and payment integration by Rutwik Patel',
+    link: 'https://airbnblite-api.onrender.com/api/v1/docs',
+    description: 'Full-featured hotel booking backend API with user authentication, hotel/room management, booking flow, and mock payment integration.',
+    tech: ['FastAPI', 'PostgreSQL', 'SQLAlchemy', 'JWT'],
+    hasLiveDemo: true,
+  },
+  {
     title: 'Stock Insight Application (Web)',
     category: 'web development',
     image: '/myimg/Project_Stock_Web.png',
