@@ -83,7 +83,7 @@ export const education: Education[] = [
   {
     school: 'University of Southern California',
     degree: 'Masters of Science in Computer Science | GPA: 3.81/4.0',
-    period: 'August 2023 - May 2025*',
+    period: 'August 2023 - May 2025',
     description: 'Developed advanced technical expertise in algorithms, database systems, and web technologies while enhancing problem-solving skills and innovation.',
   },
   {
