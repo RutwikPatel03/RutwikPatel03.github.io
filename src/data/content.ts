@@ -117,6 +117,16 @@ export const projects: Project[] = [
     hasLiveDemo: true,
   },
   {
+    title: 'TalkToData - Natural Language SQL',
+    category: 'web development',
+    image: '/myimg/Project_TalkToData.png',
+    imageAlt: 'TalkToData - AI-powered SQL query interface converting natural language to SQL, supporting PostgreSQL, MySQL, SQLite, SQL Server, and MongoDB by Rutwik Patel',
+    link: 'https://talktodata.vercel.app/',
+    description: 'AI-powered SQL query interface that converts plain English to SQL. Supports PostgreSQL, MySQL, SQLite, SQL Server, and MongoDB with AI-driven query explanations and error fixing.',
+    tech: ['Next.js', 'TypeScript', 'Groq AI', 'Tailwind'],
+    hasLiveDemo: true,
+  },
+  {
     title: 'Stock Insight Application (Web)',
     category: 'web development',
     image: '/myimg/Project_Stock_Web.png',
