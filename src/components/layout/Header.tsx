@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Menu, X, Download, Sparkles } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import { VisitorStats } from '@/components/ui/VisitorStats';
 import { navItems, externalLinks, siteConfig } from '@/constants';
@@ -86,13 +86,6 @@ export default function Header() {
             <VisitorStats variant="minimal" />
             <div className="w-px h-4 bg-border" />
             <ThemeToggle />
-            <Link
-              href={externalLinks.aiChat}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent"
-            >
-              <Sparkles className="w-4 h-4" />
-              Ask AI
-            </Link>
             <Link
               href={externalLinks.resume}
               target="_blank"
