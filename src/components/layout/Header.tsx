@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Menu, X, Download } from 'lucide-react';
+import { Menu, X, Download, Sparkles } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import { VisitorStats } from '@/components/ui/VisitorStats';
 import { navItems, externalLinks, siteConfig } from '@/constants';
