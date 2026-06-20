@@ -1,0 +1,104 @@
+---
+title: "How I Built TalkToData: Natural Language to SQL in Under 200ms"
+description: "The prompt engineering, error recovery, and multi-dialect challenges behind building a production-quality NL-to-SQL tool."
+date: "2025-05-12"
+tags: ["AI", "SQL", "LLMs", "Next.js"]
+readTime: "7 min read"
+slug: "natural-language-to-sql"
+---
+
+Most "Text-to-SQL" demos you see online are deceptively simple. Type "show me top 10 customers by revenue" and get back `SELECT customer_name, SUM(revenue) ...`. Looks great in a tweet.
+
+Then you try it on a real schema with 40 tables, nullable foreign keys, and dialect-specific syntax — and it falls apart.
+
+I built [TalkToData](https://talktodata.vercel.app/) to see how far you can push a small LLM for SQL generation, and learned a few things worth sharing.
+
+## The core problem: SQL is unforgiving
+
+Natural language is forgiving. "Show me recent orders" is valid even if "recent" is ambiguous. SQL is not forgiving. `WHERE created_at > NOW() - INTERVAL '7 days'` is either right or it throws an exception — and `NOW() - INTERVAL '7 days'` is PostgreSQL syntax, while MySQL wants `NOW() - INTERVAL 7 DAY`.
+
+This makes NL-to-SQL harder than most NL tasks. The output must be syntactically valid *and* semantically correct *and* match the target dialect.
+
+## Picking the right model
+
+I evaluated three options:
+
+- **GPT-4o**: Best SQL quality, but $0.005/1K output tokens and ~800ms latency killed it for a demo
+- **GPT-3.5**: Fast and cheap, but hallucinated column names too often
+- **Groq + llama-3.1-8b-instant**: 170ms average, free tier, SQL quality comparable to GPT-3.5 with the right prompt
+
+Groq won. For a public demo tool, free tier + 170ms matters more than marginal accuracy improvement.
+
+## The prompt engineering that actually worked
+
+Zero-shot prompting produced valid SQL about 40% of the time. The breakthrough was a three-part prompt structure:
+
+```
+You are an expert SQL developer. Convert the following question to {dialect} SQL.
+
+RULES:
+1. Return ONLY the SQL query, no explanation
+2. Use {dialect}-specific syntax (e.g., LIMIT for MySQL, FETCH FIRST for Oracle)
+3. If the question is ambiguous, make the most reasonable assumption
+
+SCHEMA CONTEXT:
+{user_provided_schema}
+
+FEW-SHOT EXAMPLES:
+Question: Show me the top 5 customers by order count
+SQL: SELECT customer_id, COUNT(*) as order_count 
+     FROM orders 
+     GROUP BY customer_id 
+     ORDER BY order_count DESC 
+     LIMIT 5;
+
+Question: {user_question}
+SQL:
+```
+
+The few-shot examples alone jumped accuracy from ~40% to ~80%. The model needs to see the dialect in action.
+
+## The error recovery loop
+
+Even at 80% accuracy, 20% of queries fail. Instead of showing the user a raw SQL error, I built a recovery loop:
+
+```typescript
+async function generateSQL(question: string, schema: string, dialect: string) {
+  const sql = await callGroq(buildPrompt(question, schema, dialect));
+  
+  const validation = validateSQL(sql, dialect);
+  if (validation.ok) return sql;
+  
+  // Second call: feed the error back
+  const fixed = await callGroq(buildErrorRecoveryPrompt(sql, validation.error, dialect));
+  return fixed;
+}
+```
+
+The error recovery prompt is different — it includes the broken SQL, the error message, and asks the model to fix *only* the problematic part. This works about 70% of the time, meaning overall success rate goes from 80% → ~94%.
+
+## Multi-dialect support
+
+Supporting 5 dialects (PostgreSQL, MySQL, SQLite, SQL Server, MongoDB) required more than prompt changes. Each dialect has fundamentally different:
+
+- Date arithmetic: `NOW() - INTERVAL '7 days'` vs `DATEADD(day, -7, GETDATE())`
+- String functions: `SUBSTRING()` vs `SUBSTR()` vs `MID()`
+- Pagination: `LIMIT 10 OFFSET 5` vs `FETCH FIRST 10 ROWS ONLY OFFSET 5`
+
+I built dialect-specific prompt templates and a thin validation layer that checks common anti-patterns per dialect (e.g., flagging `LIMIT` in SQL Server queries).
+
+MongoDB was the outlier — it's not SQL at all, so the output is aggregation pipeline JSON instead. The prompt for MongoDB is completely different, with different few-shot examples.
+
+## What I'd do differently
+
+**Schema upload, not schema typing.** The current UX asks users to paste their schema as text. A file upload that auto-parses `CREATE TABLE` statements would be much better. I started on this but cut it for the v1 launch.
+
+**Streaming the response.** I added streaming in v2 after noticing that perceived latency felt much higher than actual latency when users waited for the full SQL to appear. Streaming character-by-character at 170ms total feels *much* faster than a 170ms blank → full response flash.
+
+**Caching common patterns.** Many users ask similar questions. A Redis cache keyed on `hash(question + schema_hash + dialect)` would eliminate ~30% of API calls for common queries.
+
+## The takeaway
+
+LLMs are good at SQL generation when you give them structure. Few-shot examples, error recovery, and dialect-specific prompts together make a usable tool from a 8B model running on free infrastructure. The hard part isn't the AI — it's the UX: making failure graceful and uncertainty invisible to the user.
+
+[Try TalkToData →](https://talktodata.vercel.app/)

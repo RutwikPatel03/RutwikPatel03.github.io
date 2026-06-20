@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -16,6 +17,7 @@ export default function Header() {
   const isScrolled = useScrolled(50);
   const scrollToSection = useScrollToSection();
   const { toggle: togglePalette } = useCommandPalette();
+  const router = useRouter();
   const { scrollYProgress } = useScroll();
 
   // Transform scroll progress to width percentage
@@ -23,7 +25,11 @@ export default function Header() {
 
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
-    scrollToSection(href);
+    if (href.startsWith('/')) {
+      router.push(href);
+    } else {
+      scrollToSection(href);
+    }
   };
 
   return (

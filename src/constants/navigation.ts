@@ -13,8 +13,9 @@ export const navItems: NavItem[] = [
   { name: 'Projects', href: '#projects' },
   { name: 'Testimonials', href: '#testimonials' },
   { name: 'Publications', href: '#publications' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '#contact' },
-] as const;
+];
 
 // ===========================================
 // External Links
