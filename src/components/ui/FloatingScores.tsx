@@ -19,8 +19,8 @@ function rand(seed: number): number {
 
 const WC26_GLOWS = ['#facc15', '#22d3ee', '#f97316', '#a78bfa', '#fb7185', '#34d399'];
 
-// 36 footballs scattered across the whole hero. Center band is kept sparse so
-// the balls frame the name/photo instead of covering it.
+// 36 footballs scattered fully at random across the whole hero — including
+// the center, behind the name and photo.
 function buildFootballs() {
   const balls: Array<{
     top: number; left: number; size: number; opacity: number;
@@ -28,18 +28,10 @@ function buildFootballs() {
     x: number[]; y: number[];
   }> = [];
 
-  let i = 0;
-  let attempts = 0;
-  while (balls.length < 36 && attempts < 400) {
-    attempts++;
-    const s = attempts * 3.17;
+  for (let i = 0; i < 36; i++) {
+    const s = (i + 1) * 3.17;
     const left = rand(s + 1) * 100;
     const top = rand(s + 2) * 100;
-
-    // Keep the central content area lighter (but not empty)
-    const inCenter = left > 26 && left < 74 && top > 22 && top < 82;
-    if (inCenter && rand(s + 9) > 0.28) continue;
-
     const size = 8 + Math.floor(rand(s + 3) * 16); // 8–24px
     const big = size > 16;
     balls.push({
@@ -51,7 +43,6 @@ function buildFootballs() {
       x: [0, (rand(s + 10) - 0.5) * 50, (rand(s + 11) - 0.5) * 36, (rand(s + 12) - 0.5) * 44, 0],
       y: [0, (rand(s + 13) - 0.5) * 44, (rand(s + 14) - 0.5) * 32, (rand(s + 15) - 0.5) * 40, 0],
     });
-    i++;
   }
   return balls;
 }
