@@ -26,6 +26,8 @@ export default function CommandPaletteProvider({ children }: { children: ReactNo
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setOpen((prev) => !prev);
+      } else if (e.key === 'Escape') {
+        setOpen(false);
       }
     };
     document.addEventListener('keydown', down);

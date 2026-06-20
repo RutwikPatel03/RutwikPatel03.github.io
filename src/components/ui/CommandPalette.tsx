@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { useCommandPalette } from '@/providers/CommandPaletteProvider';
 import { useTheme } from '@/providers/ThemeProvider';
@@ -98,6 +98,13 @@ export default function CommandPalette() {
     },
   ];
 
+  // Lock body scroll while palette is open so the page doesn't scroll through the backdrop
+  useEffect(() => {
+    if (!open) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
   if (!open) return null;
 
   return (
@@ -112,8 +119,9 @@ export default function CommandPalette() {
       <div
         className="relative w-full max-w-lg rounded-xl border border-border bg-background shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
       >
-        <Command className="w-full" loop>
+        <Command loop>
           {/* Search input */}
           <div className="flex items-center gap-3 px-4 border-b border-border">
             <span className="text-muted-foreground text-sm">⌘</span>
@@ -130,7 +138,8 @@ export default function CommandPalette() {
             </button>
           </div>
 
-          <Command.List className="max-h-80 overflow-y-auto p-2">
+          {/* List — inline style forces scroll regardless of cmdk internals */}
+          <Command.List style={{ maxHeight: '320px', overflowY: 'auto' }} className="p-2">
             <Command.Empty className="py-8 text-center text-sm text-muted-foreground">
               No results found.
             </Command.Empty>
