@@ -5,10 +5,17 @@ import { motion } from 'motion/react';
 
 interface Match {
   id: string;
+  date: string;
   status: 'live' | 'final' | 'scheduled';
   statusText: string;
   home: { name: string; abbreviation: string; score: string; winner: boolean };
   away: { name: string; abbreviation: string; score: string; winner: boolean };
+}
+
+function formatTime(iso: string): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 }
 
 // ─── Deterministic pseudo-random (stable between server/client) ───────────────
@@ -68,7 +75,7 @@ const SCORE_PATHS = [
 function LiveChip({ match }: { match: Match }) {
   return (
     <div
-      className="relative flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] font-mono bg-background/90 backdrop-blur-md border border-emerald-400/70 shadow-lg"
+      className="relative flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] font-mono bg-card border border-emerald-400/70 shadow-xl ring-1 ring-emerald-400/20"
       style={{ boxShadow: '0 0 18px 4px rgba(52,211,153,0.45), 0 0 48px 8px rgba(52,211,153,0.18)' }}
     >
       <span className="relative flex h-2.5 w-2.5 shrink-0">
@@ -89,7 +96,7 @@ function LiveChip({ match }: { match: Match }) {
 
 function FinishedChip({ match }: { match: Match }) {
   return (
-    <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-background/85 backdrop-blur-md text-[12px] font-mono whitespace-nowrap shadow-md">
+    <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-[12px] font-mono whitespace-nowrap shadow-lg ring-1 ring-black/5 dark:ring-white/5">
       <span className={`font-semibold ${match.home.winner ? 'text-foreground' : 'text-muted-foreground'}`}>
         {match.home.abbreviation}
       </span>
@@ -103,18 +110,21 @@ function FinishedChip({ match }: { match: Match }) {
       <span className={`font-semibold ${match.away.winner ? 'text-foreground' : 'text-muted-foreground'}`}>
         {match.away.abbreviation}
       </span>
-      <span className="text-muted-foreground/70 text-[9px] ml-1 font-semibold">FT</span>
+      <span className="w-px h-3.5 bg-border mx-0.5" />
+      <span className="text-muted-foreground/80 text-[9px] font-semibold">FT</span>
+      <span className="text-muted-foreground/60 text-[9px]">· {formatTime(match.date)}</span>
     </div>
   );
 }
 
 function ScheduledChip({ match }: { match: Match }) {
   return (
-    <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-background/80 backdrop-blur-md text-[12px] font-mono whitespace-nowrap text-foreground/80 shadow-md">
+    <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-[12px] font-mono whitespace-nowrap text-foreground shadow-lg ring-1 ring-black/5 dark:ring-white/5">
       <span className="font-semibold">{match.home.abbreviation}</span>
       <span className="text-[10px] text-muted-foreground">vs</span>
       <span className="font-semibold">{match.away.abbreviation}</span>
-      <span className="text-[10px] ml-0.5">⚽</span>
+      <span className="w-px h-3.5 bg-border mx-0.5" />
+      <span className="text-muted-foreground text-[10px]">🕐 {formatTime(match.date)}</span>
     </div>
   );
 }
@@ -169,7 +179,7 @@ export default function FloatingScores() {
         return (
           <motion.div
             key={match.id}
-            className="absolute"
+            className="absolute z-10"
             style={pos}
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{
