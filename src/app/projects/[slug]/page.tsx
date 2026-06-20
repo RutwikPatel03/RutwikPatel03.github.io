@@ -14,6 +14,20 @@ function getProject(slug: string) {
   return projects.find((p) => p.slug === slug && p.caseStudy);
 }
 
+function getHeroImage(project: NonNullable<ReturnType<typeof getProject>>): string {
+  if (project.hasLiveDemo && project.link) {
+    const params = new URLSearchParams({
+      url: project.link,
+      screenshot: 'true',
+      meta: 'false',
+      embed: 'screenshot.url',
+      waitForTimeout: '3000',
+    });
+    return `https://api.microlink.io/?${params.toString()}`;
+  }
+  return project.image;
+}
+
 export function generateStaticParams() {
   return projects
     .filter((p) => p.caseStudy && p.slug)
@@ -53,11 +67,12 @@ export default function ProjectCaseStudy({ params }: Props) {
         {/* Hero */}
         <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-border mb-8">
           <Image
-            src={project.image}
+            src={getHeroImage(project)}
             alt={project.imageAlt || project.title}
             fill
             className="object-cover"
             priority
+            unoptimized={project.hasLiveDemo && !!project.link}
           />
           {project.hasLiveDemo && (
             <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30">
