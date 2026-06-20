@@ -98,6 +98,10 @@ export default function About() {
             </BentoCard>
           ))}
         </BentoGrid>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground/60 italic">
+          * Proficiency levels are AI-estimated based on project experience, internship work, and research contributions.
+        </p>
       </div>
     </section>
   );
