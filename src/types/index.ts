@@ -1,3 +1,5 @@
+import type React from 'react';
+
 // ===========================================
 // Navigation & Page Types
 // ===========================================
@@ -24,6 +26,18 @@ export interface Skills {
   backend: readonly string[];
   devops: readonly string[];
   machineLearning: readonly string[];
+}
+
+export interface SkillItem {
+  name: string;
+  level: number; // 0–100
+}
+
+export interface SkillCategory {
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  skills: SkillItem[];
 }
 
 export interface ExperienceHighlight {

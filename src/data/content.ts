@@ -1,3 +1,4 @@
+import { Code2, Database, Cloud, Brain, Layers, Globe } from 'lucide-react';
 import type {
   Skills,
   Experience,
@@ -6,10 +7,11 @@ import type {
   Publication,
   BlogPost,
   Testimonial,
+  SkillCategory,
 } from '@/types';
 
 // Re-export types for backward compatibility
-export type { Skills, Experience, Education, Project, Publication, BlogPost, Testimonial } from '@/types';
+export type { Skills, Experience, Education, Project, Publication, BlogPost, Testimonial, SkillCategory } from '@/types';
 
 // ===========================================
 // Data
@@ -23,6 +25,81 @@ export const skills: Skills = {
   devops: ['AWS', 'GCP', 'Docker', 'CI/CD', 'Terraform'],
   machineLearning: ['PyTorch', 'TensorFlow', 'LangChain', 'RAG Systems', 'OpenAI Embeddings'],
 } as const;
+
+export const skillsWithLevels: SkillCategory[] = [
+  {
+    title: 'Programming Languages',
+    icon: Code2,
+    color: 'text-blue-500',
+    skills: [
+      { name: 'Python', level: 95 },
+      { name: 'TypeScript', level: 90 },
+      { name: 'JavaScript', level: 88 },
+      { name: 'Go', level: 70 },
+      { name: 'Swift', level: 65 },
+    ],
+  },
+  {
+    title: 'Frontend',
+    icon: Globe,
+    color: 'text-purple-500',
+    skills: [
+      { name: 'React', level: 92 },
+      { name: 'Next.js', level: 90 },
+      { name: 'Angular', level: 75 },
+      { name: 'Tailwind CSS', level: 90 },
+      { name: 'Redux / Zustand', level: 78 },
+    ],
+  },
+  {
+    title: 'Backend',
+    icon: Layers,
+    color: 'text-green-500',
+    skills: [
+      { name: 'Node.js / Express', level: 85 },
+      { name: 'FastAPI', level: 82 },
+      { name: 'Django REST', level: 78 },
+      { name: 'REST APIs', level: 92 },
+      { name: 'Microservices', level: 75 },
+    ],
+  },
+  {
+    title: 'Databases',
+    icon: Database,
+    color: 'text-orange-500',
+    skills: [
+      { name: 'PostgreSQL', level: 85 },
+      { name: 'MongoDB', level: 82 },
+      { name: 'MySQL', level: 80 },
+      { name: 'Redis', level: 72 },
+      { name: 'Chroma (Vector DB)', level: 70 },
+    ],
+  },
+  {
+    title: 'Cloud & DevOps',
+    icon: Cloud,
+    color: 'text-cyan-500',
+    skills: [
+      { name: 'AWS', level: 80 },
+      { name: 'Docker', level: 80 },
+      { name: 'GCP', level: 75 },
+      { name: 'CI/CD', level: 75 },
+      { name: 'Terraform', level: 65 },
+    ],
+  },
+  {
+    title: 'AI / ML',
+    icon: Brain,
+    color: 'text-pink-500',
+    skills: [
+      { name: 'LangChain / RAG', level: 88 },
+      { name: 'PyTorch', level: 80 },
+      { name: 'OpenAI Embeddings', level: 82 },
+      { name: 'TensorFlow', level: 75 },
+      { name: 'Groq / LLM APIs', level: 85 },
+    ],
+  },
+];
 
 export const experience: Experience[] = [
   {

@@ -2,49 +2,9 @@
 
 import { motion } from 'motion/react';
 import { BentoGrid, BentoCard, BentoCardHeader, BentoCardTitle, BentoCardDescription, BentoCardContent } from '@/components/ui/BentoGrid';
-import { Badge } from '@/components/ui/Badge';
 import GitHubActivity from '@/components/ui/GitHubActivity';
-import { skills } from '@/data/content';
-import { Code2, Database, Cloud, Brain, Layers, Globe } from 'lucide-react';
-
-const skillCategories = [
-  {
-    title: 'Programming Languages',
-    skills: skills.programmingLanguages,
-    icon: Code2,
-    color: 'text-blue-500'
-  },
-  { 
-    title: 'Frontend', 
-    skills: skills.frontend, 
-    icon: Globe,
-    color: 'text-purple-500'
-  },
-  { 
-    title: 'Backend', 
-    skills: skills.backend, 
-    icon: Layers,
-    color: 'text-green-500'
-  },
-  { 
-    title: 'Databases', 
-    skills: skills.databases, 
-    icon: Database,
-    color: 'text-orange-500'
-  },
-  { 
-    title: 'Cloud & DevOps', 
-    skills: skills.devops, 
-    icon: Cloud,
-    color: 'text-cyan-500'
-  },
-  { 
-    title: 'AI / ML', 
-    skills: skills.machineLearning, 
-    icon: Brain,
-    color: 'text-pink-500'
-  },
-];
+import SkillBar from '@/components/ui/SkillBar';
+import { skillsWithLevels } from '@/data/content';
 
 const stats = [
   { value: '2', label: 'IEEE Research Publications' },
@@ -116,18 +76,22 @@ export default function About() {
           <GitHubActivity />
 
           {/* Skills Cards */}
-          {skillCategories.map((category) => (
+          {skillsWithLevels.map((category) => (
             <BentoCard key={category.title}>
               <BentoCardHeader className="flex flex-row items-center gap-2 mb-3">
                 <category.icon className={`w-5 h-5 ${category.color}`} />
                 <BentoCardTitle>{category.title}</BentoCardTitle>
               </BentoCardHeader>
               <BentoCardContent>
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
+                <div className="space-y-3">
+                  {category.skills.map((skill, i) => (
+                    <SkillBar
+                      key={skill.name}
+                      name={skill.name}
+                      level={skill.level}
+                      color={category.color}
+                      delay={i * 0.08}
+                    />
                   ))}
                 </div>
               </BentoCardContent>
