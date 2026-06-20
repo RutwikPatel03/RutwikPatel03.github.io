@@ -9,11 +9,13 @@ import ThemeToggle from '@/components/ui/ThemeToggle';
 import { VisitorStats } from '@/components/ui/VisitorStats';
 import { navItems, externalLinks, siteConfig } from '@/constants';
 import { useScrollToSection, useScrolled } from '@/hooks';
+import { useCommandPalette } from '@/providers/CommandPaletteProvider';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isScrolled = useScrolled(50);
   const scrollToSection = useScrollToSection();
+  const { toggle: togglePalette } = useCommandPalette();
   const { scrollYProgress } = useScroll();
 
   // Transform scroll progress to width percentage
@@ -66,6 +68,15 @@ export default function Header() {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
+            <button
+              onClick={togglePalette}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-muted-foreground border border-border rounded-lg hover:bg-accent hover:text-foreground transition-colors"
+              aria-label="Open command palette"
+            >
+              <span>Search</span>
+              <kbd className="font-mono text-[10px] bg-muted px-1 py-0.5 rounded">⌘K</kbd>
+            </button>
+            <div className="w-px h-4 bg-border" />
             <VisitorStats variant="minimal" />
             <div className="w-px h-4 bg-border" />
             <ThemeToggle />

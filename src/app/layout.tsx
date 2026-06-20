@@ -5,6 +5,8 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import SmoothScrollProvider from '@/providers/SmoothScrollProvider';
 import ThemeProvider from '@/providers/ThemeProvider';
+import CommandPaletteProvider from '@/providers/CommandPaletteProvider';
+import CommandPalette from '@/components/ui/CommandPalette';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -285,9 +287,12 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${poppins.variable} font-sans antialiased`}>
         <ThemeProvider>
-          <SmoothScrollProvider>
-            {children}
-          </SmoothScrollProvider>
+          <CommandPaletteProvider>
+            <SmoothScrollProvider>
+              {children}
+            </SmoothScrollProvider>
+            <CommandPalette />
+          </CommandPaletteProvider>
         </ThemeProvider>
 
         {/* Vercel Analytics & Speed Insights */}
