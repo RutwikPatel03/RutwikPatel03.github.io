@@ -13,8 +13,11 @@ interface Props {
 }
 
 const rehypePrettyCodeOptions: Options = {
-  theme: 'github-dark',
-  keepBackground: false,
+  theme: {
+    dark: 'github-dark',
+    light: 'github-light',
+  },
+  keepBackground: true,
 };
 
 export function generateStaticParams() {
@@ -85,8 +88,9 @@ export default function BlogPost({ params }: Props) {
         <article className="prose prose-neutral dark:prose-invert max-w-none
           prose-headings:font-heading prose-headings:font-semibold
           prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline
-          prose-code:text-sm prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-          prose-pre:bg-muted/50 prose-pre:border prose-pre:border-border">
+          [&_:not(pre)>code]:text-sm [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:rounded [&_:not(pre)>code]:before:content-none [&_:not(pre)>code]:after:content-none
+          [&_pre]:rounded-xl [&_pre]:border [&_pre]:border-border [&_pre]:overflow-x-auto [&_pre]:text-sm
+          [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-inherit">
           <MDXRemote
             source={post.content}
             options={{
