@@ -26,6 +26,39 @@ function rand(seed: number): number {
 
 const WC26_GLOWS = ['#facc15', '#22d3ee', '#f97316', '#a78bfa', '#fb7185', '#34d399'];
 
+// ─── World Cup 2026 ball (adidas "Trionda" inspired) ─────────────────────────
+// White ball with a three-colour swirl for the three host nations
+// (red, green, blue) plus small star accents.
+function WC26Ball({ size }: { size: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ display: 'block' }}
+    >
+      {/* white base */}
+      <circle cx="50" cy="50" r="47" fill="#fdfdfd" stroke="#0f172a" strokeOpacity="0.18" strokeWidth="2" />
+      {/* three swirling panels */}
+      <g>
+        <path d="M50 50 C 70 44 70 16 50 6 C 45 22 47 38 50 50 Z" fill="#E4002B" transform="rotate(0 50 50)" />
+        <path d="M50 50 C 70 44 70 16 50 6 C 45 22 47 38 50 50 Z" fill="#00843D" transform="rotate(120 50 50)" />
+        <path d="M50 50 C 70 44 70 16 50 6 C 45 22 47 38 50 50 Z" fill="#0072CE" transform="rotate(240 50 50)" />
+      </g>
+      {/* small star accents (one per panel) */}
+      <g fill="#fdfdfd">
+        <circle cx="50" cy="20" r="2.4" transform="rotate(0 50 50)" />
+        <circle cx="50" cy="20" r="2.4" transform="rotate(120 50 50)" />
+        <circle cx="50" cy="20" r="2.4" transform="rotate(240 50 50)" />
+      </g>
+      {/* centre hub */}
+      <circle cx="50" cy="50" r="4.5" fill="#fdfdfd" />
+    </svg>
+  );
+}
+
 // 36 footballs scattered fully at random across the whole hero — including
 // the center, behind the name and photo.
 function buildFootballs() {
@@ -39,8 +72,8 @@ function buildFootballs() {
     const s = (i + 1) * 3.17;
     const left = rand(s + 1) * 100;
     const top = rand(s + 2) * 100;
-    const size = 8 + Math.floor(rand(s + 3) * 16); // 8–24px
-    const big = size > 16;
+    const size = 12 + Math.floor(rand(s + 3) * 16); // 12–28px
+    const big = size > 20;
     balls.push({
       top, left, size,
       opacity: 0.18 + rand(s + 4) * 0.28,        // 0.18–0.46
@@ -160,12 +193,11 @@ export default function FloatingScores() {
         >
           <span
             style={{
-              fontSize: `${fb.size}px`,
-              lineHeight: 1,
+              lineHeight: 0,
               filter: fb.glow ? `drop-shadow(0 0 6px ${fb.glow})` : undefined,
             }}
           >
-            ⚽
+            <WC26Ball size={fb.size} />
           </span>
         </motion.div>
       ))}
