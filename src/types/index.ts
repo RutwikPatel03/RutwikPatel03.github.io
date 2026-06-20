@@ -69,6 +69,14 @@ export interface Project {
   description: string;
   tech: string[];
   hasLiveDemo?: boolean;
+  // Case study fields
+  slug?: string;
+  caseStudy?: boolean;
+  challenge?: string;
+  solution?: string;
+  architecture?: string;
+  impact?: string[];
+  lessons?: string[];
 }
 
 export interface Publication {

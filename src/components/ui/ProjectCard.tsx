@@ -2,9 +2,10 @@
 
 import { motion } from 'motion/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { Eye } from 'lucide-react';
+import { Eye, BookOpen } from 'lucide-react';
 import type { Project } from '@/types';
 
 interface ProjectCardProps {
@@ -68,6 +69,14 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 View
               </Button>
             </a>
+          )}
+          {project.caseStudy && project.slug && (
+            <Link href={`/projects/${project.slug}`}>
+              <Button size="sm" variant="secondary">
+                <BookOpen className="w-4 h-4" />
+                Case Study
+              </Button>
+            </Link>
           )}
         </div>
       </div>
