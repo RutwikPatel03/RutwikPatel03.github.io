@@ -142,7 +142,7 @@ export default function FloatingScores() {
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none hidden lg:block" aria-hidden="true">
 
       {/* ── Footballs ── */}
       {footballs.map((fb, i) => (

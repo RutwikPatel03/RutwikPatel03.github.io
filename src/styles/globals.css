@@ -70,6 +70,46 @@
   .prose ul { list-style-type: disc; }
   .prose ol { list-style-type: decimal; }
   .prose li { list-style: inherit; }
+
+  /* Visible keyboard focus indicator (accessibility) */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Skip-to-content link — visible only when focused */
+  .skip-to-content {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--foreground);
+    color: var(--background);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transform: translateY(-150%);
+    transition: transform 0.2s ease;
+  }
+  .skip-to-content:focus {
+    transform: translateY(0);
+  }
+}
+
+/*-----------------------------------*\
+  #REDUCED MOTION (accessibility)
+\*-----------------------------------*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 

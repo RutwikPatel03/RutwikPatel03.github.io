@@ -1,6 +1,7 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Poppins } from 'next/font/google';
 import Script from 'next/script';
+import { MotionConfig } from 'motion/react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import SmoothScrollProvider from '@/providers/SmoothScrollProvider';
@@ -97,6 +98,15 @@ export const metadata: Metadata = {
   category: 'technology',
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -105,13 +115,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/myimg/favicon.png" type="image/x-icon" />
+        <link rel="icon" href="/myimg/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/myimg/favicon.png" />
 
-        {/* Preconnect for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Preconnect for third-party resources - 80ms LCP savings */}
-        <link rel="preconnect" href="https://assets.apollo.io" crossOrigin="anonymous" />
+        {/* Note: next/font self-hosts Google Fonts, so no font-origin preconnect
+            is needed. Apollo loads afterInteractive, so a preconnect to it
+            expires unused — both were removed per Lighthouse. */}
 
         {/* Search Engine Verification - Add your verification codes here */}
         {/* <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" /> */}
@@ -286,14 +295,17 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${poppins.variable} font-sans antialiased`}>
-        <ThemeProvider>
-          <CommandPaletteProvider>
-            <SmoothScrollProvider>
-              {children}
-            </SmoothScrollProvider>
-            <CommandPalette />
-          </CommandPaletteProvider>
-        </ThemeProvider>
+        <a href="#main-content" className="skip-to-content">Skip to content</a>
+        <MotionConfig reducedMotion="user">
+          <ThemeProvider>
+            <CommandPaletteProvider>
+              <SmoothScrollProvider>
+                {children}
+              </SmoothScrollProvider>
+              <CommandPalette />
+            </CommandPaletteProvider>
+          </ThemeProvider>
+        </MotionConfig>
 
         {/* Vercel Analytics & Speed Insights */}
         <Analytics />

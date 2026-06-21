@@ -50,7 +50,7 @@ export default function BlogPost({ params }: Props) {
   if (!post) notFound();
 
   return (
-    <main className="min-h-screen bg-background py-24 px-4 sm:px-6 lg:px-8">
+    <main id="main-content" className="min-h-screen bg-background py-24 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <Link
           href="/blog"

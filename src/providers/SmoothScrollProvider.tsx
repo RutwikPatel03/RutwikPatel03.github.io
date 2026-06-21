@@ -18,6 +18,12 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
       return;
     }
 
+    // Respect users who prefer reduced motion — skip JS smooth scroll
+    if (typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     // Initialize Lenis smooth scroll
     const lenis = new Lenis({
       duration: 1.2,
