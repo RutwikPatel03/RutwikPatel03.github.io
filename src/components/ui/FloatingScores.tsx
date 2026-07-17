@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
+import Image from 'next/image';
 
 interface Match {
   id: string;
@@ -63,12 +64,14 @@ const SCORE_POSITIONS = [
   { top: '85%', left: '4%' },
 ];
 
+// Gentle sway only — kept small so chips stay pinned to the edges and never
+// wander across the hero text.
 const SCORE_PATHS = [
-  { x: [0, 18, 8, 24, 0],    y: [0, -12, 9, -6, 0],   dur: 22, del: 0 },
-  { x: [0, -20, -9, -26, 0], y: [0, 14, -10, 7, 0],   dur: 27, del: 2 },
-  { x: [0, 14, 28, 16, 0],   y: [0, -16, -7, 10, 0],  dur: 20, del: 4 },
-  { x: [0, -16, -28, -10, 0],y: [0, -9, 14, -16, 0],  dur: 24, del: 1 },
-  { x: [0, 24, 10, 18, 0],   y: [0, 12, -15, 7, 0],   dur: 30, del: 3 },
+  { x: [0, 6, 3, 8, 0],    y: [0, -5, 4, -3, 0],  dur: 26, del: 0 },
+  { x: [0, -7, -3, -9, 0], y: [0, 5, -4, 3, 0],   dur: 30, del: 2 },
+  { x: [0, 5, 9, 5, 0],    y: [0, -6, -3, 5, 0],  dur: 24, del: 4 },
+  { x: [0, -6, -9, -4, 0], y: [0, -4, 5, -6, 0],  dur: 28, del: 1 },
+  { x: [0, 8, 4, 6, 0],    y: [0, 5, -5, 3, 0],   dur: 32, del: 3 },
 ];
 
 // ─── Chips ────────────────────────────────────────────────────────────────
@@ -129,6 +132,46 @@ function ScheduledChip({ match }: { match: Match }) {
   );
 }
 
+// ─── Star player photos (WC26 final: Argentina vs Spain) ────────────────────
+// Full-height figures anchored to each edge, fading toward the center so the
+// hero text stays readable. Desktop-only (the parent is `hidden lg:block`).
+function PlayerFigure({
+  src,
+  side,
+  glow,
+}: {
+  src: string;
+  side: 'left' | 'right';
+  glow: string;
+}) {
+  const isRight = side === 'right';
+  // Opaque at the outer edge, fading to transparent before it reaches the text.
+  const mask = `linear-gradient(to ${isRight ? 'left' : 'right'}, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 26%, rgba(0,0,0,0) 66%)`;
+  return (
+    <motion.div
+      className={`absolute top-0 bottom-0 ${isRight ? 'right-0' : 'left-0'} w-[40%] xl:w-[34%]`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 0.9 }}
+      transition={{ duration: 1.4 }}
+    >
+      {/* Country-colour wash at the base, tying the figure to its kit */}
+      <div
+        className={`absolute bottom-0 ${isRight ? 'right-0' : 'left-0'} h-1/3 w-full`}
+        style={{ background: `linear-gradient(to top, ${glow}, transparent)`, opacity: 0.25 }}
+      />
+      <Image
+        src={src}
+        alt=""
+        fill
+        sizes="40vw"
+        quality={72}
+        className="object-cover object-top"
+        style={{ WebkitMaskImage: mask, maskImage: mask }}
+      />
+    </motion.div>
+  );
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────
 export default function FloatingScores() {
   const [matches, setMatches] = useState<Match[]>([]);
@@ -143,6 +186,10 @@ export default function FloatingScores() {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none hidden lg:block" aria-hidden="true">
+
+      {/* ── Star players: WC26 final — Argentina vs Spain ── */}
+      <PlayerFigure side="left" src="/myimg/messi.jpg" glow="#6cb7e0" />
+      <PlayerFigure side="right" src="/myimg/yamal.jpg" glow="#e03a3a" />
 
       {/* ── Footballs ── */}
       {footballs.map((fb, i) => (
