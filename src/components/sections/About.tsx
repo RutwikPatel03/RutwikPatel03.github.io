@@ -3,7 +3,6 @@
 import { motion } from 'motion/react';
 import { BentoGrid, BentoCard, BentoCardHeader, BentoCardTitle, BentoCardDescription, BentoCardContent } from '@/components/ui/BentoGrid';
 import GitHubActivity from '@/components/ui/GitHubActivity';
-import WorldCupWidget from '@/components/ui/WorldCupWidget';
 import SkillBar from '@/components/ui/SkillBar';
 import { skillsWithLevels } from '@/data/content';
 
@@ -75,9 +74,6 @@ export default function About() {
 
           {/* GitHub Activity Card */}
           <GitHubActivity />
-
-          {/* FIFA World Cup 2026 */}
-          <WorldCupWidget />
 
           {/* Skills Cards */}
           {skillsWithLevels.map((category) => (

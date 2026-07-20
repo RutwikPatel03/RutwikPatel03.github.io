@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Download, MapPin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import FloatingScores from '@/components/ui/FloatingScores';
 import { useTypewriter } from '@/hooks';
 
 const TITLES = [
@@ -32,9 +31,6 @@ export default function Hero() {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
-
-      {/* World Cup floating scores */}
-      <FloatingScores />
 
       {/* Dot pattern overlay */}
       <div

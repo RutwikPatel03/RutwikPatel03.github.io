@@ -173,6 +173,7 @@ export const education: Education[] = [
 
 export const projects: Project[] = [
   // Live deployed projects first
+  /* Netflix Clone — commented out
   {
     title: 'Netflix Clone',
     category: 'web development',
@@ -200,6 +201,7 @@ export const projects: Project[] = [
       'Using Next.js route groups kept auth pages visually separate without duplicating layout code',
     ],
   },
+  */
   {
     title: 'Airbnb-Lite - Hotel Booking API',
     category: 'web development',
