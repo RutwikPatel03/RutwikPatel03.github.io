@@ -7,11 +7,11 @@ import SkillBar from '@/components/ui/SkillBar';
 import { skillsWithLevels } from '@/data/content';
 
 const stats = [
-  { value: '2', label: 'IEEE Research Publications' },
-  { value: '39K+', label: 'Records Processed via AI Pipelines' },
-  { value: '1TB+', label: 'Data Processed Across AI Pipelines' },
-  { value: '3.8', label: 'Graduate GPA' },
-  { value: '12+', label: 'Production Features Shipped E2E' },
+  { value: '984K', label: 'ops/sec on miniredis (C++)' },
+  { value: '58K+', label: 'Profiles Processed via AI Pipelines' },
+  { value: '500GB+', label: 'Data Indexed for RAG Retrieval' },
+  { value: '60+', label: 'Enterprises Using Shipped Features' },
+  { value: '3.81', label: 'Graduate GPA' },
 ];
 
 export default function About() {
@@ -42,15 +42,15 @@ export default function About() {
             </BentoCardHeader>
             <BentoCardContent>
               <BentoCardDescription className="text-sm sm:text-base leading-relaxed">
-                I&apos;m a Software Engineer and USC Master&apos;s graduate focused on building scalable full-stack systems and applied AI solutions.
+                I&apos;m a Software Engineer and USC Master&apos;s graduate who works close to the systems layer — backend services, infrastructure, and applied AI — and enjoys making complex things fast and reliable.
                 <br /><br />
-                I&apos;ve shipped production features at Sigma Computing used by 60+ enterprise customers, where I worked on cloud analytics UI, formula-based styling, and TypeScript performance optimizations to reduce user friction. Previously at World Salon, I re-architected payment microservices, improving performance by 20%, and integrated Stripe to support monetized event workflows.
+                At Sigma Computing I shipped four production features used by 60+ enterprise organizations, and optimized rendering of large data grids with memoization and virtualization. At World Salon I refactored a monolithic backend into modular payment and event services (cutting request latency by 20%), built OpenAI-powered pipelines that processed 58,000+ profiles end-to-end, and containerized and deployed everything on AWS with Docker, EC2, S3, and GitHub Actions.
                 <br /><br />
-                Alongside industry work, I was a Research Assistant at USC Marshall, where I built large-scale data pipelines processing 500GB+ of energy transition data and developed semantic search systems using vector databases and RAG architectures.
+                As a Research Assistant at USC Marshall, I engineered fault-tolerant ETL pipelines and RAG semantic-search systems over 500GB+ of sustainability disclosures, indexing 2M+ data points in PostgreSQL for 30+ researchers.
                 <br /><br />
-                My strength lies in turning complex systems into reliable, usable products—whether that&apos;s optimizing frontend performance, designing backend APIs, or building AI-powered data workflows.
+                For fun and depth, I build systems from scratch — like <span className="font-medium text-foreground">miniredis</span>, a Redis-compatible in-memory store written in C++17 with a non-blocking epoll/kqueue reactor and a hand-written skip list, reaching 984K+ ops/sec.
                 <br /><br />
-                I&apos;m open to full-time roles in Full Stack and AI Engineering. Happy to connect with engineers, founders, and recruiters.
+                I&apos;m open to full-time roles in Software, Infrastructure, Backend, and AI Engineering. Happy to connect with engineers, founders, and recruiters.
               </BentoCardDescription>
             </BentoCardContent>
           </BentoCard>

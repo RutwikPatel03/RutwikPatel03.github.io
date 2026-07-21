@@ -9,9 +9,9 @@ import { useTypewriter } from '@/hooks';
 
 const TITLES = [
   'Software Engineer',
+  'Infrastructure Engineer',
+  'Backend & Systems Engineer',
   'Full Stack Developer',
-  'AI Enthusiast',
-  'Problem Solver',
   'USC CS Graduate',
 ];
 
@@ -95,7 +95,7 @@ export default function Hero() {
               transition={{ delay: 0.4, duration: 0.5 }}
               className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0"
             >
-              I want to build and ship software that people actually use. From enterprise data products to AI-driven systems, I focus on speed, clarity, and real-world impact. USC MS Computer Science. Published IEEE researcher.
+              I build and ship software that people actually use — from enterprise data products to backend services, infrastructure, and AI-driven systems. I care about performance, reliability, and real-world impact (I wrote a Redis-compatible store in C++ that hits 984K+ ops/sec). USC MS Computer Science. Published IEEE researcher.
             </motion.p>
 
             {/* Location */}

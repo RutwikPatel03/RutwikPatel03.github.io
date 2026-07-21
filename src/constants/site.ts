@@ -4,16 +4,16 @@
 
 export const siteConfig = {
   name: 'Rutwik Patel',
-  title: 'Rutwik Patel | Software Engineer | USC CS Graduate | Top Candidate',
+  title: 'Rutwik Patel | Software & Infrastructure Engineer | USC CS',
   description:
-    'High-impact Software Engineer with production experience at Sigma Computing (Series D, $1B+ valuation). Shipped 4 production features to 60+ enterprise customers. USC MS Computer Science (3.8 GPA). Published IEEE researcher. Full-stack expertise: React, TypeScript, Python, Go, AI/ML. Proven track record of delivering scalable solutions. Seeking Senior SWE / AI Engineer roles.',
+    'Software & Infrastructure Engineer. Shipped 4 production features at Sigma Computing used by 60+ enterprises. Built miniredis — a Redis-compatible in-memory store in C++ reaching 984K+ ops/sec. USC MS Computer Science. Published IEEE researcher. Backend, systems, cloud infrastructure, and AI/ML expertise: C++, Go, TypeScript, Python, AWS, Kubernetes, Terraform, RAG. Seeking full-time SWE / Infra / Backend / AI Engineering roles.',
   url: 'https://rutwik.dev',
   ogImage: 'https://rutwik.dev/myimg/me.jpg',
   favicon: '/myimg/favicon.png',
   logo: 'RP',
   author: {
     name: 'Rutwik Patel',
-    email: 'rutwikpatel1313@gmail.com',
+    email: 'me.rutwik@gmail.com',
     location: 'San Francisco, CA',
   },
 } as const;

@@ -31,6 +31,10 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     ? getLiveScreenshotUrl(project.link)
     : project.image;
 
+  // SVGs (e.g. the miniredis thumbnail) and live microlink screenshots bypass
+  // the Next.js image optimizer — SVGs can't be re-encoded by it.
+  const isUnoptimized = (project.hasLiveDemo && !!project.link) || imageSrc.endsWith('.svg');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -58,7 +62,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           loading="lazy"
           quality={80}
-          unoptimized={project.hasLiveDemo && !!project.link}
+          unoptimized={isUnoptimized}
         />
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">

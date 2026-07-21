@@ -18,11 +18,11 @@ export type { Skills, Experience, Education, Project, Publication, BlogPost, Tes
 // ===========================================
 
 export const skills: Skills = {
-  programmingLanguages: ['Python', 'TypeScript', 'JavaScript', 'Go', 'Swift'],
-  databases: ['PostgreSQL', 'MongoDB', 'MySQL', 'Chroma', 'Redis'],
-  frontend: ['React', 'Angular', 'Next.js', 'Redux', 'Zustand', 'Tailwind', 'Material UI', 'Jest', 'Cypress'],
+  programmingLanguages: ['Python', 'TypeScript', 'JavaScript', 'C++', 'Go'],
+  databases: ['PostgreSQL', 'MongoDB', 'Redis', 'Chroma'],
+  frontend: ['React', 'Next.js', 'Angular', 'Redux', 'Zustand', 'Tailwind', 'Jest', 'Cypress'],
   backend: ['Node.js', 'Express.js', 'Django REST', 'Flask', 'FastAPI', 'REST APIs', 'Microservices'],
-  devops: ['AWS', 'GCP', 'Docker', 'CI/CD', 'Terraform'],
+  devops: ['AWS', 'GCP', 'Docker', 'Kubernetes', 'CI/CD', 'GitHub Actions', 'Terraform', 'Monitoring & Logging'],
   machineLearning: ['PyTorch', 'TensorFlow', 'LangChain', 'RAG Systems', 'OpenAI Embeddings'],
 } as const;
 
@@ -32,11 +32,11 @@ export const skillsWithLevels: SkillCategory[] = [
     icon: Code2,
     color: 'text-blue-500',
     skills: [
-      { name: 'Python', level: 95 },
+      { name: 'Python', level: 92 },
       { name: 'TypeScript', level: 90 },
       { name: 'JavaScript', level: 88 },
-      { name: 'Go', level: 70 },
-      { name: 'Swift', level: 65 },
+      { name: 'C++', level: 82 },
+      { name: 'Go', level: 80 },
     ],
   },
   {
@@ -68,23 +68,22 @@ export const skillsWithLevels: SkillCategory[] = [
     icon: Database,
     color: 'text-orange-500',
     skills: [
-      { name: 'PostgreSQL', level: 85 },
+      { name: 'PostgreSQL', level: 88 },
+      { name: 'Redis', level: 82 },
       { name: 'MongoDB', level: 82 },
-      { name: 'MySQL', level: 80 },
-      { name: 'Redis', level: 72 },
-      { name: 'Chroma (Vector DB)', level: 70 },
+      { name: 'Chroma (Vector DB)', level: 72 },
     ],
   },
   {
-    title: 'Cloud & DevOps',
+    title: 'Cloud & Infrastructure',
     icon: Cloud,
     color: 'text-cyan-500',
     skills: [
-      { name: 'AWS', level: 80 },
-      { name: 'Docker', level: 80 },
-      { name: 'GCP', level: 75 },
-      { name: 'CI/CD', level: 75 },
-      { name: 'Terraform', level: 65 },
+      { name: 'AWS (EC2, S3, RDS)', level: 84 },
+      { name: 'Docker', level: 85 },
+      { name: 'CI/CD & GitHub Actions', level: 82 },
+      { name: 'Kubernetes', level: 72 },
+      { name: 'Terraform', level: 70 },
     ],
   },
   {
@@ -103,14 +102,24 @@ export const skillsWithLevels: SkillCategory[] = [
 
 export const experience: Experience[] = [
   {
+    company: 'USC Marshall School of Business, Los Angeles, CA',
+    title: 'Research Assistant',
+    period: 'Jan 2026 - May 2026',
+    description: [
+      'Built a RAG-based semantic search and chat platform over 10K+ vector embeddings, letting researchers query 500GB+ of structured and unstructured sustainability disclosures in natural language.',
+      'Developed chunking and schema-guided LLM pipelines that extract structured ESG fields from unstructured disclosures.',
+      'Shipped a React dashboard and chat interface for 30+ researchers, cutting 15+ hours per week of manual review.',
+      'Integrated an LLM layer grounding answers in retrieved disclosures with citations to reduce hallucination, plus a feedback loop capturing researcher ratings to refine retrieval accuracy over time.',
+    ],
+  },
+  {
     company: 'Sigma Computing, New York, NY',
     title: 'Software Engineer Intern',
     period: 'Sept 2025 - Dec 2025',
     description: [
-      'Built Conditional Formatting for Containers from scratch, enabling dynamic styling based on formula conditions - now used by 60+ enterprise organizations.',
-      'Implemented Custom Page Headers feature end-to-end, allowing users to add branded headers to workbooks for professional reporting.',
-      'Shipped 4 production features by owning full development lifecycle from design collaboration through deployment and post-release monitoring.',
-      'Expanded test coverage and caught regressions early, improving production stability and reducing post-release issues.',
+      'Delivered four production features end-to-end — owning implementation, testing, and deployment — including a condition-based formula visualization tool, Form v2, headers, and navigation used by 60+ enterprise organizations.',
+      'Optimized rendering of large data grids with memoization and virtualization, improving dashboard responsiveness.',
+      'Wrote Cypress end-to-end tests for critical workbook flows, catching regressions before they reached production.',
     ],
     highlights: [
       { text: 'Conditional Formatting for Containers', link: 'https://help.sigmacomputing.com/docs/use-containers-to-organize-workbook-layouts' },
@@ -119,13 +128,14 @@ export const experience: Experience[] = [
   },
   {
     company: 'World Salon, Los Angeles, CA',
-    title: 'Software Engineer Intern',
+    title: 'Software Engineer',
     period: 'Jul 2024 - Aug 2025',
     description: [
-      'Solved slow speaker sourcing by automating data extraction and outreach workflows, processing 39,000+ profiles e2e.',
-      'Improved team efficiency through AI-driven speaker profiling and personalized outreach, enabling scalable sourcing.',
-      'Addressed performance and scalability bottlenecks by modularizing core, payment services improving latency by 20%.',
-      'Spearheaded Event creation workflow using MERN stack with JWT authentication, role-based access control.',
+      'Launched an events platform powering 130+ events for institutions, speakers, attendees, BDR, and internal teams.',
+      'Engineered scraping and OpenAI-powered profiling pipelines that processed 58,000+ candidate profiles end-to-end, automating the company\'s core speaker-sourcing operation.',
+      'Designed REST APIs with JWT auth and role-based access control across production services and admin routes.',
+      'Refactored a monolithic backend into modular payment and event services, reducing request latency by 20%.',
+      'Containerized and deployed applications on AWS using Docker, EC2, S3, and GitHub Actions CI/CD pipelines.',
     ],
     highlights: [
       { text: 'Main Website', link: 'https://www.world-salon.com' },
@@ -137,21 +147,9 @@ export const experience: Experience[] = [
     title: 'Research Assistant',
     period: 'Feb 2024 - May 2025',
     description: [
-      'Implemented automated web scraper using Selenium to collect 10 years of SP1500 sustainability reports (15K+ PDFs).',
-      'Engineered RAG system with 10K+ vector embeddings and semantic search across 500GB+ energy transition data.',
-      'Executed multi-threaded PDF pipeline with OCR attaining 30% faster extraction vs. prior single-threaded workflow.',
-      'Created PostgreSQL database indexing 2M+ data points with React UI for researchers accessing processed reports.',
-      'Automated Orbis database scraper for 1.8M+ companies using dynamic threading, reducing manual workload by 90%.',
-    ],
-  },
-  {
-    company: 'Smart Consultant, Mumbai, India',
-    title: 'Software Development Engineer Intern',
-    period: 'May 2022 - Jul 2022',
-    description: [
-      'Designed inventory management system for small retail businesses with Django REST API and PostgreSQL database.',
-      'Delivered dashboard analytics showing sales trends, profit margins, and automated ABC analysis for 5000+ SKUs.',
-      'Deployed on AWS EC2 achieving 200ms response times with S3/CloudFront CDN, supporting 15+ concurrent clients.',
+      'Engineered fault-tolerant ETL pipelines chaining Selenium scraping, OCR, and indexing to ingest 15,000+ sustainability reports across 10 years of S&P 1500 filings into a unified research knowledge base.',
+      'Modeled normalized PostgreSQL schemas with targeted indexing over 2M+ extracted data points, cutting query latency by 12% and powering fast downstream analytics, semantic retrieval, and reporting.',
+      'Parallelized PDF extraction with multithreading, cutting processing time 30% over the prior sequential pipeline.',
     ],
   },
 ];
@@ -172,7 +170,36 @@ export const education: Education[] = [
 ];
 
 export const projects: Project[] = [
-  // Live deployed projects first
+  // Flagship systems project
+  {
+    title: 'miniredis - Redis-Compatible In-Memory Store',
+    category: 'systems',
+    image: '/myimg/Project_miniredis.svg',
+    imageAlt: 'miniredis - A Redis-compatible in-memory store built from scratch in C++17 with a non-blocking epoll/kqueue reactor, RESP protocol, skip-list sorted sets, and 984K+ ops/sec throughput by Rutwik Patel',
+    link: 'https://github.com/RutwikPatel13/miniredis',
+    description: 'A Redis-compatible in-memory store written from scratch in C++17 — non-blocking epoll/kqueue reactor over the RESP protocol, hand-written skip-list sorted sets, AOF persistence, pub/sub, and replication. Reaches 984K+ ops/sec.',
+    tech: ['C++17', 'epoll / kqueue', 'RESP', 'Skip List'],
+    slug: 'miniredis',
+    caseStudy: true,
+    challenge: 'Redis makes single-threaded, event-driven networking look effortless — but reproducing it from scratch means solving the hard parts yourself: a non-blocking reactor that scales across thousands of connections, a wire protocol parser that handles partial reads, a sorted-set data structure with logarithmic operations, and durability without blocking the event loop. The goal was a from-scratch, Redis-compatible server fast enough to be benchmarked against the real thing.',
+    solution: 'Built a single-threaded, non-blocking reactor in modern C++17 using epoll on Linux and kqueue on macOS behind one portable event-loop abstraction. Implemented a streaming RESP (REdis Serialization Protocol) parser that tolerates partial reads and pipelining, so any redis-cli or Redis client library can talk to it unmodified. Sorted sets are backed by a hand-written skip list giving O(log n) inserts and range queries. Throughput was pushed to 984K+ ops/sec — a 2.5x gain — by sharding locks across key space, and the whole thing is load-tested with a custom Go benchmark harness.',
+    architecture: 'Client (redis-cli / any RESP client) → non-blocking epoll/kqueue reactor → streaming RESP protocol parser → command dispatch → data structures (hash table, hand-written skip list for ZSETs) → AOF persistence + pub/sub + replication. Sharded locking across the key space for throughput. Cross-platform event-loop abstraction (Linux/macOS). Go-based load-testing harness.',
+    impact: [
+      'Reaches 984K+ ops/sec — 2.5x higher throughput via sharded locking',
+      'Wire-compatible with the RESP protocol: works with redis-cli and standard Redis clients unmodified',
+      'Hand-written skip list delivers O(log n) sorted-set inserts and range queries',
+      'Non-blocking epoll/kqueue reactor scales across many concurrent connections on a single thread',
+      'AOF persistence, pub/sub, and replication implemented from scratch',
+      'Load-tested end-to-end with a custom Go benchmark harness',
+    ],
+    lessons: [
+      'A streaming protocol parser must treat every read as partial — buffering RESP frames across reads was the difference between "works with one client" and "works under load"',
+      'Sharded locking across the key space unlocked most of the 2.5x throughput gain; a single global lock left cores idle',
+      'A hand-written skip list is far simpler to reason about than a balanced tree and hits the same O(log n) bounds Redis relies on for ZSETs',
+      'Abstracting epoll and kqueue behind one interface kept the core loop identical across Linux and macOS',
+    ],
+  },
+  // Live deployed projects
   /* Netflix Clone — commented out
   {
     title: 'Netflix Clone',
@@ -203,33 +230,6 @@ export const projects: Project[] = [
   },
   */
   {
-    title: 'Airbnb-Lite - Hotel Booking API',
-    category: 'web development',
-    image: '/myimg/Project_Airbnb-Lite.png',
-    imageAlt: 'Airbnb-Lite API - Full-featured hotel booking backend with FastAPI, PostgreSQL, JWT auth, room management, and payment integration by Rutwik Patel',
-    link: 'https://airbnblite-api.onrender.com/api/v1/docs',
-    description: 'Full-featured hotel booking backend API with user authentication, hotel/room management, booking flow, and mock payment integration.',
-    tech: ['FastAPI', 'PostgreSQL', 'SQLAlchemy', 'JWT'],
-    hasLiveDemo: true,
-    slug: 'airbnb-lite',
-    caseStudy: true,
-    challenge: 'A hotel booking system has tricky consistency requirements: two users booking the same room at the same time must not both succeed. Building this correctly — with proper auth, availability windows, and payment flow — from scratch is a systems design exercise that surfaces real database and API design decisions.',
-    solution: 'Designed a layered FastAPI backend: route handlers → service layer → SQLAlchemy repository. Booking conflicts are prevented using database-level row locking (SELECT FOR UPDATE) inside a transaction, ensuring only one booking can claim a room for overlapping dates. JWT tokens (access + refresh) handle auth. Auto-generated OpenAPI docs via FastAPI serve as live documentation.',
-    architecture: 'FastAPI routers → Pydantic schemas for validation → Service layer for business logic → SQLAlchemy ORM with PostgreSQL → Alembic for migrations. JWT auth middleware. Row-level locking for booking conflict prevention. Mock Stripe integration in the payment service layer.',
-    impact: [
-      'Live Swagger UI at airbnblite-api.onrender.com/api/v1/docs — fully interactive documentation',
-      'Zero double-booking bugs: row-level locking prevents race conditions under concurrent load',
-      'Full booking lifecycle: search → reserve → pay → cancel with status transitions',
-      'JWT refresh token rotation implemented correctly — no silent token reuse attacks',
-      'Alembic migrations make schema changes safe and reversible across environments',
-    ],
-    lessons: [
-      'SELECT FOR UPDATE inside a transaction is the correct primitive for booking conflict prevention — optimistic locking would work too but adds retry complexity',
-      'FastAPI\'s dependency injection made adding auth middleware to specific routes clean without wrapping every handler',
-      'Pydantic v2\'s model_validator enabled cross-field validation (check-out must be after check-in) at the schema layer, keeping the service layer clean',
-    ],
-  },
-  {
     title: 'TalkToData - Natural Language SQL',
     category: 'web development',
     image: '/myimg/Project_TalkToData.png',
@@ -254,6 +254,34 @@ export const projects: Project[] = [
       'Few-shot examples in the prompt reduced SQL syntax errors by ~70% vs. zero-shot — the model needs to see the dialect in action',
       'Groq\'s llama-3.1-8b-instant was 3–5× faster than GPT-3.5 for this task and free-tier friendly, making it the right choice for a public demo',
       'Streaming the AI response character-by-character felt much faster to users than waiting for the full SQL, even though total latency was the same',
+    ],
+  },
+  {
+    title: 'RoomReserve - Hotel Booking API',
+    category: 'web development',
+    image: '/myimg/Project_Airbnb-Lite.png',
+    imageAlt: 'RoomReserve API - Full-featured hotel booking backend with FastAPI, PostgreSQL, JWT auth, room management, and payment integration by Rutwik Patel',
+    link: 'https://airbnblite-api.onrender.com/api/v1/docs',
+    description: 'Full-featured hotel booking backend API with user authentication, hotel/room management, booking lifecycle, and mock payment integration — 20+ REST endpoints on a normalized relational schema with concurrency-safe double-booking prevention.',
+    tech: ['FastAPI', 'PostgreSQL', 'SQLAlchemy', 'JWT'],
+    hasLiveDemo: true,
+    slug: 'roomreserve',
+    caseStudy: true,
+    challenge: 'A hotel booking system has tricky consistency requirements: two users booking the same room at the same time must not both succeed. Building this correctly — with proper auth, availability windows, and payment flow — from scratch is a systems design exercise that surfaces real database and API design decisions.',
+    solution: 'Designed a layered FastAPI backend with 20+ REST endpoints: route handlers → service layer → SQLAlchemy repository. Booking conflicts are prevented using database-level row locking (SELECT FOR UPDATE) inside a transaction, ensuring only one booking can claim a room for overlapping dates. JWT tokens (access + refresh) handle auth with role-based access control. Auto-generated OpenAPI docs via FastAPI serve as live documentation.',
+    architecture: 'FastAPI routers → Pydantic schemas for validation → Service layer for business logic → SQLAlchemy ORM with PostgreSQL → Alembic for migrations. JWT auth middleware with role-based access control. Row-level locking for booking conflict prevention. Mock Stripe integration in the payment service layer.',
+    impact: [
+      'Live Swagger UI with 20+ REST endpoints — fully interactive documentation',
+      'Zero double-booking bugs: row-level locking prevents race conditions under concurrent load',
+      'Full booking lifecycle: search → reserve → pay → cancel with status transitions',
+      'Role-based access control separates guest, host, and admin capabilities',
+      'JWT refresh token rotation implemented correctly — no silent token reuse attacks',
+      'Alembic migrations make schema changes safe and reversible across environments',
+    ],
+    lessons: [
+      'SELECT FOR UPDATE inside a transaction is the correct primitive for booking conflict prevention — optimistic locking would work too but adds retry complexity',
+      'FastAPI\'s dependency injection made adding auth middleware to specific routes clean without wrapping every handler',
+      'Pydantic v2\'s model_validator enabled cross-field validation (check-out must be after check-in) at the schema layer, keeping the service layer clean',
     ],
   },
   {

@@ -72,7 +72,7 @@ export default function ProjectCaseStudy({ params }: Props) {
             fill
             className="object-cover"
             priority
-            unoptimized={project.hasLiveDemo && !!project.link}
+            unoptimized={(project.hasLiveDemo && !!project.link) || project.image.endsWith('.svg')}
           />
           {project.hasLiveDemo && (
             <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30">

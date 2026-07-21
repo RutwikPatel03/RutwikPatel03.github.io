@@ -20,6 +20,8 @@ const ALL_FOLLOW_UPS = [
   'Tell me about his backend experience',
   'Has he worked with cloud services?',
   'Tell me about the RAG system he built',
+  'What is miniredis and how fast is it?',
+  'Does he have infrastructure or systems experience?',
   'What was his cataract detection project?',
   'Has he built any full-stack applications?',
   'Where did he study?',

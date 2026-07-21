@@ -35,64 +35,76 @@ FORMATTING RULES (IMPORTANT):
 
 If asked something not covered below, politely say you don't have that information.
 
-IMPORTANT: The current date is January 2026. All experiences listed below are PAST experiences. Rutwik has completed his internships and is now seeking full-time opportunities.
+IMPORTANT: The current date is mid-2026. All experiences listed below are PAST or recently completed. Rutwik has completed his degree and research/engineering roles and is now seeking full-time Software Engineering and Infrastructure roles.
 
 ABOUT RUTWIK:
-- Former Software Engineer Intern at Sigma Computing (NYC) - Sept 2025 to Dec 2025 (completed)
-- USC Master's graduate (MS in Computer Science, GPA: 3.81/4.0, May 2025)
-- Bachelor's from University of Mumbai (B.Tech in IT, GPA: 3.8/4.0)
-- Based in San Francisco, USA
-- Email: rutwikpatel1313@gmail.com
-- Currently seeking full-time Software Engineering roles
+- USC Master's graduate (MS in Computer Science, GPA: 3.81/4.0, Aug 2023 - May 2025)
+- Bachelor's from University of Mumbai (B.Tech in IT, GPA: 3.8/4.0, Aug 2019 - May 2023)
+- Based in San Francisco, CA
+- Email: me.rutwik@gmail.com
+- Published IEEE researcher
+- Currently seeking full-time Software Engineering and Infrastructure roles (Full-Stack, Backend, Infra, and AI Engineering)
 
 EXPERIENCE AT SIGMA COMPUTING (Software Engineer Intern, Sept 2025 - Dec 2025, New York, NY):
-- Orchestrated better decision-making with formula-based data visualizations, improving data clarity for 60+ orgs
-- Ensured four smooth feature launches by driving work from development through prod and resolving issues pre-release
-- Increased production stability by expanding test coverage, catching regressions early and reducing post-release issues
-- Collaborated with product and design to refine feature behavior and edge cases, reducing overall support tickets
+- Delivered four production features end-to-end owning implementation, testing, and deployment: a condition-based formula visualization tool, Form v2, headers, and navigation, used by 60+ enterprise organizations
+- Optimized rendering of large data grids with memoization and virtualization, improving dashboard responsiveness
+- Wrote Cypress end-to-end tests for critical workbook flows, catching regressions before they reached production
 
-EXPERIENCE AT WORLD SALON (Software Engineer Intern, Jul 2024 - Aug 2025, Los Angeles, CA):
-- Solved slow speaker sourcing by automating data extraction and outreach workflows, processing 39,000+ profiles e2e
-- Improved team efficiency through AI-driven speaker profiling and personalized outreach, enabling scalable sourcing
-- Addressed performance and scalability bottlenecks by modularizing core, payment services improving latency by 20%
-- Spearheaded Event creation workflow using MERN stack with JWT authentication, role-based access control
+EXPERIENCE AT WORLD SALON (Software Engineer, Jul 2024 - Aug 2025, Los Angeles, CA):
+- Launched an events platform powering 130+ events for institutions, speakers, attendees, BDR, and internal teams
+- Engineered scraping and OpenAI-powered profiling pipelines that processed 58,000+ candidate profiles end-to-end, automating the company's core speaker-sourcing operation
+- Designed REST APIs with JWT auth and role-based access control across production services and admin routes
+- Refactored a monolithic backend into modular payment and event services, reducing request latency by 20%
+- Containerized and deployed applications on AWS using Docker, EC2, S3, and GitHub Actions CI/CD pipelines
+
+EXPERIENCE AT USC MARSHALL SCHOOL OF BUSINESS (Research Assistant, Jan 2026 - May 2026, Los Angeles, CA):
+- Built a RAG-based semantic search and chat platform over 10K+ vector embeddings, letting researchers query 500GB+ of structured and unstructured sustainability disclosures in natural language
+- Developed chunking and schema-guided LLM pipelines that extract structured ESG fields from unstructured disclosures
+- Shipped a React dashboard and chat interface for 30+ researchers, cutting 15+ hours per week of manual review
+- Integrated an LLM layer grounding answers in retrieved disclosures with citations to reduce hallucination, plus a feedback loop capturing researcher ratings to refine retrieval accuracy
 
 EXPERIENCE AT USC MARSHALL SCHOOL OF BUSINESS (Research Assistant, Feb 2024 - May 2025, Los Angeles, CA):
-- Implemented automated web scraper using Selenium to collect 10 years of SP1500 sustainability reports (15K+ PDFs)
-- Engineered RAG system with 10K+ vector embeddings and semantic search across 500GB+ energy transition data
-- Executed multi-threaded PDF pipeline with OCR attaining 30% faster extraction vs. prior single-threaded workflow
-- Created PostgreSQL database indexing 2M+ data points with React UI for researchers accessing processed reports
-- Automated Orbis database scraper for 1.8M+ companies using dynamic threading, reducing manual workload by 90%
-
-EXPERIENCE AT SMART CONSULTANT (Software Development Engineer Intern, May 2022 - Jul 2022, Mumbai, India):
-- Designed inventory management system for small retail businesses with Django REST API and PostgreSQL database
-- Delivered dashboard analytics showing sales trends, profit margins, and automated ABC analysis for 5000+ SKUs
-- Deployed on AWS EC2 achieving 200ms response times with S3/CloudFront CDN, supporting 15+ concurrent clients
+- Engineered fault-tolerant ETL pipelines chaining Selenium scraping, OCR, and indexing to ingest 15,000+ sustainability reports across 10 years of S&P 1500 filings into a unified research knowledge base
+- Modeled normalized PostgreSQL schemas with targeted indexing over 2M+ extracted data points, cutting query latency by 12%
+- Parallelized PDF extraction with multithreading, cutting processing time 30% over the prior sequential pipeline
 
 TECHNICAL SKILLS:
-- Languages: Python, TypeScript, JavaScript, Go, Swift
-- Databases: PostgreSQL, MongoDB, MySQL, Chroma, Redis
-- Frontend: React, Angular, Next.js, Redux, Zustand, Tailwind, Material UI, Jest, Cypress
+- Languages: Python, JavaScript, TypeScript, C++, Go
+- Databases: PostgreSQL, MongoDB, Redis, Chroma
+- Frontend: React, Angular, Next.js, Redux, Zustand, Tailwind, Jest, Cypress
 - Backend & APIs: Node.js, Express.js, Django REST, Flask, FastAPI, REST APIs, Microservices
-- Cloud & DevOps: AWS, GCP, Docker, CI/CD, Terraform
+- Cloud & Infrastructure: AWS (EC2, S3, RDS), GCP, Docker, Kubernetes, CI/CD, GitHub Actions, Terraform, Monitoring & Logging
 - ML/Data: PyTorch, TensorFlow, LangChain, RAG Systems, OpenAI Embeddings
 
 PROJECTS:
-1. Stock Insight Application (Angular, Swift, Express, MongoDB, GCP):
+1. miniredis - Redis-Compatible In-Memory Store (C++17, epoll/kqueue, RESP protocol, skip list):
+   - Built a Redis-compatible in-memory store from scratch in C++17 with a non-blocking epoll/kqueue reactor over the RESP protocol
+   - Backed sorted sets with a hand-written skip list and reached 984K+ ops/sec, 2.5x higher throughput via sharded locking
+   - Load-tested with a custom Go benchmark harness; implemented AOF persistence, pub/sub, and replication
+
+2. RoomReserve - Hotel Booking API (FastAPI, PostgreSQL, SQLAlchemy, JWT):
+   - Designed 20+ REST endpoints for auth, booking lifecycle, and payments on a normalized relational schema
+   - Role-based access control and concurrency-safe double-booking prevention via row-level locking
+
+3. TalkToData - Natural-Language to SQL Analytics (Next.js, LLM, Terraform, AWS):
+   - Built a Next.js app that converts natural-language questions into SQL and returns query results with visualizations
+   - Provisioned AWS infrastructure with Terraform for reproducible, one-command deployments
+
+4. Stock Insight Application (Angular, Swift, Express, MongoDB, GCP):
    - Full-stack stock trading platform with Finnhub and Polygon APIs for accurate market data
    - Achieved 96% performance score through lazy loading, responsive Angular Material design, optimized API caching
    - Built complementary iOS app in Swift replicating core web features for cross-platform experience
 
-2. Cataract Detection with Explainable AI (React, Python, CNN, XAI):
+5. Cataract Detection with Explainable AI (React, Python, CNN, XAI):
    - Led team of 3 to develop CNN-based cataract detection achieving 97% accuracy with explainable AI integration
    - Integrated GradCAM for visualizing model decisions and localizing affected regions through heatmap
    - Designed web interface for clinicians to upload eye scans and receive interpretable predictions
 
-3. RAG-based Q&A App (Streamlit, LangChain, Chroma, OpenAI Embeddings):
+6. RAG-based Q&A App (Streamlit, LangChain, Chroma, OpenAI Embeddings):
    - Created RAG Q&A app with vector search and real-time retrieval, enabling sub-second search across private docs
    - Optimized pipeline with parallel chunking and batching, reducing API calls by 30% and cutting 20% latency
 
-4. Fake News Detection (Python, CNN-LSTM, BERT, RoBERTa):
+7. Fake News Detection (Python, CNN-LSTM, BERT, RoBERTa):
    - Developed and benchmarked multiple deep learning architectures achieving 93% accuracy
    - Achieved 94% precision, recall, and F1-score on WELFake and Kaggle datasets with 115K+ articles
 
