@@ -74,7 +74,7 @@ export default function ProjectCaseStudy({ params }: Props) {
             priority
             unoptimized={(project.hasLiveDemo && !!project.link) || project.image.endsWith('.svg')}
           />
-          {project.hasLiveDemo && (
+          {(project.hasLiveDemo || project.isLive) && (
             <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />

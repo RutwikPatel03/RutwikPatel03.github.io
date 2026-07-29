@@ -45,7 +45,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     >
       {/* Project Image */}
       <div className="relative aspect-video overflow-hidden">
-        {project.hasLiveDemo && (
+        {(project.hasLiveDemo || project.isLive) && (
           <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />

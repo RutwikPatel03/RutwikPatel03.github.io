@@ -69,6 +69,9 @@ export interface Project {
   description: string;
   tech: string[];
   hasLiveDemo?: boolean;
+  // Shows the "Live" badge without swapping the thumbnail for a microlink
+  // screenshot. Used for App Store / native apps whose image is a custom graphic.
+  isLive?: boolean;
   // Case study fields
   slug?: string;
   caseStudy?: boolean;
