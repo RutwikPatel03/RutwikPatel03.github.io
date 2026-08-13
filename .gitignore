@@ -94,3 +94,7 @@ storybook-static/
 # Sentry
 .sentryclirc
 
+
+# Radio build caches: ~19MB of YouTube API dumps, regenerable via
+# scripts/fetch-pool.mjs. Never belongs in the repo.
+scripts/.cache/

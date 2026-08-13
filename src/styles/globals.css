@@ -99,6 +99,76 @@
 }
 
 /*-----------------------------------*\
+  #RADIO BACKDROPS
+\*-----------------------------------*/
+/* Motion for the generated station backdrops. Deliberately very slow: this is
+   ambient texture behind a music player, not something to look at directly. */
+@keyframes radio-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes radio-spin-rev {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+@keyframes radio-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.75; }
+}
+@keyframes radio-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(2.5%, -3.5%, 0) scale(1.08); }
+}
+@keyframes radio-bg-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 128px 0; }
+}
+
+.radio-spin      { animation: radio-spin linear infinite; }
+.radio-spin-rev  { animation: radio-spin-rev linear infinite; }
+.radio-twinkle   { animation: radio-twinkle 5s ease-in-out infinite; }
+.radio-float     { animation: radio-float ease-in-out infinite; }
+.radio-bg-drift  { animation: radio-bg-drift 26s linear infinite; }
+
+/*-----------------------------------*\
+  #RADIO VOLUME SLIDER
+\*-----------------------------------*/
+/* The default range thumb renders in the browser accent colour (blue on
+   Chrome), which fights every station palette. The track gradient is set
+   inline per station; the thumb inherits that station's accent via
+   --slider-thumb so it stays in the same colour family. */
+.radio-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+}
+
+.radio-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 9999px;
+  background: var(--slider-thumb, currentColor);
+  border: none;
+  cursor: pointer;
+}
+
+.radio-volume::-moz-range-thumb {
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 9999px;
+  background: var(--slider-thumb, currentColor);
+  border: none;
+  cursor: pointer;
+}
+
+.radio-volume:focus-visible {
+  outline: 2px solid var(--slider-thumb, currentColor);
+  outline-offset: 3px;
+}
+
+/*-----------------------------------*\
   #REDUCED MOTION (accessibility)
 \*-----------------------------------*/
 @media (prefers-reduced-motion: reduce) {

@@ -229,6 +229,35 @@ export const projects: Project[] = [
       'Pushing every payment and email call into Supabase edge functions kept Stripe and Resend secrets off the device entirely, which the client app has no business holding',
     ],
   },
+  // Live on this site
+  {
+    title: 'Street-Corner Radio - Live Multi-Station Player',
+    category: 'web development',
+    image: '/myimg/Project_Radio.svg',
+    imageAlt: 'Street-Corner Radio - A four-station Indian music radio built with Next.js, the YouTube IFrame API, and Redis sorted-set presence for a real live-listener count, by Rutwik Patel',
+    link: 'https://rutwik.dev/radio',
+    description: 'A four-station always-on radio built into this site: cassette-era Hindi film music, garba and Gujarati folk, late-night melodies, and Indian hip-hop. It hosts no audio. Every track streams from its official YouTube upload, and a real live-listener count runs on Redis sorted sets instead of a WebSocket server.',
+    tech: ['Next.js 14', 'TypeScript', 'YouTube IFrame API', 'Upstash Redis', 'Tailwind'],
+    hasLiveDemo: true,
+    slug: 'street-corner-radio',
+    caseStudy: true,
+    challenge: 'Two problems worth solving. First, showing a genuine "N people listening right now" number normally means running a WebSocket server and tracking connect/disconnect events, which is a lot of moving infrastructure for one line of UI, and disconnects are the part that always leaks. Second, a music site that hosts audio files is a copyright liability and a takedown target, so the catalogue had to stream from somewhere that already holds the licences.',
+    solution: 'Presence runs on a Redis sorted set with no persistent connections at all. Each listener heartbeats its session id scored by timestamp; counting live listeners is a range trim plus a cardinality read, so a closed tab simply ages out of the window and there is no disconnect event to miss. The whole thing is four Redis commands in one pipelined round trip. For the catalogue, tracks store only metadata plus a YouTube video id, and playback runs through a hidden YouTube IFrame player, so every play counts as a normal view for the rights holders and no audio is served from this origin. A build-time resolver script turns curated song metadata into verified video ids, checking each candidate is actually embeddable and not region-blocked before it lands in the data file.',
+    architecture: 'Next.js 14 App Router → curated track metadata in typed data files → offline resolver script (YouTube Data API v3, scores official-label uploads, verifies status.embeddable and region restrictions) → hidden YouTube IFrame player driven by a custom hook → /api/presence heartbeat → Upstash Redis sorted set (ZADD scored by timestamp, ZREMRANGEBYSCORE to expire, ZCARD to count) with a 45s presence window and 15s client heartbeat. Per-station theming, keyboard transport, and shareable ?station= URLs.',
+    impact: [
+      'Real concurrency without a WebSocket server: presence is four pipelined Redis commands, and closed tabs self-expire instead of needing disconnect handling',
+      'Hosts zero audio - every track plays from the rights holder\'s own YouTube upload, so plays count as normal views for the artists and labels',
+      'Resolver verifies embeddability and region restrictions before a video id is committed, so dead or blocked embeds never reach listeners',
+      'Four independently themed stations across Hindi, Gujarati, and Indian hip-hop, each with its own sitemap entry and shareable URL',
+      'Player self-heals: a pulled or privatised video triggers onError and the station skips forward rather than stalling',
+    ],
+    lessons: [
+      'A timestamp-scored sorted set is a far simpler presence primitive than WebSockets, because expiry replaces disconnect handling entirely and the failure mode is a slightly stale count rather than a leaked ghost listener',
+      'Embeddability is not implied by a video existing: YouTube search happily returns uploads that refuse to embed or are region-blocked, so verifying with videos.list before committing an id is what separates a working station from a silent one',
+      'Separating curation (song metadata, written by hand) from resolution (video ids, resolved by script) meant the catalogue stayed reviewable and diffable instead of becoming an opaque list of eleven-character strings',
+      'Pausing heartbeats on hidden tabs matters, otherwise a background tab inflates the live count and the one number the whole page rests on stops being true',
+    ],
+  },
   // Live deployed projects
   /* Netflix Clone — commented out
   {

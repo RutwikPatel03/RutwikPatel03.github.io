@@ -1,10 +1,24 @@
 import { MetadataRoute } from 'next';
+import { stations } from '@/data/radio';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://rutwik.dev';
   const lastModified = new Date();
 
+  // One entry per station so each rotation can rank on its own terms
+  // (garba, 90s hindi, desi hip-hop) rather than competing on one URL.
+  const radioRoutes: MetadataRoute.Sitemap = stations.map((station) => ({
+    url:
+      station.id === 'saloon'
+        ? `${baseUrl}/radio`
+        : `${baseUrl}/radio?station=${station.id}`,
+    lastModified,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
   return [
+    ...radioRoutes,
     // Main pages
     {
       url: baseUrl,
