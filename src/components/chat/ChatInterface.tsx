@@ -4,34 +4,25 @@ import { useState, useRef, useEffect, FormEvent, KeyboardEvent, useCallback } fr
 import ReactMarkdown from 'react-markdown';
 import { Send, Sparkles, User, Bot, Briefcase, Code, FolderOpen, GraduationCap, Copy, Check } from 'lucide-react';
 import type { ChatMessage } from '@/types';
+import {
+  FOLLOW_UP_QUESTIONS,
+  INITIAL_SUGGESTION_TOPICS,
+  buildTopicQuestion,
+} from '@/lib/chat-prompts';
 
-const INITIAL_SUGGESTIONS = [
-  { text: 'Work experience', icon: Briefcase },
-  { text: 'Technical skills', icon: Code },
-  { text: 'Projects', icon: FolderOpen },
-  { text: 'Education', icon: GraduationCap },
-];
+// The question text lives in @/lib/chat-prompts so the server can recognize
+// these as self-contained and answer them from cache. Only the icons are local.
+const TOPIC_ICONS = [Briefcase, Code, FolderOpen, GraduationCap];
 
-const ALL_FOLLOW_UPS = [
-  'What did he do at Sigma Computing?',
-  'Tell me about his work at World Salon',
-  'What are his key achievements?',
-  'What frontend frameworks does he know?',
-  'Tell me about his backend experience',
-  'Has he worked with cloud services?',
-  'Tell me about the RAG system he built',
-  'What is miniredis and how fast is it?',
-  'Does he have infrastructure or systems experience?',
-  'What was his cataract detection project?',
-  'Has he built any full-stack applications?',
-  'Where did he study?',
-  'What courses has he taken?',
-  'Tell me about his research publications',
-  'What programming languages does he know?',
-  'How can I contact him?',
-  'What AI/ML projects has he worked on?',
-  'Tell me about his iOS development experience',
-];
+const INITIAL_SUGGESTIONS = INITIAL_SUGGESTION_TOPICS.map((text, i) => ({
+  text,
+  icon: TOPIC_ICONS[i],
+}));
+
+const ALL_FOLLOW_UPS = FOLLOW_UP_QUESTIONS;
+
+// Matches MAX_HISTORY_MESSAGES on the server; sending more just wastes payload.
+const HISTORY_LIMIT = 4;
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -107,10 +98,20 @@ export default function ChatInterface() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, history: messages.slice(-10) }),
+        body: JSON.stringify({ message, history: messages.slice(-HISTORY_LIMIT) }),
       });
 
-      if (!response.ok) throw new Error('API error');
+      if (!response.ok) {
+        // A 429 carries a specific, user-facing explanation worth showing;
+        // anything else falls back to the generic connection message.
+        const body = await response.json().catch(() => null);
+        const reason =
+          response.status === 429 && typeof body?.error === 'string'
+            ? body.error
+            : "Sorry, I'm having trouble connecting. Please try again.";
+        setMessages((prev) => [...prev, { role: 'assistant', content: reason }]);
+        return;
+      }
 
       const data = await response.json();
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply || "Sorry, I couldn't process that." }]);
@@ -148,7 +149,7 @@ export default function ChatInterface() {
               {INITIAL_SUGGESTIONS.map(({ text, icon: Icon }, index) => (
                 <button
                   key={index}
-                  onClick={() => sendMessage(`Tell me about Rutwik's ${text.toLowerCase()}`)}
+                  onClick={() => sendMessage(buildTopicQuestion(text))}
                   className="flex items-center gap-3 sm:gap-4 p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-border bg-card hover:bg-muted/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 text-left group"
                 >
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0">
