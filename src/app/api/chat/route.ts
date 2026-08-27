@@ -12,6 +12,7 @@ import {
   readCachedReply,
   writeCachedReply,
 } from '@/lib/chat-cache';
+import { recordQuestion } from '@/lib/analytics';
 
 // ===========================================
 // Configuration
@@ -119,9 +120,17 @@ export async function POST(request: NextRequest) {
     if (cacheable) {
       const cached = await readCachedReply(key);
       if (cached) {
+        // Recorded before returning rather than fired and forgotten: a
+        // serverless invocation can be frozen the moment it responds, which
+        // would drop the write on exactly the fastest path.
+        await recordQuestion(message, true);
         return successResponse({ reply: cached, cached: true });
       }
     }
+
+    // Every question that reaches the model is worth recording even if the call
+    // below fails — a question asked is a question asked.
+    await recordQuestion(message, false);
 
     // Check API key configuration
     const apiKey = process.env.GROQ_API_KEY;

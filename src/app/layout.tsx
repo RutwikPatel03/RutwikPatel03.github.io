@@ -8,6 +8,7 @@ import SmoothScrollProvider from '@/providers/SmoothScrollProvider';
 import ThemeProvider from '@/providers/ThemeProvider';
 import CommandPaletteProvider from '@/providers/CommandPaletteProvider';
 import CommandPalette from '@/components/ui/CommandPalette';
+import SiteAnalytics from '@/components/analytics/SiteAnalytics';
 import '@/styles/globals.css';
 
 const inter = Inter({
@@ -330,6 +331,9 @@ export default function RootLayout({
         {/* Vercel Analytics & Speed Insights */}
         <Analytics />
         <SpeedInsights />
+
+        {/* First-party behavioural analytics (see /admin/analytics) */}
+        <SiteAnalytics />
 
         {/* Apollo Tracking Script */}
         <Script

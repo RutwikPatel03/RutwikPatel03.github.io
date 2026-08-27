@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowRight, Download, MapPin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useTypewriter } from '@/hooks';
+import { track } from '@/lib/analytics-client';
 
 const TITLES = [
   'Software Engineer',
@@ -126,7 +127,12 @@ export default function Hero() {
                   Ask AI About Me
                 </Button>
               </Link>
-              <Link href="/resume.pdf" target="_blank" className="w-full sm:w-auto">
+              <Link
+                href="/resume.pdf"
+                target="_blank"
+                className="w-full sm:w-auto"
+                onClick={() => track('resume_download', 'hero')}
+              >
                 <Button variant="ghost" size="lg" className="w-full sm:w-auto">
                   <Download className="w-4 h-4" />
                   Resume

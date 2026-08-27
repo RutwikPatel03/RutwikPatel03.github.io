@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Eye, BookOpen } from 'lucide-react';
+import { track } from '@/lib/analytics-client';
 import type { Project } from '@/types';
 
 interface ProjectCardProps {
@@ -34,6 +35,10 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   // SVGs (e.g. the miniredis thumbnail) and live microlink screenshots bypass
   // the Next.js image optimizer — SVGs can't be re-encoded by it.
   const isUnoptimized = (project.hasLiveDemo && !!project.link) || imageSrc.endsWith('.svg');
+
+  // Not every project has a case-study slug, so the title is the fallback
+  // dimension; the ingest route lowercases and slugifies whatever arrives.
+  const trackingId = project.slug || project.title;
 
   return (
     <motion.div
@@ -67,7 +72,12 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
           {project.link && (
-            <a href={project.link} target="_blank" rel="noopener noreferrer">
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track('project_external', trackingId)}
+            >
               <Button size="sm" variant="secondary">
                 <Eye className="w-4 h-4" />
                 View
@@ -75,7 +85,10 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </a>
           )}
           {project.caseStudy && project.slug && (
-            <Link href={`/projects/${project.slug}`}>
+            <Link
+              href={`/projects/${project.slug}`}
+              onClick={() => track('project_open', trackingId)}
+            >
               <Button size="sm" variant="secondary">
                 <BookOpen className="w-4 h-4" />
                 Case Study

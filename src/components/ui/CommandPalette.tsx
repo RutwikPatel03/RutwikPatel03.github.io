@@ -6,6 +6,7 @@ import { useCommandPalette } from '@/providers/CommandPaletteProvider';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useScrollToSection } from '@/hooks';
 import { siteConfig, socialLinks, externalLinks } from '@/constants';
+import { track } from '@/lib/analytics-client';
 import {
   User, Briefcase, FolderOpen, MessageSquare, BookOpen, Mail,
   Moon, Sun, Download, Bot, Github, Linkedin, Copy, X,
@@ -62,6 +63,7 @@ export default function CommandPalette() {
           hint: siteConfig.author.email,
           onSelect: () => {
             navigator.clipboard.writeText(siteConfig.author.email);
+            track('email_copy', 'command_palette');
             setOpen(false);
           },
         },
@@ -69,7 +71,11 @@ export default function CommandPalette() {
           id: 'resume',
           label: 'Download Resume',
           icon: Download,
-          onSelect: () => { window.open(externalLinks.resume, '_blank'); setOpen(false); },
+          onSelect: () => {
+            track('resume_download', 'command_palette');
+            window.open(externalLinks.resume, '_blank');
+            setOpen(false);
+          },
         },
         {
           id: 'ai',
@@ -101,6 +107,7 @@ export default function CommandPalette() {
   // Lock body scroll while palette is open so the page doesn't scroll through the backdrop
   useEffect(() => {
     if (!open) return;
+    track('command_open');
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
@@ -154,7 +161,10 @@ export default function CommandPalette() {
                   <Command.Item
                     key={item.id}
                     value={item.label}
-                    onSelect={item.onSelect}
+                    onSelect={() => {
+                      track('command_selected', item.id);
+                      item.onSelect();
+                    }}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-foreground cursor-pointer select-none
                                data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground
                                hover:bg-accent transition-colors"

@@ -9,6 +9,7 @@ import {
   INITIAL_SUGGESTION_TOPICS,
   buildTopicQuestion,
 } from '@/lib/chat-prompts';
+import { track } from '@/lib/analytics-client';
 
 // The question text lives in @/lib/chat-prompts so the server can recognize
 // these as self-contained and answer them from cache. Only the icons are local.
@@ -149,7 +150,10 @@ export default function ChatInterface() {
               {INITIAL_SUGGESTIONS.map(({ text, icon: Icon }, index) => (
                 <button
                   key={index}
-                  onClick={() => sendMessage(buildTopicQuestion(text))}
+                  onClick={() => {
+                    track('chat_topic', text);
+                    sendMessage(buildTopicQuestion(text));
+                  }}
                   className="flex items-center gap-3 sm:gap-4 p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-border bg-card hover:bg-muted/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 text-left group"
                 >
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0">
@@ -236,7 +240,10 @@ export default function ChatInterface() {
                 {currentSuggestions.map((suggestion, index) => (
                   <button
                     key={index}
-                    onClick={() => sendMessage(suggestion)}
+                    onClick={() => {
+                      track('chat_topic', 'follow_up');
+                      sendMessage(suggestion);
+                    }}
                     className="text-xs sm:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-border bg-card hover:bg-muted hover:border-primary/30 transition-all duration-200 text-muted-foreground hover:text-foreground"
                   >
                     {suggestion}

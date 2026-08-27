@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { Mail, MapPin, Send, Linkedin, Github, CheckCircle, XCircle, X } from 'lucide-react';
 import { contactInfo as baseContactInfo, socialLinks as socialConfig, siteConfig } from '@/constants';
+import { track } from '@/lib/analytics-client';
 
 // Map contact info with icons
 const contactInfo = baseContactInfo.map((item) => ({
@@ -131,6 +132,7 @@ export default function Contact() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => track('outbound_click', link.label)}
                     className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                   >
                     <link.icon className="w-4 h-4 sm:w-5 sm:h-5" />

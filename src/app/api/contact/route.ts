@@ -5,6 +5,7 @@ import {
   validateString,
   checkRateLimit,
 } from '@/lib/api';
+import { recordServerEvent } from '@/lib/analytics';
 
 // Rate limiting: 5 contact form submissions per minute per IP
 const RATE_LIMIT = 5;
@@ -97,6 +98,10 @@ export async function POST(request: NextRequest) {
       console.error('Resend API error:', errorData);
       return ApiErrors.internalError('Failed to send email. Please try again.');
     }
+
+    // Counted server-side so the number reflects mail that actually went out,
+    // not submit buttons pressed.
+    await recordServerEvent('contact_submit');
 
     return successResponse({ 
       success: true, 

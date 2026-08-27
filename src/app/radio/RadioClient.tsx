@@ -29,6 +29,7 @@ import type { RotationId, RadioTrack } from '@/types/radio';
 import { usePresence } from '@/hooks/usePresence';
 import { useYouTubeRadio } from '@/hooks/useYouTubeRadio';
 import { RadioBackdrop } from './RadioBackdrop';
+import { track } from '@/lib/analytics-client';
 
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds) || seconds <= 0) return '0:00';
@@ -155,6 +156,14 @@ export function RadioClient({ initialStationId }: { initialStationId: string }) 
     },
     [pasteValue, station.id]
   );
+
+  // Several paths can start the music (transport button, picking a song,
+  // switching station), and they all land on playingSource. Watching it here
+  // records "started listening to X" once per switch instead of instrumenting
+  // each handler and drifting apart from them.
+  useEffect(() => {
+    if (playingSource) track('radio_play', playingSource.stationId);
+  }, [playingSource]);
 
   /**
    * Main transport. Before anything is playing this pins the viewed station as

@@ -1,5 +1,18 @@
+import { createHash } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { redis, REDIS_KEYS } from '@/lib/redis';
+
+/**
+ * Salts the per-visitor key so the stored value cannot be reversed into an IP
+ * by hashing the candidate address space, which is small enough to enumerate.
+ * A missing salt is not fatal, it just makes the digest guessable, so the
+ * counter keeps working rather than failing the request.
+ */
+const IP_SALT = process.env.VISITOR_HASH_SALT || 'portfolio-visitor';
+
+function hashIp(ip: string): string {
+  return createHash('sha256').update(`${IP_SALT}:${ip}`).digest('hex').slice(0, 16);
+}
 
 // GET - Retrieve current visitor count
 export async function GET() {
@@ -25,8 +38,9 @@ export async function POST(request: NextRequest) {
     const forwarded = request.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown';
     
-    // Create a simple hash of the IP for privacy
-    const visitorHash = Buffer.from(ip).toString('base64').slice(0, 12);
+    // Base64 is encoding, not hashing: the previous version was reversible and
+    // truncation collided nearby addresses into one key. This is a real digest.
+    const visitorHash = hashIp(ip);
     const visitorKey = `${REDIS_KEYS.UNIQUE_VISITORS}:${visitorHash}`;
     
     // Check if this visitor was already counted today
