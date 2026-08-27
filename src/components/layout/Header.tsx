@@ -11,6 +11,7 @@ import { VisitorStats } from '@/components/ui/VisitorStats';
 import { navItems, externalLinks, siteConfig } from '@/constants';
 import { useScrollToSection, useScrolled } from '@/hooks';
 import { useCommandPalette } from '@/providers/CommandPaletteProvider';
+import { track } from '@/lib/analytics-client';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -86,14 +87,16 @@ export default function Header() {
             <VisitorStats variant="minimal" />
             <div className="w-px h-4 bg-border" />
             <ThemeToggle />
-            <Link
+            <a
               href={externalLinks.resume}
               target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track('resume_download', 'header')}
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
             >
               <Download className="w-4 h-4" />
               Resume
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -140,15 +143,19 @@ export default function Header() {
                   <Sparkles className="w-4 h-4" />
                   Ask AI
                 </Link>
-                <Link
+                <a
                   href={externalLinks.resume}
                   target="_blank"
-                  onClick={() => setIsMenuOpen(false)}
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    track('resume_download', 'mobile_menu');
+                    setIsMenuOpen(false);
+                  }}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
                 >
                   <Download className="w-4 h-4" />
                   Resume
-                </Link>
+                </a>
               </div>
             </div>
           </motion.div>
