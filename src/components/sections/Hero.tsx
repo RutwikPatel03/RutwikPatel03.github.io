@@ -127,9 +127,13 @@ export default function Hero() {
                   Ask AI About Me
                 </Button>
               </Link>
-              <Link
+              {/* A plain anchor, not next/link: Link prefetches its href as a
+                  route, and /resume.pdf is a static file, so every homepage
+                  load fired a 404 for /resume.pdf?_rsc=... */}
+              <a
                 href="/resume.pdf"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="w-full sm:w-auto"
                 onClick={() => track('resume_download', 'hero')}
               >
@@ -137,7 +141,7 @@ export default function Hero() {
                   <Download className="w-4 h-4" />
                   Resume
                 </Button>
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
 

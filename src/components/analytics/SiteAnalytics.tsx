@@ -13,8 +13,19 @@ import { flush, resetPageState, track, trackOnce } from '@/lib/analytics-client'
 /** A section has to hold the viewport this long to count as read, not scrolled past. */
 const DWELL_MS = 1000;
 
-/** Fraction of a section on screen before its dwell timer starts. */
-const VISIBLE_RATIO = 0.5;
+/**
+ * A horizontal band across the middle of the viewport, expressed as a root
+ * margin that shrinks the root to its central 20%.
+ *
+ * The obvious implementation — `threshold: 0.5` on the section itself — is
+ * wrong for this page. A threshold is a fraction of the *element*, so an
+ * element taller than the viewport can never satisfy it: Experience and
+ * Projects run to several screens each and would silently never register a
+ * view, losing exactly the sections worth measuring. Asking whether the
+ * section overlaps the centre band instead is independent of section height
+ * and matches what the number is supposed to mean: the section being looked at.
+ */
+const CENTRE_BAND = '-40% 0px -40% 0px';
 
 const DEPTH_BUCKETS = [25, 50, 75, 100] as const;
 
@@ -55,7 +66,7 @@ export default function SiteAnalytics() {
           }
         }
       },
-      { threshold: VISIBLE_RATIO }
+      { rootMargin: CENTRE_BAND, threshold: 0 }
     );
 
     const observed = new WeakSet<Element>();
