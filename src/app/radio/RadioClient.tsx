@@ -33,6 +33,7 @@ import type { RotationId, RadioTrack } from '@/types/radio';
 import { usePresence } from '@/hooks/usePresence';
 import { useYouTubeRadio, type RadioSource } from '@/hooks/useYouTubeRadio';
 import { useWakeLock } from '@/hooks/useWakeLock';
+import { useMediaSession } from '@/hooks/useMediaSession';
 import { usePlaylistLibrary } from '@/hooks/usePlaylistLibrary';
 import { PlaylistLibrary } from './PlaylistLibrary';
 import { NowPlayingSheet } from './NowPlayingSheet';
@@ -1034,6 +1035,7 @@ export function RadioClient({
    * of a phone left face-up while the radio is on.
    */
   const wakeLock = useWakeLock(isPlaying);
+
   /**
    * True once the player has actually been engaged. Used to keep the compact
    * transport hidden until there is something to control, so opening the song
@@ -1102,6 +1104,8 @@ export function RadioClient({
   /** The live queue with real titles, for the expanded player's list. */
   const namedQueue = useMemo(() => queue.map(named), [queue, named]);
 
+
+
   /**
    * The last song the bar showed.
    *
@@ -1114,6 +1118,25 @@ export function RadioClient({
   const lastPlayedRef = useRef<RadioTrack | null>(null);
   if (nowPlaying) lastPlayedRef.current = nowPlaying;
   const barTrack = nowPlaying ?? lastPlayedRef.current;
+
+  /**
+   * Puts the current song on the lock screen and in Control Centre, and lets
+   * the buttons there — and on headphones — drive the player.
+   */
+  const playPause = useCallback(() => handleToggle(), [handleToggle]);
+  useMediaSession({
+    title: barTrack?.title,
+    artist: barTrack?.artist,
+    album: barTrack?.album ?? playingStation.name,
+    artwork: barTrack?.videoId ? thumbnailFor(barTrack.videoId) : null,
+    isPlaying,
+    active: hasStarted,
+    onPlay: playPause,
+    onPause: playPause,
+    onNext: next,
+    onPrev: prev,
+  });
+
 
   /**
    * Write the playlist's songs back to the library once the player has handed

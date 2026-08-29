@@ -120,7 +120,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/myimg/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/myimg/favicon.png" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        {/* iOS reads the manifest for standalone mode only from 16.4; this is
+            what makes it open without Safari's chrome on anything older. */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Radio" />
 
         {/* Note: next/font self-hosts Google Fonts, so no font-origin preconnect
             is needed. Apollo loads afterInteractive, so a preconnect to it
