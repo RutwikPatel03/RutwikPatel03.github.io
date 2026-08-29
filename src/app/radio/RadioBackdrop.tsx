@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import type { RadioStation } from '@/types/radio';
 
 /**
@@ -209,7 +209,55 @@ function GullyLayer({ accent, sand }: { accent: string; sand: string }) {
   );
 }
 
-export function RadioBackdrop({ station }: { station: RadioStation }) {
+/**
+ * Memoised on the station. The player polls its progress twice a second, which
+ * re-renders the page; without this, ninety star circles and five animated
+ * mandala rings were reconciled on every one of those ticks for nothing.
+ */
+/** My Playlist: a field of equalizer bars, the listener's own music as a wave. */
+function PlaylistLayer({ accent, sand }: { accent: string; sand: string }) {
+  // Deterministic heights, so the server and client draw the same wave.
+  const bars = useMemo(() => {
+    const rand = seeded(20260827);
+    return Array.from({ length: 48 }, (_, i) => ({
+      h: 14 + Math.abs(Math.sin(i * 0.7)) * 52 + rand() * 18,
+      delay: (i % 12) * 0.18,
+    }));
+  }, []);
+
+  return (
+    <>
+      <div className="absolute inset-x-0 bottom-0 flex h-[62vh] items-end gap-[0.9vw] px-[3vw]">
+        {bars.map((bar, i) => (
+          <div
+            key={i}
+            className="radio-float flex-1 rounded-t"
+            style={{
+              height: `${bar.h}%`,
+              background: `linear-gradient(180deg, ${accent}2e 0%, transparent 100%)`,
+              animationDuration: `${7 + (i % 5)}s`,
+              animationDelay: `${bar.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+      <div
+        className="absolute inset-x-0 top-0 h-[1px]"
+        style={{ background: `linear-gradient(90deg, transparent, ${sand}22, transparent)` }}
+      />
+      <div
+        className="absolute left-1/2 top-1/3 h-[60vmin] w-[80vw] -translate-x-1/2 rounded-full blur-3xl"
+        style={{ background: `radial-gradient(circle, ${accent}33 0%, transparent 70%)` }}
+      />
+    </>
+  );
+}
+
+export const RadioBackdrop = memo(function RadioBackdrop({
+  station,
+}: {
+  station: RadioStation;
+}) {
   const { shade, sand, accent } = station.theme;
 
   return (
@@ -257,6 +305,7 @@ export function RadioBackdrop({ station }: { station: RadioStation }) {
           {station.id === 'garba' && <GarbaLayer accent={accent} sand={sand} />}
           {station.id === 'melody' && <MelodyLayer accent={accent} sand={sand} />}
           {station.id === 'gully' && <GullyLayer accent={accent} sand={sand} />}
+          {station.id === 'mine' && <PlaylistLayer accent={accent} sand={sand} />}
         </>
       )}
 
@@ -270,4 +319,4 @@ export function RadioBackdrop({ station }: { station: RadioStation }) {
       <Grain />
     </div>
   );
-}
+});

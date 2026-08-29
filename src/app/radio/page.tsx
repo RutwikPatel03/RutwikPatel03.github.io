@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { RadioClient } from './RadioClient';
-import { getStation, stations, totalTrackCount, DEFAULT_STATION_ID } from '@/data/radio';
+import { getStation, allStations, totalTrackCount } from '@/data/radio';
 
 export const metadata: Metadata = {
   title: 'Radio — an always-on Indian street-corner station',
@@ -34,10 +34,13 @@ export default function RadioPage({
   searchParams?: { station?: string };
 }) {
   const requested = searchParams?.station;
-  const station = getStation(requested);
-  const initialStationId = stations.some((s) => s.id === requested)
-    ? station.id
-    : DEFAULT_STATION_ID;
+  // getStation already falls back to the default for anything unrecognised.
+  const initialStationId = getStation(requested).id;
+  // A real ?station= link outranks the listener's remembered station, so a
+  // shared link always opens on the station it names.
+  const hasExplicitStation = allStations.some((s) => s.id === requested);
 
-  return <RadioClient initialStationId={initialStationId} />;
+  return (
+    <RadioClient initialStationId={initialStationId} hasExplicitStation={hasExplicitStation} />
+  );
 }

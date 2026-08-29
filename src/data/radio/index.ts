@@ -8,6 +8,7 @@ export const stations: RadioStation[] = [
   {
     id: 'saloon',
     name: 'Saloon 90s',
+    shortName: 'Saloon',
     script: '९० का दशक',
     tagline: 'Cassette-era Hindi film music',
     description:
@@ -50,6 +51,7 @@ export const stations: RadioStation[] = [
   {
     id: 'garba',
     name: 'Garba Ground',
+    shortName: 'Garba',
     script: 'ગરબા',
     tagline: 'Gujarati folk, raas and navratri',
     description:
@@ -60,6 +62,7 @@ export const stations: RadioStation[] = [
   {
     id: 'melody',
     name: 'Late Night Melody',
+    shortName: 'Melody',
     script: 'मेलोडी',
     tagline: 'Soulful Hindi, Arijit to KK',
     description:
@@ -70,6 +73,7 @@ export const stations: RadioStation[] = [
   {
     id: 'gully',
     name: 'Gully Frequency',
+    shortName: 'Gully',
     script: 'गली',
     tagline: 'Indian hip-hop and rap',
     description:
@@ -81,8 +85,48 @@ export const stations: RadioStation[] = [
 
 export const DEFAULT_STATION_ID = 'saloon';
 
+// ===========================================
+// The listener's own playlist
+// ===========================================
+
+export const PLAYLIST_STATION_ID = 'mine';
+
+/**
+ * A fifth station backed by a YouTube playlist the listener names, rather than
+ * by a curated list.
+ *
+ * It ships with no tracks on purpose. A playlist cannot be enumerated without
+ * the Data API, so the ids arrive from the player itself once it has loaded
+ * the list, which also keeps this station out of the catalogue counts.
+ */
+export const playlistStation: RadioStation = {
+  id: PLAYLIST_STATION_ID,
+  name: 'My Playlist',
+    shortName: 'Playlist',
+  script: 'मेरी',
+  tagline: 'Your own YouTube playlist',
+  description:
+    'Any public or unlisted YouTube playlist of yours, played through the same radio. Private playlists cannot be embedded, so those will not load.',
+  theme: { shade: '#191026', sand: '#efe4fb', accent: '#a970ff' },
+  tracks: [],
+};
+
+/** Everything the station switcher offers, curated plus the listener's own. */
+export const allStations: RadioStation[] = [...stations, playlistStation];
+
 export function getStation(id: string | undefined | null): RadioStation {
-  return stations.find((s) => s.id === id) ?? stations[0];
+  return allStations.find((s) => s.id === id) ?? stations[0];
+}
+
+/** A YouTube playlist id out of a full URL, or a bare id. */
+export function parsePlaylistId(input: string): string | null {
+  const value = (input || '').trim();
+  if (!value) return null;
+  const fromUrl = /[?&]list=([A-Za-z0-9_-]+)/.exec(value);
+  const candidate = fromUrl ? fromUrl[1] : value;
+  // Ids run from about 13 characters (LL/WL) upward; anything shorter is a
+  // video id or a typo, and would fail silently inside the player.
+  return /^[A-Za-z0-9_-]{13,}$/.test(candidate) ? candidate : null;
 }
 
 /** Tracks that actually have a resolved, embeddable video id. */

@@ -59,6 +59,11 @@ export interface RadioStation {
   id: string;
   /** Display name. */
   name: string;
+  /**
+   * A one-word label for tight spots, such as the phone's prev/next strip
+   * where three station names have to share one line. Falls back to `name`.
+   */
+  shortName?: string;
   /** Short line shown under the name. */
   tagline: string;
   /** Longer description used for the station picker and SEO. */
@@ -94,4 +99,41 @@ export interface RadioStation {
     /** CSS object-position, for steering the crop. Defaults to 'center'. */
     position?: string;
   };
+}
+
+// ===========================================
+// Saved playlists
+// ===========================================
+// The listener's own YouTube playlists. These live on the server rather than
+// in the browser, so they survive a refresh, follow you between devices, and
+// are part of the site for everyone.
+
+export interface SavedTrack {
+  videoId: string;
+  title: string;
+  artist: string;
+}
+
+export interface SavedPlaylist {
+  /** YouTube playlist id. */
+  id: string;
+  /** Playlist title from YouTube, falling back to the id until it resolves. */
+  name: string;
+  /** Channel the playlist belongs to. */
+  author?: string;
+  /**
+   * The playlist's own cover art, when YouTube will tell us about it. Absent
+   * for playlists resolved without a Data API key, where the library falls
+   * back to a mosaic of the first four songs' thumbnails.
+   */
+  image?: string;
+  addedAt: number;
+  /**
+   * The songs, cached.
+   *
+   * A playlist's contents otherwise only exist inside the YouTube player,
+   * which does not exist until something is playing — which is why, before
+   * this, every reload showed an empty station until you pressed play.
+   */
+  tracks: SavedTrack[];
 }
