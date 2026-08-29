@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, Reorder } from 'motion/react';
+import { motion, Reorder, useDragControls } from 'motion/react';
 import { ChevronDown, GripVertical, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
 import type { RadioTrack } from '@/types/radio';
+import { Scrubber, formatTime } from './Scrubber';
 
 interface Theme {
   shade: string;
@@ -15,18 +16,84 @@ function thumbnailFor(videoId: string) {
   return `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
 }
 
-function formatTime(seconds: number) {
-  if (!Number.isFinite(seconds) || seconds <= 0) return '0:00';
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
-
 /** A queue row carries a stable key of its own, since titles repeat. */
 interface QueueRow {
   key: string;
   track: RadioTrack;
   index: number;
+}
+
+/**
+ * One row of the queue.
+ *
+ * Its own component because dragging is driven by the handle alone, and the
+ * controls for that are a hook. Letting the whole row start a drag made the
+ * list impossible to scroll on a phone: a vertical swipe to scroll is the same
+ * gesture as a vertical drag to reorder, so scrolling picked songs up and
+ * dropped them somewhere else.
+ */
+function QueueRow({
+  row,
+  theme,
+  onPlayAt,
+  onCommit,
+}: {
+  row: QueueRow;
+  theme: Theme;
+  onPlayAt: (index: number) => void;
+  onCommit: () => void;
+}) {
+  const controls = useDragControls();
+
+  return (
+    <Reorder.Item
+      value={row}
+      dragListener={false}
+      dragControls={controls}
+      onDragEnd={onCommit}
+      className="flex items-center gap-3 rounded-lg px-2 py-2"
+      style={{ backgroundColor: theme.shade }}
+      whileDrag={{ scale: 1.02, backgroundColor: `${theme.accent}22` }}
+    >
+      {/* The only thing that starts a drag. touch-none stops the browser
+          scrolling the list out from under the gesture. */}
+      <span
+        onPointerDown={(e) => controls.start(e)}
+        className="shrink-0 cursor-grab touch-none p-2 opacity-40 active:cursor-grabbing"
+        style={{ touchAction: 'none' }}
+        aria-label="Drag to reorder"
+        role="button"
+        tabIndex={-1}
+      >
+        <GripVertical className="h-4 w-4" />
+      </span>
+
+      <button
+        onClick={() => onPlayAt(row.index)}
+        className="flex min-w-0 flex-1 items-center gap-3 text-left"
+      >
+        {row.track?.videoId ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={thumbnailFor(row.track.videoId)}
+            alt=""
+            loading="lazy"
+            className="h-9 w-16 shrink-0 rounded object-cover"
+            style={{ backgroundColor: `${theme.sand}12` }}
+          />
+        ) : (
+          <span
+            className="h-9 w-16 shrink-0 rounded"
+            style={{ backgroundColor: `${theme.sand}12` }}
+          />
+        )}
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm">{row.track?.title}</span>
+          <span className="block truncate text-xs opacity-50">{row.track?.artist}</span>
+        </span>
+      </button>
+    </Reorder.Item>
+  );
 }
 
 /**
@@ -51,6 +118,8 @@ export function NowPlayingSheet({
   onPrev,
   onPlayAt,
   onReorder,
+  onSeekFraction,
+  onSkipSeconds,
 }: {
   open: boolean;
   theme: Theme;
@@ -66,6 +135,8 @@ export function NowPlayingSheet({
   onPrev: () => void;
   onPlayAt: (index: number) => void;
   onReorder: (nextQueue: RadioTrack[], nextIndex: number) => void;
+  onSeekFraction: (fraction: number) => void;
+  onSkipSeconds: (delta: number) => void;
 }) {
   /**
    * A local copy so a drag is smooth: committing every intermediate order to
@@ -96,8 +167,6 @@ export function NowPlayingSheet({
     const rest = next.map((r) => r.track);
     onReorder([...played, queue[index], ...rest], index);
   };
-
-  const pct = progress.duration > 0 ? (progress.current / progress.duration) * 100 : 0;
 
   return (
     <motion.div
@@ -138,15 +207,19 @@ export function NowPlayingSheet({
           <p className="mt-1 line-clamp-1 text-sm opacity-60">{current?.artist}</p>
 
           <div className="mt-4 w-full max-w-[280px] sm:max-w-none">
-            <div
-              className="h-1 w-full overflow-hidden rounded-full"
-              style={{ backgroundColor: `${theme.sand}22` }}
-            >
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${pct}%`, backgroundColor: theme.accent }}
-              />
-            </div>
+            {/* A real scrubber, not a progress readout. This sheet covers the
+                bar at the bottom, so without one there is no way to seek
+                while the queue is open. */}
+            <Scrubber
+              label="Seek within the current song, expanded player"
+              progress={progress}
+              onSeekFraction={onSeekFraction}
+              onSkipSeconds={onSkipSeconds}
+              className="group -my-3 cursor-pointer py-3 focus:outline-none"
+              trackClassName="h-1 w-full overflow-hidden rounded-full transition-all group-hover:h-1.5 group-focus-visible:h-1.5"
+              trackColor={`${theme.sand}22`}
+              fillColor={theme.accent}
+            />
             <div className="mt-1.5 flex justify-between font-mono text-[0.65rem] tabular-nums opacity-50">
               <span>{formatTime(progress.current)}</span>
               <span>{formatTime(progress.duration)}</span>
@@ -178,7 +251,7 @@ export function NowPlayingSheet({
         {/* the queue */}
         <div className="flex min-h-0 flex-1 flex-col">
           <p className="mb-2 shrink-0 text-[0.6rem] uppercase tracking-[0.25em] opacity-40">
-            Next up · drag to reorder
+            Next up · drag the handle to reorder
           </p>
           {rows.length === 0 ? (
             <p className="py-8 text-center text-sm opacity-50">Nothing queued after this one.</p>
@@ -191,50 +264,13 @@ export function NowPlayingSheet({
               className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain pr-1"
             >
               {rows.map((row) => (
-                <Reorder.Item
+                <QueueRow
                   key={row.key}
-                  value={row}
-                  onDragEnd={() => commitOrder(rows)}
-                  className="flex items-center gap-3 rounded-lg px-2 py-2"
-                  style={{ backgroundColor: theme.shade }}
-                  whileDrag={{ scale: 1.02, backgroundColor: `${theme.accent}22` }}
-                >
-                  {/* Its own handle, so dragging a row and tapping to play it
-                      are different gestures rather than a guess. */}
-                  <span
-                    className="shrink-0 cursor-grab touch-none p-1 opacity-30 active:cursor-grabbing"
-                    aria-hidden
-                  >
-                    <GripVertical className="h-4 w-4" />
-                  </span>
-
-                  <button
-                    onClick={() => onPlayAt(row.index)}
-                    className="flex min-w-0 flex-1 items-center gap-3 text-left"
-                  >
-                    {row.track?.videoId ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={thumbnailFor(row.track.videoId)}
-                        alt=""
-                        loading="lazy"
-                        className="h-9 w-16 shrink-0 rounded object-cover"
-                        style={{ backgroundColor: `${theme.sand}12` }}
-                      />
-                    ) : (
-                      <span
-                        className="h-9 w-16 shrink-0 rounded"
-                        style={{ backgroundColor: `${theme.sand}12` }}
-                      />
-                    )}
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm">{row.track?.title}</span>
-                      <span className="block truncate text-xs opacity-50">
-                        {row.track?.artist}
-                      </span>
-                    </span>
-                  </button>
-                </Reorder.Item>
+                  row={row}
+                  theme={theme}
+                  onPlayAt={onPlayAt}
+                  onCommit={() => commitOrder(rows)}
+                />
               ))}
             </Reorder.Group>
           )}
