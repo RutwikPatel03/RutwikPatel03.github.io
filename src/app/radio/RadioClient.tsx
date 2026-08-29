@@ -1,7 +1,6 @@
 'use client';
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Play,
@@ -12,7 +11,6 @@ import {
   ListMusic,
   Search as SearchIcon,
   X,
-  ArrowLeft,
   Search,
   Check,
   AlertCircle,
@@ -617,6 +615,53 @@ export function RadioClient({
     [library.playlists]
   );
 
+  /**
+   * Swiping the bar skips a track, the way every phone music app works.
+   *
+   * The bar's own buttons were 32px on a phone — under the 44px a finger
+   * needs — and they sit inside a bar that opens the queue when tapped, so a
+   * near miss expanded the player instead of skipping. Bigger targets fix the
+   * miss; this makes the common action not need aiming at all.
+   *
+   * The bar sits outside the page's drag layer, so this never collides with
+   * the swipe that changes station.
+   */
+  const barTouchRef = useRef<{ x: number; y: number } | null>(null);
+  const barSwipedAtRef = useRef(0);
+
+  const onBarTouchStart = useCallback((e: React.TouchEvent) => {
+    const el = e.target as HTMLElement | null;
+    if (el?.closest('[role="slider"]')) {
+      barTouchRef.current = null;
+      return;
+    }
+    const t = e.touches[0];
+    barTouchRef.current = { x: t.clientX, y: t.clientY };
+  }, []);
+
+  const onBarTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const start = barTouchRef.current;
+      barTouchRef.current = null;
+      if (!start) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - start.x;
+      const dy = t.clientY - start.y;
+      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      barSwipedAtRef.current = Date.now();
+      if (dx < 0) next();
+      else prev();
+    },
+    [next, prev]
+  );
+
+  /** A swipe must not also count as the tap that opens the queue. */
+  const onBarClickCapture = useCallback((e: React.MouseEvent) => {
+    if (Date.now() - barSwipedAtRef.current > 500) return;
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
   const backToLibrary = useCallback(() => setOpenPlaylistId(null), []);
   const togglePlaylistShuffle = useCallback(() => {
     setPlaylistShuffle((on) => {
@@ -1209,13 +1254,9 @@ export function RadioClient({
       <div className="relative z-10 flex min-h-[100dvh] flex-col">
         {/* ---------- header ---------- */}
         <header className="flex items-center justify-between gap-3 px-4 pt-5 sm:px-8 sm:pt-6">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs opacity-70 transition-opacity hover:opacity-100 sm:text-sm md:flex-1"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span className="hidden sm:inline">rutwik.dev</span>
-          </Link>
+          {/* Empty, but it still holds one side of the header: the segmented
+              control is centred by equal weight either side of it. */}
+          <span className="md:flex-1" aria-hidden />
 
           {/* ---------- station switcher, wide screens ---------- */}
           {/* In the header rather than the hero so it never scrolls away, and
@@ -1741,6 +1782,9 @@ export function RadioClient({
             tabIndex={0}
             aria-label="Open player and queue"
             onClick={() => setSheetOpen(true)}
+            onTouchStart={onBarTouchStart}
+            onTouchEnd={onBarTouchEnd}
+            onClickCapture={onBarClickCapture}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -1803,7 +1847,7 @@ export function RadioClient({
                 prev();
               }}
               aria-label="Previous song"
-              className="shrink-0 rounded-full p-2 opacity-70 transition-opacity hover:opacity-100"
+              className="shrink-0 rounded-full p-3.5 opacity-70 transition-opacity hover:opacity-100 sm:p-2"
             >
               <SkipBack className="h-4 w-4" />
             </button>
@@ -1813,16 +1857,16 @@ export function RadioClient({
                 handleToggle();
               }}
               aria-label={isPlaying ? 'Pause' : 'Play'}
-              className="shrink-0 rounded-full p-2.5 transition-transform hover:scale-105 active:scale-95"
+              className="shrink-0 rounded-full p-3.5 transition-transform hover:scale-105 active:scale-95 sm:p-2.5"
               style={{
                 backgroundColor: playingStation.theme.accent,
                 color: playingStation.theme.shade,
               }}
             >
               {isPlaying ? (
-                <Pause className="h-4 w-4" fill="currentColor" />
+                <Pause className="h-5 w-5 sm:h-4 sm:w-4" fill="currentColor" />
               ) : (
-                <Play className="h-4 w-4 translate-x-px" fill="currentColor" />
+                <Play className="h-5 w-5 translate-x-px sm:h-4 sm:w-4" fill="currentColor" />
               )}
             </button>
             <button
@@ -1831,9 +1875,9 @@ export function RadioClient({
                 next();
               }}
               aria-label="Next song"
-              className="shrink-0 rounded-full p-2 opacity-70 transition-opacity hover:opacity-100"
+              className="shrink-0 rounded-full p-3.5 opacity-70 transition-opacity hover:opacity-100 sm:p-2"
             >
-              <SkipForward className="h-4 w-4" />
+              <SkipForward className="h-5 w-5 sm:h-4 sm:w-4" />
             </button>
           </div>
         </motion.div>
