@@ -34,6 +34,7 @@ import { usePresence } from '@/hooks/usePresence';
 import { useYouTubeRadio, type RadioSource } from '@/hooks/useYouTubeRadio';
 import { useWakeLock } from '@/hooks/useWakeLock';
 import { useMediaSession } from '@/hooks/useMediaSession';
+import { useSilentAudioKeepAlive } from '@/hooks/useSilentAudioKeepAlive';
 import { usePlaylistLibrary } from '@/hooks/usePlaylistLibrary';
 import { PlaylistLibrary } from './PlaylistLibrary';
 import { NowPlayingSheet } from './NowPlayingSheet';
@@ -49,6 +50,12 @@ import { Scrubber, formatTime } from './Scrubber';
 import { track } from '@/lib/analytics-client';
 
 const STATION_KEY = 'radio:station';
+/**
+ * Whether to hold a silent native audio element open while the radio plays.
+ *
+ * See useSilentAudioKeepAlive. Set false to remove the behaviour entirely.
+ */
+const KEEP_ALIVE_BEHIND_LOCK_SCREEN = true;
 /** Marks a source that came from a search rather than from a station. */
 const SEARCH_SOURCE_ID = 'search';
 
@@ -1035,6 +1042,13 @@ export function RadioClient({
    * of a phone left face-up while the radio is on.
    */
   const wakeLock = useWakeLock(isPlaying);
+
+  /**
+   * Attempts to keep playing behind a locked screen. Flagged so it can be
+   * switched off in one line: it works around YouTube's rule that embedded
+   * players must not play in the background, and it may not work at all.
+   */
+  useSilentAudioKeepAlive(isPlaying, KEEP_ALIVE_BEHIND_LOCK_SCREEN);
 
   /**
    * True once the player has actually been engaged. Used to keep the compact
