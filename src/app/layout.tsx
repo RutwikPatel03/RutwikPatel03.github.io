@@ -28,7 +28,10 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: 'Rutwik Patel | Software & Infrastructure Engineer | USC CS',
-  description: 'Software & Infrastructure Engineer. Shipped 4 production features at Sigma Computing used by 60+ enterprises. Built miniredis — a Redis-compatible store in C++ reaching 984K+ ops/sec. USC MS Computer Science. Published IEEE researcher. Backend, systems, cloud infrastructure, and AI/ML: C++, Go, TypeScript, Python, AWS, Kubernetes, Terraform, RAG. Seeking full-time SWE / Infra / Backend / AI roles.',
+  // TEMPORARILY HIDDEN (2026-08-29): miniredis clause removed from the search
+  // snippet. Original, restore by swapping these two lines back:
+  // description: 'Software & Infrastructure Engineer. Shipped 4 production features at Sigma Computing used by 60+ enterprises. Built miniredis — a Redis-compatible store in C++ reaching 984K+ ops/sec. USC MS Computer Science. Published IEEE researcher. Backend, systems, cloud infrastructure, and AI/ML: C++, Go, TypeScript, Python, AWS, Kubernetes, Terraform, RAG. Seeking full-time SWE / Infra / Backend / AI roles.',
+  description: 'Software & Infrastructure Engineer. Shipped 4 production features at Sigma Computing used by 60+ enterprises. USC MS Computer Science. Published IEEE researcher. Backend, systems, cloud infrastructure, and AI/ML: C++, Go, TypeScript, Python, AWS, Kubernetes, Terraform, RAG. Seeking full-time SWE / Infra / Backend / AI roles.',
   keywords: [
     'Rutwik Patel',
     'Software Engineer',
@@ -72,7 +75,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Rutwik Patel | Software & Infrastructure Engineer',
-    description: 'Software Engineer building scalable systems & infrastructure. Shipped 4 features at Sigma Computing used by 60+ enterprises. Built miniredis (984K+ ops/sec). USC MS CS. Published IEEE researcher. Expert in Go, C++, TypeScript, Python, AI/ML.',
+    // TEMPORARILY HIDDEN (2026-08-29): original with miniredis:
+    // description: 'Software Engineer building scalable systems & infrastructure. Shipped 4 features at Sigma Computing used by 60+ enterprises. Built miniredis (984K+ ops/sec). USC MS CS. Published IEEE researcher. Expert in Go, C++, TypeScript, Python, AI/ML.',
+    description: 'Software Engineer building scalable systems & infrastructure. Shipped 4 features at Sigma Computing used by 60+ enterprises. USC MS CS. Published IEEE researcher. Expert in Go, C++, TypeScript, Python, AI/ML.',
     url: 'https://rutwik.dev',
     siteName: 'Rutwik Patel - Software Engineer Portfolio',
     type: 'website',
@@ -89,7 +94,9 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Rutwik Patel | Software & Infrastructure Engineer',
-    description: 'Backend, systems & infra engineer. 4 features at Sigma Computing (60+ enterprises), built miniredis (984K+ ops/sec, C++), USC MS CS, IEEE published.',
+    // TEMPORARILY HIDDEN (2026-08-29): original with miniredis:
+    // description: 'Backend, systems & infra engineer. 4 features at Sigma Computing (60+ enterprises), built miniredis (984K+ ops/sec, C++), USC MS CS, IEEE published.',
+    description: 'Backend, systems & infra engineer. 4 features at Sigma Computing (60+ enterprises), USC MS CS, IEEE published.',
     images: ['https://rutwik.dev/myimg/me.jpg'],
   },
   alternates: {
@@ -149,7 +156,9 @@ export default function RootLayout({
                   givenName: 'Rutwik',
                   familyName: 'Patel',
                   jobTitle: 'Software Engineer',
-                  description: 'Software & Infrastructure Engineer with production impact at Sigma Computing, where he shipped 4 features now used by 60+ enterprise organizations. USC MS Computer Science graduate (3.81 GPA) and published IEEE researcher. Works across backend services, infrastructure, distributed systems, and applied AI — built miniredis, a Redis-compatible in-memory store in C++17 reaching 984K+ ops/sec. Expertise spans systems programming (C++, Go), full-stack development (React, TypeScript, Python), AI/ML (RAG, LangChain, PyTorch), and cloud infrastructure (AWS, GCP, Docker, Kubernetes, Terraform, CI/CD). Seeking full-time Software, Infrastructure, Backend, and AI Engineering roles.',
+                  // TEMPORARILY HIDDEN (2026-08-29): original clause was
+                  // '... and applied AI — built miniredis, a Redis-compatible in-memory store in C++17 reaching 984K+ ops/sec. Expertise spans ...'
+                  description: 'Software & Infrastructure Engineer with production impact at Sigma Computing, where he shipped 4 features now used by 60+ enterprise organizations. USC MS Computer Science graduate (3.81 GPA) and published IEEE researcher. Works across backend services, infrastructure, distributed systems, and applied AI. Expertise spans systems programming (C++, Go), full-stack development (React, TypeScript, Python), AI/ML (RAG, LangChain, PyTorch), and cloud infrastructure (AWS, GCP, Docker, Kubernetes, Terraform, CI/CD). Seeking full-time Software, Infrastructure, Backend, and AI Engineering roles.',
                   url: 'https://rutwik.dev',
                   image: 'https://rutwik.dev/myimg/me.jpg',
                   email: 'me.rutwik@gmail.com',
@@ -254,7 +263,8 @@ export default function RootLayout({
                   award: [
                     'Shipped 4 production features at Sigma Computing',
                     '60+ enterprise organizations using built features',
-                    'Built miniredis — a Redis-compatible store in C++ reaching 984K+ ops/sec',
+                    // TEMPORARILY HIDDEN (2026-08-29):
+                    // 'Built miniredis — a Redis-compatible store in C++ reaching 984K+ ops/sec',
                     '2 IEEE published research papers',
                     'Processed 58,000+ candidate profiles end-to-end at World Salon',
                     '20% latency improvement through architecture optimization',
@@ -306,13 +316,14 @@ export default function RootLayout({
                       name: 'RAG System Engineering - USC Research',
                       description: 'Engineered RAG system with 10K+ vector embeddings enabling semantic search across 500GB+ data. Built automated pipeline processing 15K+ PDFs with 30% faster extraction.',
                     },
-                    {
-                      '@type': 'ListItem',
-                      position: 6,
-                      name: 'miniredis — Redis-Compatible In-Memory Store',
-                      description: 'Built a Redis-compatible in-memory store from scratch in C++17: non-blocking epoll/kqueue reactor over the RESP protocol, hand-written skip-list sorted sets, reaching 984K+ ops/sec (2.5x throughput via sharded locking). Load-tested with a Go benchmark harness.',
-                      url: 'https://github.com/RutwikPatel13/miniredis',
-                    },
+                    // TEMPORARILY HIDDEN (2026-08-29): miniredis achievement entry.
+                    // {
+                    //   '@type': 'ListItem',
+                    //   position: 6,
+                    //   name: 'miniredis — Redis-Compatible In-Memory Store',
+                    //   description: 'Built a Redis-compatible in-memory store from scratch in C++17: non-blocking epoll/kqueue reactor over the RESP protocol, hand-written skip-list sorted sets, reaching 984K+ ops/sec (2.5x throughput via sharded locking). Load-tested with a Go benchmark harness.',
+                    //   url: 'https://github.com/RutwikPatel13/miniredis',
+                    // },
                   ],
                 },
               ],
