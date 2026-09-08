@@ -10,7 +10,11 @@
     "lint:fix": "next lint --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "playwright test",
+    "test:mobile": "playwright test --project=mobile",
+    "test:desktop": "playwright test --project=desktop",
+    "test:ui": "playwright test --ui"
   },
   "dependencies": {
     "@upstash/redis": "^1.36.1",
@@ -33,6 +37,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
