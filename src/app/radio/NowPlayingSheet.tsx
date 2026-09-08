@@ -1,10 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, Reorder, useDragControls } from 'motion/react';
-import { ChevronDown, GripVertical, Pause, Play, SkipBack, SkipForward } from 'lucide-react';
+import {
+  ChevronDown,
+  ExternalLink,
+  GripVertical,
+  Link2,
+  ListStart,
+  Pause,
+  Play,
+  SkipBack,
+  SkipForward,
+  Trash2,
+} from 'lucide-react';
 import type { RadioTrack } from '@/types/radio';
 import { Scrubber, formatTime } from './Scrubber';
+import { TrackMenu, type TrackAction } from './TrackMenu';
 
 interface Theme {
   shade: string;
@@ -36,14 +48,49 @@ function QueueRow({
   row,
   theme,
   onPlayAt,
+  onPlayNext,
+  onRemoveAt,
   onCommit,
 }: {
   row: QueueRow;
   theme: Theme;
   onPlayAt: (index: number) => void;
+  onPlayNext: (index: number) => void;
+  onRemoveAt: (index: number) => void;
   onCommit: () => void;
 }) {
   const controls = useDragControls();
+
+  const actions = useMemo<TrackAction[]>(() => {
+    const id = row.track?.videoId;
+    const watch = id ? `https://www.youtube.com/watch?v=${id}` : null;
+    return [
+      { label: 'Play now', icon: Play, onSelect: () => onPlayAt(row.index) },
+      { label: 'Move to next', icon: ListStart, onSelect: () => onPlayNext(row.index) },
+      ...(watch
+        ? [
+            {
+              label: 'Copy link',
+              icon: Link2,
+              onSelect: () => {
+                void navigator.clipboard?.writeText(watch).catch(() => {});
+              },
+            },
+            {
+              label: 'Open on YouTube',
+              icon: ExternalLink,
+              onSelect: () => window.open(watch, '_blank', 'noopener,noreferrer'),
+            },
+          ]
+        : []),
+      {
+        label: 'Remove from queue',
+        icon: Trash2,
+        danger: true,
+        onSelect: () => onRemoveAt(row.index),
+      },
+    ];
+  }, [row, onPlayAt, onPlayNext, onRemoveAt]);
 
   return (
     <Reorder.Item
@@ -92,6 +139,8 @@ function QueueRow({
           <span className="block truncate text-xs opacity-50">{row.track?.artist}</span>
         </span>
       </button>
+
+      <TrackMenu label={row.track?.title ?? 'this song'} theme={theme} actions={actions} />
     </Reorder.Item>
   );
 }
@@ -168,12 +217,45 @@ export function NowPlayingSheet({
     onReorder([...played, queue[index], ...rest], index);
   };
 
+  /**
+   * Lifts one row out of the queue and drops it straight after the current
+   * song — the same thing dragging it to the top does, in one tap.
+   *
+   * The rows wrap past the end of the queue, so `from` can sit *before* the
+   * current position. Pulling it out then shifts the current song down one,
+   * which is why the index is tracked rather than assumed.
+   */
+  const moveToNext = (from: number) => {
+    if (from === index) return;
+    const kept: RadioTrack[] = [];
+    let nextIndex = index;
+    queue.forEach((q, i) => {
+      if (i === from) {
+        if (i < index) nextIndex -= 1;
+        return;
+      }
+      kept.push(q);
+    });
+    kept.splice(nextIndex + 1, 0, queue[from]);
+    onReorder(kept, nextIndex);
+  };
+
+  const removeAt = (at: number) => {
+    // Never leave the player with an empty queue and a song still sounding.
+    if (at === index || queue.length <= 1) return;
+    onReorder(
+      queue.filter((_, i) => i !== at),
+      at < index ? index - 1 : index
+    );
+  };
+
   return (
     <motion.div
       initial={{ y: '100%' }}
       animate={{ y: 0 }}
       exit={{ y: '100%' }}
       transition={{ type: 'spring', damping: 34, stiffness: 300 }}
+      data-testid="now-playing-sheet"
       className="fixed inset-0 z-[70] flex flex-col"
       style={{ backgroundColor: theme.shade, color: theme.sand }}
     >
@@ -201,7 +283,10 @@ export function NowPlayingSheet({
               style={{ backgroundColor: `${theme.sand}12` }}
             />
           )}
-          <h2 className="mt-4 line-clamp-2 text-balance text-lg font-bold leading-snug sm:text-xl">
+          <h2
+            data-testid="sheet-now-playing"
+            className="mt-4 line-clamp-2 text-balance text-lg font-bold leading-snug sm:text-xl"
+          >
             {current?.title ?? 'Nothing playing'}
           </h2>
           <p className="mt-1 line-clamp-1 text-sm opacity-60">{current?.artist}</p>
@@ -261,6 +346,7 @@ export function NowPlayingSheet({
               values={rows}
               onReorder={setRows}
               data-lenis-prevent
+              data-testid="queue-list"
               className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain pr-1"
             >
               {rows.map((row) => (
@@ -269,6 +355,8 @@ export function NowPlayingSheet({
                   row={row}
                   theme={theme}
                   onPlayAt={onPlayAt}
+                  onPlayNext={moveToNext}
+                  onRemoveAt={removeAt}
                   onCommit={() => commitOrder(rows)}
                 />
               ))}

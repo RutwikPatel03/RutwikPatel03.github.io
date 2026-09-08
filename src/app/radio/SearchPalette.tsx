@@ -2,7 +2,18 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Search, X, CornerDownLeft, Loader2 } from 'lucide-react';
+import {
+  Search,
+  X,
+  CornerDownLeft,
+  Loader2,
+  Play,
+  ListStart,
+  ListPlus,
+  Link2,
+  ExternalLink,
+} from 'lucide-react';
+import { TrackMenu, type TrackAction } from './TrackMenu';
 
 interface Theme {
   shade: string;
@@ -60,6 +71,7 @@ export function SearchPalette({
   onPlaySong,
   onOpenPlace,
   onPlayYouTube,
+  onQueue,
 }: {
   open: boolean;
   theme: Theme;
@@ -69,6 +81,8 @@ export function SearchPalette({
   onPlaySong: (song: LocalSong) => void;
   onOpenPlace: (place: LocalPlace) => void;
   onPlayYouTube: (results: YouTubeHit[], chosen: YouTubeHit) => void;
+  /** Queues a result without leaving the search, so several can be lined up. */
+  onQueue: (track: { videoId: string; title: string; artist: string }, where: 'next' | 'end') => void;
 }) {
   const [query, setQuery] = useState('');
   const [hits, setHits] = useState<YouTubeHit[] | null>(null);
@@ -144,6 +158,34 @@ export function SearchPalette({
   }, [open, onClose]);
 
   if (!open) return null;
+
+  /**
+   * Queueing leaves the palette open on purpose — the whole point of it here
+   * is lining up several songs from one search without searching again.
+   */
+  const songActions = (
+    song: { videoId: string; title: string; artist: string },
+    play: () => void
+  ): TrackAction[] => {
+    const watch = `https://www.youtube.com/watch?v=${song.videoId}`;
+    return [
+      { label: 'Play now', icon: Play, onSelect: play },
+      { label: 'Play next', icon: ListStart, onSelect: () => onQueue(song, 'next') },
+      { label: 'Add to queue', icon: ListPlus, onSelect: () => onQueue(song, 'end') },
+      {
+        label: 'Copy link',
+        icon: Link2,
+        onSelect: () => {
+          void navigator.clipboard?.writeText(watch).catch(() => {});
+        },
+      },
+      {
+        label: 'Open on YouTube',
+        icon: ExternalLink,
+        onSelect: () => window.open(watch, '_blank', 'noopener,noreferrer'),
+      },
+    ];
+  };
 
   const showYouTubeRow = trimmed.length > 1 && searchedRef.current !== query.trim();
   const heading = (text: string, note?: string) => (
@@ -229,26 +271,38 @@ export function SearchPalette({
             <>
               {heading('in your music')}
               {localSongs.map((s) => (
-                <button
+                <div
                   key={`${s.videoId}-${s.where}`}
-                  onClick={() => onPlaySong(s)}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors hover:bg-white/5"
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-white/5"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://i.ytimg.com/vi/${s.videoId}/mqdefault.jpg`}
-                    alt=""
-                    loading="lazy"
-                    className="h-8 w-14 shrink-0 rounded object-cover"
-                    style={{ backgroundColor: `${theme.sand}12` }}
-                  />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm">{s.title}</span>
-                    <span className="block truncate text-[0.7rem] opacity-50">
-                      {[s.artist, s.where].filter(Boolean).join(' · ')}
+                  <button
+                    onClick={() => onPlaySong(s)}
+                    className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`https://i.ytimg.com/vi/${s.videoId}/mqdefault.jpg`}
+                      alt=""
+                      loading="lazy"
+                      className="h-8 w-14 shrink-0 rounded object-cover"
+                      style={{ backgroundColor: `${theme.sand}12` }}
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm">{s.title}</span>
+                      <span className="block truncate text-[0.7rem] opacity-50">
+                        {[s.artist, s.where].filter(Boolean).join(' · ')}
+                      </span>
                     </span>
-                  </span>
-                </button>
+                  </button>
+                  <TrackMenu
+                    label={s.title}
+                    theme={theme}
+                    actions={songActions(
+                      { videoId: s.videoId, title: s.title, artist: s.artist },
+                      () => onPlaySong(s)
+                    )}
+                  />
+                </div>
               ))}
             </>
           )}
@@ -297,24 +351,36 @@ export function SearchPalette({
                 remaining !== null ? `${remaining} searches left today` : undefined
               )}
               {hits.map((h) => (
-                <button
+                <div
                   key={h.videoId}
-                  onClick={() => onPlayYouTube(hits, h)}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors hover:bg-white/5"
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-white/5"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://i.ytimg.com/vi/${h.videoId}/mqdefault.jpg`}
-                    alt=""
-                    loading="lazy"
-                    className="h-8 w-14 shrink-0 rounded object-cover"
-                    style={{ backgroundColor: `${theme.sand}12` }}
+                  <button
+                    onClick={() => onPlayYouTube(hits, h)}
+                    className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`https://i.ytimg.com/vi/${h.videoId}/mqdefault.jpg`}
+                      alt=""
+                      loading="lazy"
+                      className="h-8 w-14 shrink-0 rounded object-cover"
+                      style={{ backgroundColor: `${theme.sand}12` }}
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm">{h.title}</span>
+                      <span className="block truncate text-[0.7rem] opacity-50">{h.author}</span>
+                    </span>
+                  </button>
+                  <TrackMenu
+                    label={h.title}
+                    theme={theme}
+                    actions={songActions(
+                      { videoId: h.videoId, title: h.title, artist: h.author },
+                      () => onPlayYouTube(hits, h)
+                    )}
                   />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm">{h.title}</span>
-                    <span className="block truncate text-[0.7rem] opacity-50">{h.author}</span>
-                  </span>
-                </button>
+                </div>
               ))}
             </>
           )}

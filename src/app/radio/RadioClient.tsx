@@ -17,6 +17,10 @@ import {
   RefreshCw,
   Sun,
   Trash2,
+  ListStart,
+  ListPlus,
+  Link2,
+  ExternalLink,
 } from 'lucide-react';
 import {
   allStations,
@@ -38,6 +42,7 @@ import { useSilentAudioKeepAlive } from '@/hooks/useSilentAudioKeepAlive';
 import { usePlaylistLibrary } from '@/hooks/usePlaylistLibrary';
 import { PlaylistLibrary } from './PlaylistLibrary';
 import { NowPlayingSheet } from './NowPlayingSheet';
+import { TrackMenu, type TrackAction } from './TrackMenu';
 import {
   SearchPalette,
   type LocalSong,
@@ -137,6 +142,8 @@ const TrackRow = memo(function TrackRow({
   confirmingRemove,
   message,
   onPlay,
+  onPlayNext,
+  onQueueLast,
   onTogglePaste,
   onPasteChange,
   onSubmitPaste,
@@ -158,6 +165,8 @@ const TrackRow = memo(function TrackRow({
   confirmingRemove: boolean;
   message: { ok: boolean; text: string } | null;
   onPlay: (track: RadioTrack) => void;
+  onPlayNext: (track: RadioTrack) => void;
+  onQueueLast: (track: RadioTrack) => void;
   onTogglePaste: (title: string) => void;
   onPasteChange: (value: string) => void;
   onSubmitPaste: (title: string) => void;
@@ -168,6 +177,55 @@ const TrackRow = memo(function TrackRow({
   const query = [t.title, (t.artist || '').split(',')[0], t.album, 'official song']
     .filter(Boolean)
     .join(' ');
+
+  const theme = useMemo(() => ({ shade, sand, accent }), [shade, sand, accent]);
+
+  /**
+   * Memoised alongside the row itself. Rebuilding this array every render
+   * would not be wrong, but it would undo the memo above for no gain.
+   */
+  const actions = useMemo<TrackAction[]>(() => {
+    const watch = `https://www.youtube.com/watch?v=${t.videoId}`;
+    if (!t.videoId) {
+      return [
+        {
+          label: 'Find it on YouTube',
+          icon: Search,
+          onSelect: () =>
+            window.open(
+              `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
+              '_blank',
+              'noopener,noreferrer'
+            ),
+        },
+      ];
+    }
+    return [
+      // Queueing the song already playing is the one thing this menu cannot
+      // do, so it offers the rest instead of a row that would do nothing.
+      ...(isNow
+        ? []
+        : [
+            { label: 'Play now', icon: Play, onSelect: () => onPlay(t) },
+            { label: 'Play next', icon: ListStart, onSelect: () => onPlayNext(t) },
+            { label: 'Add to queue', icon: ListPlus, onSelect: () => onQueueLast(t) },
+          ]),
+      {
+        label: 'Copy link',
+        icon: Link2,
+        onSelect: () => {
+          // Clipboard access can be refused outright, and the menu closing is
+          // feedback enough either way.
+          void navigator.clipboard?.writeText(watch).catch(() => {});
+        },
+      },
+      {
+        label: 'Open on YouTube',
+        icon: ExternalLink,
+        onSelect: () => window.open(watch, '_blank', 'noopener,noreferrer'),
+      },
+    ];
+  }, [t, isNow, query, onPlay, onPlayNext, onQueueLast]);
 
   return (
     <li>
@@ -239,6 +297,8 @@ const TrackRow = memo(function TrackRow({
             </button>
           </>
         )}
+
+        <TrackMenu label={t.title} theme={theme} actions={actions} />
       </div>
 
       {pasteOpen && canEdit && (
@@ -292,6 +352,15 @@ export function RadioClient({
 }) {
   const [stationId, setStationId] = useState(initialStationId);
   const [listOpen, setListOpen] = useState(false);
+  /**
+   * A brief line confirming a queue change.
+   *
+   * Carries a stamp as well as the text so that queueing two songs in a row
+   * restarts the timer — setting the same string twice is not a state change,
+   * and the second confirmation would vanish on the first one's schedule.
+   */
+  const [toast, setToastState] = useState<{ text: string; at: number } | null>(null);
+  const setToast = useCallback((text: string) => setToastState({ text, at: Date.now() }), []);
   const [clock, setClock] = useState('');
   /**
    * null means "follow the clock" and a rotation id pins that rotation.
@@ -826,6 +895,70 @@ export function RadioClient({
     [handlePlayTrack]
   );
 
+  /**
+   * Puts a song into the live queue without interrupting the one playing.
+   *
+   * The drawer stays open afterwards, so this has to say something: queueing
+   * is the one action on the row whose whole effect is invisible until the
+   * current song ends.
+   */
+  const queueTrack = useCallback(
+    (chosen: RadioTrack, where: 'next' | 'end') => {
+      if (!chosen.videoId) return;
+      // Nothing is on air yet, so the only sensible reading of "play next" is
+      // "play" — there is no current song for it to come after.
+      if (queue.length === 0 || !current) {
+        handlePlayTrack(chosen);
+        return;
+      }
+      if (chosen.videoId === queue[index]?.videoId) return;
+
+      // A song already further down the queue moves rather than appearing in
+      // it twice. Removing entries ahead of the current one shifts it, so the
+      // position is tracked as the queue is rebuilt rather than searched for
+      // afterwards: a videoId can legitimately repeat, and findIndex would
+      // then land on the wrong copy and restart the song.
+      const kept: RadioTrack[] = [];
+      let nextIndex = index;
+      queue.forEach((q, i) => {
+        if (i !== index && q.videoId === chosen.videoId) {
+          if (i < index) nextIndex -= 1;
+          return;
+        }
+        kept.push(q);
+      });
+      if (where === 'next') {
+        kept.splice(nextIndex + 1, 0, chosen);
+      } else {
+        // The queue is circular: it wraps past the end and carries on from the
+        // top, so the end of the ARRAY is only the end of the listening once
+        // the current song happens to sit at position zero. The last thing
+        // actually heard is the slot immediately before the current song, and
+        // inserting there pushes the current song one place along.
+        kept.splice(nextIndex, 0, chosen);
+        nextIndex += 1;
+      }
+      reorderQueue(kept, nextIndex);
+      setToast(where === 'next' ? 'Playing next' : 'Added to the queue');
+    },
+    [queue, index, current, handlePlayTrack, reorderQueue, setToast]
+  );
+
+  const playNextFromList = useCallback(
+    (chosen: RadioTrack) => queueTrack(chosen, 'next'),
+    [queueTrack]
+  );
+  const queueLastFromList = useCallback(
+    (chosen: RadioTrack) => queueTrack(chosen, 'end'),
+    [queueTrack]
+  );
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToastState(null), 1900);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   // Local clock, the small touch that makes it feel like a live broadcast.
   useEffect(() => {
     const tick = () =>
@@ -1260,7 +1393,7 @@ export function RadioClient({
               onClick={() => setSearchOpen(true)}
               aria-label="Search music"
               title="Search music"
-              className="mr-1 rounded-full p-1.5 opacity-70 transition-opacity hover:opacity-100"
+              className="-m-1 mr-0 inline-flex h-10 w-10 items-center justify-center rounded-full opacity-70 transition-opacity hover:opacity-100 sm:h-8 sm:w-8"
             >
               <SearchIcon className="h-4 w-4" />
             </button>
@@ -1282,12 +1415,17 @@ export function RadioClient({
             <span className="opacity-70">
               {isBrowsingElsewhere ? `on ${playingStation.name}` : 'listening'}
             </span>
-            <span className="ml-2 hidden font-mono tabular-nums opacity-70 md:inline">{clock}</span>
+            <span data-testid="radio-clock" className="ml-2 hidden font-mono tabular-nums opacity-70 md:inline">
+              {clock}
+            </span>
           </div>
 
           {/* Below md the clock keeps its own place on the right; from md up it
               joins the presence group so the centre is free for the switcher. */}
-          <span className="min-w-[4.5rem] text-right font-mono text-xs tabular-nums opacity-70 sm:text-sm md:hidden">
+          <span
+            data-testid="radio-clock"
+            className="min-w-[4.5rem] text-right font-mono text-xs tabular-nums opacity-70 sm:text-sm md:hidden"
+          >
             {clock}
           </span>
         </header>
@@ -1299,13 +1437,14 @@ export function RadioClient({
         <div className="flex items-center justify-center gap-3 px-4 pt-4 md:hidden">
           <button
             onClick={() => switchStation(prevStation.id)}
-            className="min-w-0 shrink truncate text-[0.7rem] opacity-45 transition-opacity hover:opacity-80"
+            className="-my-3 -mx-1 min-w-0 shrink truncate px-1 py-3 text-[0.7rem] opacity-45 transition-opacity hover:opacity-80"
             style={{ color: prevStation.theme.accent }}
           >
             ‹ {prevStation.shortName ?? prevStation.name}
           </button>
 
           <span
+            data-testid="current-station"
             className="shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold"
             style={{ backgroundColor: station.theme.accent, color: station.theme.shade }}
           >
@@ -1314,7 +1453,7 @@ export function RadioClient({
 
           <button
             onClick={() => switchStation(nextStation.id)}
-            className="min-w-0 shrink truncate text-[0.7rem] opacity-45 transition-opacity hover:opacity-80"
+            className="-my-3 -mx-1 min-w-0 shrink truncate px-1 py-3 text-[0.7rem] opacity-45 transition-opacity hover:opacity-80"
             style={{ color: nextStation.theme.accent }}
           >
             {nextStation.shortName ?? nextStation.name} ›
@@ -1370,6 +1509,7 @@ export function RadioClient({
               onRename={library.setName}
               onPlayPlaylist={playPlaylist}
               onPlayTrack={playPlaylistTrack}
+              onQueueTrack={queueTrack}
               onToggleShuffle={togglePlaylistShuffle}
             />
           ) : (
@@ -1387,7 +1527,7 @@ export function RadioClient({
                         onClick={() => setPickedRotation(r.id === pickedRotation ? null : r.id)}
                         aria-pressed={active}
                         title={`${r.description} · ${counts[r.id] ?? 0} songs`}
-                        className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.7rem] transition-all sm:text-xs"
+                        className="inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3 py-1 text-[0.7rem] transition-all sm:min-h-0 sm:px-2.5 sm:text-xs"
                         style={{
                           borderColor: active ? station.theme.accent : `${station.theme.sand}25`,
                           backgroundColor: active ? `${station.theme.accent}22` : 'transparent',
@@ -1414,7 +1554,7 @@ export function RadioClient({
                     onClick={() => setPickedRotation(pickedRotation === 'all' ? null : 'all')}
                     aria-pressed={pickedRotation === 'all'}
                     title={`Every song on ${station.name}, ignoring the clock`}
-                    className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[0.7rem] transition-all sm:text-xs"
+                    className="inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3 py-1 text-[0.7rem] transition-all sm:min-h-0 sm:px-2.5 sm:text-xs"
                     style={{
                       borderColor:
                         pickedRotation === 'all' ? station.theme.accent : `${station.theme.sand}25`,
@@ -1621,7 +1761,8 @@ export function RadioClient({
 
               <button
                 onClick={() => setListOpen(true)}
-                className="inline-flex items-center gap-2 text-xs opacity-70 transition-opacity hover:opacity-100"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full border px-3.5 py-2 text-xs opacity-70 transition-opacity hover:opacity-100 sm:min-h-0 sm:py-1.5"
+                style={{ borderColor: `${station.theme.sand}25` }}
               >
                 <ListMusic className="h-4 w-4" />
                 {/* The playable count, not the catalogue count: this opens the
@@ -1875,6 +2016,7 @@ export function RadioClient({
         onPlaySong={playSearchSong}
         onOpenPlace={openSearchPlace}
         onPlayYouTube={playYouTubeHit}
+        onQueue={queueTrack}
       />
 
       {/* ---------- track list drawer ---------- */}
@@ -1930,6 +2072,7 @@ export function RadioClient({
                   past the drawer instead of scrolling inside it. */}
               <ul
                 data-lenis-prevent
+                data-testid="song-drawer"
                 className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-2"
               >
                 {/* Every track in the rotation, playable or not. Missing ones
@@ -1959,6 +2102,8 @@ export function RadioClient({
                         confirmingRemove={confirmRemove === t.title}
                         message={resolveMsg?.title === t.title ? resolveMsg : null}
                         onPlay={playFromList}
+                        onPlayNext={playNextFromList}
+                        onQueueLast={queueLastFromList}
                         onTogglePaste={openPasteFor}
                         onPasteChange={setPasteValue}
                         onSubmitPaste={submitPaste}
@@ -1978,6 +2123,35 @@ export function RadioClient({
               </ul>
 
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Sits above the drawer on purpose: queueing happens from inside it, and
+          the drawer stays open afterwards. */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key={toast.at}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ duration: 0.18 }}
+            role="status"
+            aria-live="polite"
+            className="pointer-events-none fixed inset-x-0 bottom-24 z-[95] flex justify-center px-4"
+          >
+            <span
+              className="rounded-full border px-4 py-2 text-xs font-medium shadow-2xl"
+              style={{
+                backgroundColor: station.theme.shade,
+                borderColor: `${station.theme.accent}66`,
+                color: station.theme.accent,
+                boxShadow: '0 16px 40px #000a',
+              }}
+            >
+              {toast.text}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>

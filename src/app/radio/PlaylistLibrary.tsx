@@ -1,10 +1,23 @@
 'use client';
 
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft, Check, ListPlus, Pencil, Play, Shuffle, Trash2, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  Check,
+  ExternalLink,
+  Link2,
+  ListPlus,
+  ListStart,
+  Pencil,
+  Play,
+  Shuffle,
+  Trash2,
+  X,
+} from 'lucide-react';
 import type { SavedPlaylist, SavedTrack } from '@/types/radio';
 import { parsePlaylistId } from '@/data/radio';
+import { TrackMenu, type TrackAction } from './TrackMenu';
 
 interface Theme {
   shade: string;
@@ -110,6 +123,7 @@ const PlaylistCard = memo(function PlaylistCard({
 }) {
   return (
     <button
+      data-testid="playlist-card"
       onClick={() => onOpen(playlist.id)}
       // flex-col, because a button vertically centres its own content: the
       // grid stretches every card to the tallest in its row, and a card whose
@@ -147,19 +161,52 @@ const PlaylistRow = memo(function PlaylistRow({
   isNow,
   theme,
   onPlay,
+  onQueue,
 }: {
   track: SavedTrack;
   position: number;
   isNow: boolean;
   theme: Theme;
   onPlay: (videoId: string) => void;
+  onQueue: (track: SavedTrack, where: 'next' | 'end') => void;
 }) {
+  const actions = useMemo<TrackAction[]>(() => {
+    const watch = `https://www.youtube.com/watch?v=${track.videoId}`;
+    return [
+      ...(isNow
+        ? []
+        : [
+            { label: 'Play now', icon: Play, onSelect: () => onPlay(track.videoId) },
+            { label: 'Play next', icon: ListStart, onSelect: () => onQueue(track, 'next') },
+            { label: 'Add to queue', icon: ListPlus, onSelect: () => onQueue(track, 'end') },
+          ]),
+      {
+        label: 'Copy link',
+        icon: Link2,
+        onSelect: () => {
+          void navigator.clipboard?.writeText(watch).catch(() => {});
+        },
+      },
+      {
+        label: 'Open on YouTube',
+        icon: ExternalLink,
+        onSelect: () => window.open(watch, '_blank', 'noopener,noreferrer'),
+      },
+    ];
+  }, [track, isNow, onPlay, onQueue]);
+
   return (
     <li>
-      <button
-        onClick={() => onPlay(track.videoId)}
+      {/* A div, not a button: the row already plays the song, and the options
+          menu is a button of its own — nesting one inside the other is invalid
+          markup and the inner one stops working. */}
+      <div
         className="group flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors hover:bg-white/5"
         style={isNow ? { backgroundColor: `${theme.accent}1f` } : undefined}
+      >
+      <button
+        onClick={() => onPlay(track.videoId)}
+        className="flex min-w-0 flex-1 items-center gap-3 text-left"
       >
         <span className="relative w-5 shrink-0 text-center">
           <span
@@ -194,6 +241,9 @@ const PlaylistRow = memo(function PlaylistRow({
           <span className="block truncate text-xs opacity-55">{track.artist}</span>
         </span>
       </button>
+
+        <TrackMenu label={track.title} theme={theme} actions={actions} />
+      </div>
     </li>
   );
 });
@@ -221,6 +271,7 @@ export function PlaylistLibrary({
   onRename,
   onPlayPlaylist,
   onPlayTrack,
+  onQueueTrack,
   onToggleShuffle,
 }: {
   playlists: SavedPlaylist[];
@@ -239,6 +290,7 @@ export function PlaylistLibrary({
   onRename: (id: string, name: string) => Promise<boolean>;
   onPlayPlaylist: (id: string) => void;
   onPlayTrack: (id: string, videoId: string) => void;
+  onQueueTrack: (track: SavedTrack, where: 'next' | 'end') => void;
   onToggleShuffle: () => void;
 }) {
   const [adding, setAdding] = useState(false);
@@ -404,7 +456,7 @@ export function PlaylistLibrary({
                 Press play and the songs will appear here, then stay for next time.
               </p>
             ) : (
-              <ul className="max-h-[46vh] space-y-0.5 overflow-y-auto overscroll-contain pr-1" data-lenis-prevent>
+              <ul className="max-h-[46vh] space-y-0.5 overflow-y-auto overscroll-contain pr-1" data-lenis-prevent data-testid="playlist-tracks">
                 {open.tracks.map((t, i) => (
                   <PlaylistRow
                     key={`${t.videoId}-${i}`}
@@ -413,6 +465,7 @@ export function PlaylistLibrary({
                     isNow={isPlayingThis && t.videoId === nowPlayingVideoId}
                     theme={theme}
                     onPlay={playTrack}
+                    onQueue={onQueueTrack}
                   />
                 ))}
               </ul>
