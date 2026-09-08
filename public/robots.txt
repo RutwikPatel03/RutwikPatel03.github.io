@@ -1,12 +1,22 @@
 # Robots.txt for rutwik.dev
 # Software Engineer Portfolio - Rutwik Patel
-# Last updated: 2025-01-27
+# Last updated: 2026-08-29
 
 # Default rule for all bots
 User-agent: *
 Allow: /
 Disallow: /admin/
 Crawl-delay: 1
+
+# NOTE on /radio (unlisted since 2026-08-29):
+# /radio is deliberately NOT disallowed for the major search engines. It serves
+# `noindex, nofollow` in both its page metadata and an X-Robots-Tag header, and
+# it has been pulled from sitemap.xml. A crawler must be allowed to fetch the
+# page in order to see that noindex and drop it from the index — blocking it
+# here instead would leave the already-indexed URL sitting in results with no
+# way for Google to learn it should go. Once Search Console shows /radio gone
+# from the index, uncomment the two Disallow lines marked BLOCK-LATER below to
+# stop the crawling as well.
 
 # Sitemap locations
 Sitemap: https://rutwik.dev/sitemap.xml
@@ -19,6 +29,7 @@ Sitemap: https://rutwik.dev/sitemap.xml
 User-agent: Googlebot
 Allow: /
 Disallow: /admin/
+# BLOCK-LATER: Disallow: /radio
 User-agent: Googlebot-Image
 Allow: /
 User-agent: Googlebot-Video
@@ -28,6 +39,7 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 Disallow: /admin/
+# BLOCK-LATER: Disallow: /radio
 User-agent: MSNBot
 Allow: /
 
@@ -49,34 +61,46 @@ Allow: /
 
 # ===========================================
 # AI Crawlers (Allowed for portfolio visibility)
+# /radio is disallowed for all of them: unlike the search engines above, these
+# do not need to fetch the page to honour a noindex, so a plain Disallow keeps
+# the radio out of AI answers and training sets.
 # ===========================================
 
 User-agent: GPTBot
 Allow: /
+Disallow: /radio
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /radio
 
 User-agent: CCBot
 Allow: /
+Disallow: /radio
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /radio
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /radio
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /radio
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /radio
 
 User-agent: Cohere-ai
 Allow: /
+Disallow: /radio
 
 User-agent: YouBot
 Allow: /
+Disallow: /radio
 
 # ===========================================
 # Social Media Crawlers
@@ -96,5 +120,8 @@ Allow: /
 # ===========================================
 # /admin/ is the private analytics dashboard. It is also token-gated and
 # serves noindex headers, so this is defence in depth rather than the lock.
+#
+# /radio is unlisted rather than blocked here — see the NOTE on /radio at the
+# top of this file for why, and for how to finish the job once it de-indexes.
 # Disallow: /api/
 
