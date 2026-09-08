@@ -98,3 +98,9 @@ storybook-static/
 # Radio build caches: ~19MB of YouTube API dumps, regenerable via
 # scripts/fetch-pool.mjs. Never belongs in the repo.
 scripts/.cache/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/.playwright/

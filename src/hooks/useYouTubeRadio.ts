@@ -778,6 +778,30 @@ export function useYouTubeRadio(source: RadioSource) {
     };
   }, [status]);
 
+  /**
+   * Fetch the IFrame API before anyone presses play.
+   *
+   * start() loads it on the click, so the first press paid for DNS, TLS and
+   * two script fetches before the player was even built — the longest stretch
+   * of the silence between clicking and hearing anything. Doing it on idle
+   * moves that off the click without changing what the click does: start()
+   * still awaits loadIframeApi(), which by then resolves immediately.
+   *
+   * Deliberately stops short of building the player. A player is only worth
+   * building on a user gesture on mobile, and that gesture is the very click
+   * this is trying to keep clear.
+   */
+  useEffect(() => {
+    if (typeof window.requestIdleCallback === 'function') {
+      const handle = window.requestIdleCallback(() => void loadIframeApi(), { timeout: 3000 });
+      return () => window.cancelIdleCallback(handle);
+    }
+    // Safari before 16.4 has no idle callback; a plain delay keeps the fetch
+    // clear of hydration and the first paint.
+    const timer = window.setTimeout(() => void loadIframeApi(), 1500);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   // Tear the player down on unmount so a route change stops the audio.
   useEffect(() => {
     return () => {

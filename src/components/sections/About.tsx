@@ -7,7 +7,8 @@ import SkillBar from '@/components/ui/SkillBar';
 import { skillsWithLevels } from '@/data/content';
 
 const stats = [
-  { value: '984K', label: 'ops/sec on miniredis (C++)' },
+  // TEMPORARILY HIDDEN (2026-08-29): miniredis is off the public site for now.
+  // { value: '984K', label: 'ops/sec on miniredis (C++)' },
   { value: '58K+', label: 'Profiles Processed via AI Pipelines' },
   { value: '500GB+', label: 'Data Indexed for RAG Retrieval' },
   { value: '60+', label: 'Enterprises Using Shipped Features' },
@@ -48,8 +49,9 @@ export default function About() {
                 <br /><br />
                 As a Research Assistant at USC Marshall, I engineered fault-tolerant ETL pipelines and RAG semantic-search systems over 500GB+ of sustainability disclosures, indexing 2M+ data points in PostgreSQL for 30+ researchers.
                 <br /><br />
+                {/* TEMPORARILY HIDDEN (2026-08-29): miniredis paragraph. Restore with:
                 For fun and depth, I build systems from scratch — like <span className="font-medium text-foreground">miniredis</span>, a Redis-compatible in-memory store written in C++17 with a non-blocking epoll/kqueue reactor and a hand-written skip list, reaching 984K+ ops/sec.
-                <br /><br />
+                <br /><br /> */}
                 I&apos;m open to full-time roles in Software, Infrastructure, Backend, and AI Engineering. Happy to connect with engineers, founders, and recruiters.
               </BentoCardDescription>
             </BentoCardContent>
@@ -61,7 +63,9 @@ export default function About() {
               <BentoCardTitle>Impact</BentoCardTitle>
             </BentoCardHeader>
             <BentoCardContent>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6">
+              {/* md:grid-cols-4 matches the 4 visible stats. Restore md:grid-cols-5
+                  when the miniredis stat above is uncommented. */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-4 sm:gap-6">
                 {stats.map((stat) => (
                   <div key={stat.label} className="text-center p-2 sm:p-0">
                     <div className="text-xl sm:text-2xl font-bold text-foreground">{stat.value}</div>

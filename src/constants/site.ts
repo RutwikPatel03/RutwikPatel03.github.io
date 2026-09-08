@@ -5,8 +5,11 @@
 export const siteConfig = {
   name: 'Rutwik Patel',
   title: 'Rutwik Patel | Software & Infrastructure Engineer | USC CS',
+  // TEMPORARILY HIDDEN (2026-08-29): miniredis clause pulled. Original:
+  // description:
+  //   'Software & Infrastructure Engineer. Shipped 4 production features at Sigma Computing used by 60+ enterprises. Built miniredis — a Redis-compatible in-memory store in C++ reaching 984K+ ops/sec. USC MS Computer Science. Published IEEE researcher. Backend, systems, cloud infrastructure, and AI/ML expertise: C++, Go, TypeScript, Python, AWS, Kubernetes, Terraform, RAG. Seeking full-time SWE / Infra / Backend / AI Engineering roles.',
   description:
-    'Software & Infrastructure Engineer. Shipped 4 production features at Sigma Computing used by 60+ enterprises. Built miniredis — a Redis-compatible in-memory store in C++ reaching 984K+ ops/sec. USC MS Computer Science. Published IEEE researcher. Backend, systems, cloud infrastructure, and AI/ML expertise: C++, Go, TypeScript, Python, AWS, Kubernetes, Terraform, RAG. Seeking full-time SWE / Infra / Backend / AI Engineering roles.',
+    'Software & Infrastructure Engineer. Shipped 4 production features at Sigma Computing used by 60+ enterprises. USC MS Computer Science. Published IEEE researcher. Backend, systems, cloud infrastructure, and AI/ML expertise: C++, Go, TypeScript, Python, AWS, Kubernetes, Terraform, RAG. Seeking full-time SWE / Infra / Backend / AI Engineering roles.',
   url: 'https://rutwik.dev',
   ogImage: 'https://rutwik.dev/myimg/me.jpg',
   favicon: '/myimg/favicon.png',

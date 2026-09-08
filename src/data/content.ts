@@ -170,6 +170,10 @@ export const education: Education[] = [
 ];
 
 export const projects: Project[] = [
+  // TEMPORARILY HIDDEN (2026-08-29): miniredis is pulled from the public
+  // projects list. Uncomment the block below to restore the card and its
+  // /projects/miniredis case study.
+  /*
   // Flagship systems project
   {
     title: 'miniredis - Redis-Compatible In-Memory Store',
@@ -199,6 +203,7 @@ export const projects: Project[] = [
       'Abstracting epoll and kqueue behind one interface kept the core loop identical across Linux and macOS',
     ],
   },
+  */
   // Shipped product - live on the App Store
   {
     title: 'Restore Wellness - In-Home Massage Marketplace',
@@ -229,6 +234,11 @@ export const projects: Project[] = [
       'Pushing every payment and email call into Supabase edge functions kept Stripe and Resend secrets off the device entirely, which the client app has no business holding',
     ],
   },
+  // TEMPORARILY HIDDEN (2026-08-29): Street-Corner Radio is pulled from the
+  // public projects list while /radio is kept out of search. Uncomment the
+  // block below to bring the card and its /projects/street-corner-radio case
+  // study back.
+  /*
   // Live on this site
   {
     title: 'Street-Corner Radio - Live Multi-Station Player',
@@ -258,6 +268,7 @@ export const projects: Project[] = [
       'Pausing heartbeats on hidden tabs matters, otherwise a background tab inflates the live count and the one number the whole page rests on stops being true',
     ],
   },
+  */
   // Live deployed projects
   /* Netflix Clone — commented out
   {

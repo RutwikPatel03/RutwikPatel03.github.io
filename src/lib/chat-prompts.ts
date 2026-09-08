@@ -26,7 +26,8 @@ export const FOLLOW_UP_QUESTIONS = [
   'Tell me about his backend experience',
   'Has he worked with cloud services?',
   'Tell me about the RAG system he built',
-  'What is miniredis and how fast is it?',
+  // TEMPORARILY HIDDEN (2026-08-29): miniredis is off the public site for now.
+  // 'What is miniredis and how fast is it?',
   'Does he have infrastructure or systems experience?',
   'What was his cataract detection project?',
   'Has he shipped anything to the App Store?',

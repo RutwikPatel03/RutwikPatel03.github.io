@@ -47,6 +47,28 @@ const nextConfig = {
         ],
       },
       {
+        // TEMPORARILY HIDDEN (2026-08-29): /radio is unlisted. The page metadata
+        // already sets noindex; this header repeats it for crawlers that read
+        // headers without parsing the HTML, and covers any sub-path.
+        // Remove both entries below to put the radio back in search.
+        source: '/radio',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, noarchive, nosnippet, noimageindex',
+          },
+        ],
+      },
+      {
+        source: '/radio/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, noarchive, nosnippet, noimageindex',
+          },
+        ],
+      },
+      {
         // Cache static assets for 1 year
         source: '/myimg/:path*',
         headers: [
