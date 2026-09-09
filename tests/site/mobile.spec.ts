@@ -1,5 +1,4 @@
 import { test, expect, type Page } from '@playwright/test';
-import { openRadio, openSearch } from '../radio/helpers';
 
 /**
  * The things that only go wrong on a phone.
@@ -43,12 +42,6 @@ test.describe('on a phone', () => {
         .toBeGreaterThanOrEqual(16);
     }
   }
-
-  test('focusing the radio search does not zoom the page in', async ({ page }) => {
-    await openRadio(page);
-    await openSearch(page);
-    await expectNoZoom(page, 'radio search');
-  });
 
   test('focusing the contact form does not zoom the page in', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });

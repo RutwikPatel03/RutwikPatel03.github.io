@@ -22,6 +22,28 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['motion/react', 'lucide-react'],
   },
+  // The radio moved to music.rutwik.dev. Every /radio link ever shared — and
+  // the ?station= deep links in particular — has to keep working, so these
+  // forward the path and Next carries the query string across automatically.
+  //
+  // 307 rather than 308 on purpose: a permanent redirect is cached hard by
+  // browsers and is painful to walk back. Promote it to permanent: true once
+  // the new domain has been up long enough to trust.
+  async redirects() {
+    return [
+      {
+        source: '/radio',
+        destination: 'https://music.rutwik.dev',
+        permanent: false,
+      },
+      {
+        source: '/radio/:path*',
+        destination: 'https://music.rutwik.dev/:path*',
+        permanent: false,
+      },
+    ];
+  },
+
   // Security and performance headers
   async headers() {
     return [
@@ -43,28 +65,6 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
-          },
-        ],
-      },
-      {
-        // TEMPORARILY HIDDEN (2026-08-29): /radio is unlisted. The page metadata
-        // already sets noindex; this header repeats it for crawlers that read
-        // headers without parsing the HTML, and covers any sub-path.
-        // Remove both entries below to put the radio back in search.
-        source: '/radio',
-        headers: [
-          {
-            key: 'X-Robots-Tag',
-            value: 'noindex, nofollow, noarchive, nosnippet, noimageindex',
-          },
-        ],
-      },
-      {
-        source: '/radio/:path*',
-        headers: [
-          {
-            key: 'X-Robots-Tag',
-            value: 'noindex, nofollow, noarchive, nosnippet, noimageindex',
           },
         ],
       },

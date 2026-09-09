@@ -1,27 +1,10 @@
 import { MetadataRoute } from 'next';
-// TEMPORARILY HIDDEN (2026-08-29): /radio is kept out of search entirely, so it
-// is no longer advertised in the sitemap. The page still works for anyone with
-// the link — it just isn't submitted to crawlers, and it serves noindex.
-// import { stations } from '@/data/radio';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://rutwik.dev';
   const lastModified = new Date();
 
-  // One entry per station so each rotation can rank on its own terms
-  // (garba, 90s hindi, desi hip-hop) rather than competing on one URL.
-  // const radioRoutes: MetadataRoute.Sitemap = stations.map((station) => ({
-  //   url:
-  //     station.id === 'saloon'
-  //       ? `${baseUrl}/radio`
-  //       : `${baseUrl}/radio?station=${station.id}`,
-  //   lastModified,
-  //   changeFrequency: 'weekly' as const,
-  //   priority: 0.8,
-  // }));
-
   return [
-    // ...radioRoutes,
     // Main pages
     {
       url: baseUrl,
