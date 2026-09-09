@@ -1,11 +1,42 @@
 'use client';
 
-import { useEffect, useRef, ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  ReactNode,
+} from 'react';
 import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 
 interface SmoothScrollProviderProps {
   children: ReactNode;
+}
+
+interface SmoothScrollControls {
+  /** Suspends scrolling until `start` is called. Safe to call when idle. */
+  stop: () => void;
+  start: () => void;
+}
+
+const SmoothScrollContext = createContext<SmoothScrollControls>({
+  stop: () => {},
+  start: () => {},
+});
+
+/**
+ * Pause scrolling while something is layered over the page.
+ *
+ * `overflow: hidden` on its own is not enough here. It stops the *user* from
+ * scrolling, but an element with hidden overflow can still be scrolled from
+ * script — which is exactly what Lenis does on every wheel and touch event, so
+ * the page kept moving underneath the open menu.
+ */
+export function useSmoothScrollControls() {
+  return useContext(SmoothScrollContext);
 }
 
 // Routes that own the full viewport and scroll inside their own containers.
@@ -42,20 +73,31 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
     lenisRef.current = lenis;
 
     // Animation frame loop
+    let frame = 0;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      frame = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    frame = requestAnimationFrame(raf);
 
     // Cleanup on unmount
     return () => {
+      cancelAnimationFrame(frame);
       lenis.destroy();
       lenisRef.current = null;
     };
   }, [pathname]);
 
-  return <>{children}</>;
-}
+  // Read through the ref at call time: on the routes above, and before the
+  // effect has run, there is simply no instance to pause.
+  const stop = useCallback(() => lenisRef.current?.stop(), []);
+  const start = useCallback(() => lenisRef.current?.start(), []);
+  const controls = useMemo(() => ({ stop, start }), [stop, start]);
 
+  return (
+    <SmoothScrollContext.Provider value={controls}>
+      {children}
+    </SmoothScrollContext.Provider>
+  );
+}

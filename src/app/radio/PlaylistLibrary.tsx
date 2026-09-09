@@ -385,7 +385,15 @@ export function PlaylistLibrary({
                   }}
                   aria-label="Playlist name"
                   className="min-w-0 flex-1 rounded-lg border bg-transparent px-2.5 py-1.5 text-lg font-bold outline-none"
-                  style={{ borderColor: `${theme.accent}55`, color: theme.sand }}
+                  style={
+                    {
+                      borderColor: `${theme.accent}55`,
+                      color: theme.sand,
+                      // Opts out of the 16px touch floor in globals.css: this
+                      // one reads as the playlist's title, not as form input.
+                      '--field-font-size': '1.125rem',
+                    } as React.CSSProperties
+                  }
                 />
                 <button
                   onClick={() => void commitName()}

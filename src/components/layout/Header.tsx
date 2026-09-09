@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Menu, X, Download, Sparkles } from 'lucide-react';
+import { Menu, X, Download, Sparkles, Search } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import { VisitorStats } from '@/components/ui/VisitorStats';
 import { navItems, externalLinks, siteConfig } from '@/constants';
 import { useScrollToSection, useScrolled } from '@/hooks';
 import { useCommandPalette } from '@/providers/CommandPaletteProvider';
+import { useSmoothScrollControls } from '@/providers/SmoothScrollProvider';
 import { track } from '@/lib/analytics-client';
 
 export default function Header() {
@@ -18,11 +19,30 @@ export default function Header() {
   const isScrolled = useScrolled(50);
   const scrollToSection = useScrollToSection();
   const { toggle: togglePalette } = useCommandPalette();
+  const { stop: stopScroll, start: startScroll } = useSmoothScrollControls();
   const router = useRouter();
   const { scrollYProgress } = useScroll();
 
   // Transform scroll progress to width percentage
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  // The menu is a panel over the page, not a layer the page slides behind:
+  // without this, a drag anywhere outside it scrolls the content underneath and
+  // leaves the menu floating over whatever ended up there. Both halves are
+  // needed — pausing Lenis alone leaves native scrolling on the routes where it
+  // is not running, and hidden overflow alone does not stop Lenis, which
+  // scrolls from script and so is not subject to it.
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const root = document.documentElement;
+    const previous = root.style.overflow;
+    root.style.overflow = 'hidden';
+    stopScroll();
+    return () => {
+      root.style.overflow = previous;
+      startScroll();
+    };
+  }, [isMenuOpen, stopScroll, startScroll]);
 
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
@@ -55,7 +75,8 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 font-heading text-xl font-semibold text-foreground hover:opacity-80 transition-opacity"
+            className="-ml-2 flex min-h-11 items-center gap-2 px-2 font-heading text-xl font-semibold text-foreground hover:opacity-80 transition-opacity"
+            aria-label="Home"
           >
             <span className="text-2xl">{siteConfig.logo}</span>
           </Link>
@@ -130,6 +151,18 @@ export default function Header() {
                   {item.name}
                 </button>
               ))}
+              {/* The palette's only other trigger is the desktop Search button
+                  and Cmd-K, so without this it is unreachable on a phone. */}
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  togglePalette();
+                }}
+                className="flex items-center gap-2 px-4 py-3 text-left text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+              >
+                <Search className="w-4 h-4" />
+                Search
+              </button>
               <div className="flex items-center justify-between mt-4 px-4 pt-4 border-t border-border">
                 <span className="text-sm text-muted-foreground">Theme</span>
                 <ThemeToggle />

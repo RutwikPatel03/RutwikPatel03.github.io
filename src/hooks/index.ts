@@ -3,6 +3,7 @@ export { useScrollToSection } from './useScrollToSection';
 export { useMediaQuery, useIsMobile, useIsTablet, useIsDesktop } from './useMediaQuery';
 export { useScrolled } from './useScrolled';
 export { useTypewriter } from './useTypewriter';
+export { useVisualViewport } from './useVisualViewport';
 
 // Re-export useTheme from providers for convenience
 export { useTheme } from '@/providers/ThemeProvider';
