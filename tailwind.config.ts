@@ -8,6 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        // The narrowest phones still in use are 320-360px wide. `xs` is the
+        // width at which a label can sit next to an icon without wrapping;
+        // below it, controls fall back to the icon alone.
+        xs: '380px',
+      },
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',

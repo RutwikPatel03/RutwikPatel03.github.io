@@ -182,4 +182,28 @@
   }
 }
 
+/*-----------------------------------*\
+  #MOBILE FORM FIELDS
+\*-----------------------------------*/
+/* iOS Safari zooms the whole page in whenever a field with text smaller than
+   16px takes focus, and it never zooms back out — the page is left oversized
+   and scrolled sideways until the visitor pinches it back by hand. Every field
+   on the site is 14px by design, so on touch devices the rendered size is
+   floored at 16px instead.
 
+   The other way to stop the zoom is `user-scalable=no` in the viewport meta,
+   which is not used here: it also takes pinch-zoom away from people who need
+   it to read the page at all.
+
+   `!important` because the trigger is a Tailwind text-* utility on almost
+   every field, and a floor that any new utility can silently undo is not a
+   floor. `--field-font-size` is the opt-out — set it inline on a field that is
+   deliberately larger than 16px and that size is kept. */
+@media (pointer: coarse) {
+  input:not([type='range']):not([type='checkbox']):not([type='radio']),
+  textarea,
+  select,
+  [contenteditable='true'] {
+    font-size: max(16px, var(--field-font-size, 0px)) !important;
+  }
+}
