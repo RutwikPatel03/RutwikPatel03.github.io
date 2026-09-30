@@ -12,6 +12,7 @@ export {
 } from './BentoGrid';
 export { default as ThemeToggle } from './ThemeToggle';
 export { ProjectCard } from './ProjectCard';
+export { VideoLightbox } from './VideoLightbox';
 export { SectionHeader } from './SectionHeader';
 export { ErrorBoundary } from './ErrorBoundary';
 export { Skeleton, SkeletonCard, SkeletonText, SkeletonAvatar, SkeletonButton } from './Skeleton';

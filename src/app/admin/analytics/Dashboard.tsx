@@ -269,6 +269,8 @@ export default function Dashboard({ snapshot }: { snapshot: AnalyticsSnapshot })
             items={snapshot.topSections}
           />
           <RankedList title="Projects opened" items={snapshot.topProjects} />
+          {/* Snapshots cached before this list existed lack the field. */}
+          <RankedList title="Videos played" items={snapshot.topVideos ?? []} />
           <RankedList
             title="Scroll depth"
             subtitle="How far down the page people get"

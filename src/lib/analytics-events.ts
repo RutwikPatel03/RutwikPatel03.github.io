@@ -14,6 +14,7 @@ export const CLIENT_EVENTS = [
   'resume_download',
   'project_open',
   'project_external',
+  'project_video',
   'command_open',
   'command_selected',
   'chat_topic',
