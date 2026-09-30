@@ -1,12 +1,14 @@
 'use client';
 
+import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowRight, Download, MapPin, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ArrowRight, ArrowUp, Download, MapPin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useTypewriter } from '@/hooks';
 import { track } from '@/lib/analytics-client';
+import { INITIAL_SUGGESTION_TOPICS, buildTopicQuestion } from '@/lib/chat-prompts';
 
 const TITLES = [
   'Software Engineer',
@@ -23,6 +25,20 @@ export default function Hero() {
     deleteSpeed: 40,
     delayBetweenWords: 2500,
   });
+  const router = useRouter();
+  const [question, setQuestion] = useState('');
+
+  // The /ai page sends ?q= as its first message; an empty box just opens the chat.
+  const askAI = (q: string) => {
+    const trimmed = q.trim();
+    router.push(trimmed ? `/ai?q=${encodeURIComponent(trimmed)}` : '/ai');
+  };
+
+  const handleAsk = (e: FormEvent) => {
+    e.preventDefault();
+    track('chat_topic', 'hero_question');
+    askAI(question);
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
@@ -51,18 +67,24 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
             className="flex-1 text-center lg:text-left"
           >
-            {/* Status Badge */}
+            {/* Status Badge + Location */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1 mb-6 text-sm rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-500"
+              className="mb-6 flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="inline-flex items-center gap-2 px-3 py-1 text-sm rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-500">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                Open to opportunities
               </span>
-              Open to opportunities
+              <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                <MapPin className="w-3.5 h-3.5" />
+                San Francisco, CA
+              </span>
             </motion.div>
 
             {/* Name */}
@@ -99,15 +121,56 @@ export default function Hero() {
               I&apos;m a software engineer. Most recently, I shipped features at Sigma Computing that 60+ companies depend on. I studied CS at USC and have published research with IEEE. I&apos;ve also built a few projects I&apos;m really proud of. Check them out below.
             </motion.p>
 
-            {/* Location */}
+            {/* Ask AI */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="mt-4 flex items-center justify-center lg:justify-start gap-2 text-muted-foreground"
+              className="mt-7 w-full max-w-xl mx-auto lg:mx-0"
             >
-              <MapPin className="w-4 h-4" />
-              <span>San Francisco, CA</span>
+              <form
+                onSubmit={handleAsk}
+                className="rounded-2xl p-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-[0_0_48px_rgba(168,85,247,0.28)]"
+              >
+                <div className="flex items-center gap-3 rounded-[14px] bg-background py-2 pl-4 pr-2">
+                  <Sparkles className="w-5 h-5 shrink-0 text-purple-400" aria-hidden="true" />
+                  <label htmlFor="hero-ask" className="sr-only">
+                    Ask my AI about me
+                  </label>
+                  <input
+                    id="hero-ask"
+                    type="text"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    maxLength={2000}
+                    placeholder="Ask my AI anything about me…"
+                    className="min-w-0 flex-1 h-11 bg-transparent text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Ask"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-blue-500 to-purple-500 text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <ArrowUp className="w-[18px] h-[18px]" />
+                  </button>
+                </div>
+              </form>
+              <div className="mt-3 flex flex-wrap items-center justify-center lg:justify-start gap-2">
+                <span className="text-[13px] text-muted-foreground">Try</span>
+                {INITIAL_SUGGESTION_TOPICS.map((topic) => (
+                  <button
+                    key={topic}
+                    type="button"
+                    onClick={() => {
+                      track('chat_topic', `hero:${topic}`);
+                      askAI(buildTopicQuestion(topic));
+                    }}
+                    className="rounded-full border border-border bg-background px-3.5 py-1.5 text-[13px] text-foreground/80 transition-colors hover:border-purple-500/40 hover:text-foreground"
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
             </motion.div>
 
             {/* CTA Buttons */}
@@ -115,18 +178,9 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5 }}
-              className="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4"
+              className="mt-7 flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4"
             >
-              <Link href="/ai" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto h-12 rounded-xl px-7 font-semibold text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/40 hover:opacity-90"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Ask AI About Me
-                </Button>
-              </Link>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto h-12 rounded-xl" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
+              <Button size="lg" className="w-full sm:w-auto" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
                 Get in Touch
                 <ArrowRight className="w-4 h-4" />
               </Button>
@@ -140,21 +194,12 @@ export default function Hero() {
                 className="w-full sm:w-auto"
                 onClick={() => track('resume_download', 'hero')}
               >
-                <Button variant="ghost" size="lg" className="w-full sm:w-auto h-12 rounded-xl">
+                <Button variant="ghost" size="lg" className="w-full sm:w-auto">
                   <Download className="w-4 h-4" />
                   Resume
                 </Button>
               </a>
             </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="mt-3 text-sm text-muted-foreground"
-            >
-              Got a question about my work? My AI assistant can answer it.
-            </motion.p>
           </motion.div>
 
           {/* Profile Image */}
