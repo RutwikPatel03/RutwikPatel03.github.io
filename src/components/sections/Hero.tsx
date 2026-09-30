@@ -8,7 +8,11 @@ import { CornerDownLeft, Download, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useTypewriter } from '@/hooks';
 import { track } from '@/lib/analytics-client';
-import { INITIAL_SUGGESTION_TOPICS, buildTopicQuestion } from '@/lib/chat-prompts';
+import {
+  INITIAL_SUGGESTION_TOPICS,
+  TOPIC_COMMANDS,
+  buildTopicQuestion,
+} from '@/lib/chat-prompts';
 
 const TITLES = [
   'Software Engineer',
@@ -17,10 +21,6 @@ const TITLES = [
   'Full Stack Developer',
   'USC CS Graduate',
 ];
-
-// Slash-command labels for INITIAL_SUGGESTION_TOPICS, in the same order.
-const TOPIC_COMMANDS = ['/experience', '/skills', '/projects', '/education'];
-
 export default function Hero() {
   const { text } = useTypewriter({
     words: TITLES,
