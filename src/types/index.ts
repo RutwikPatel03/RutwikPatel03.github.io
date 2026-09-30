@@ -53,8 +53,8 @@ export interface Experience {
   period: string;
   description: string[];
   highlights?: ExperienceHighlight[];
-  // Skills this role used, named as in skillCategories (or an alias). Only list
-  // what the description backs up: the About section cites the role as proof.
+  // Skills this role used, named as in skillCategories (or an alias). The About
+  // section cites the role as proof, so only list what was really used there.
   stack?: string[];
 }
 

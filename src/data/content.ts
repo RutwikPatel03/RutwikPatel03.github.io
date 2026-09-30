@@ -125,6 +125,7 @@ export const experience: Experience[] = [
       'Optimized rendering of large data grids with memoization and virtualization, improving dashboard responsiveness.',
       'Wrote Cypress end-to-end tests for critical workbook flows, catching regressions before they reached production.',
     ],
+    stack: ['TypeScript', 'JavaScript', 'React'],
     highlights: [
       { text: 'Conditional Formatting for Containers', link: 'https://help.sigmacomputing.com/docs/use-containers-to-organize-workbook-layouts' },
       { text: 'Custom Page Headers', link: 'https://help.sigmacomputing.com/docs/add-custom-page-headers-to-a-workbook' },
