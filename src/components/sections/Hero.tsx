@@ -4,7 +4,7 @@ import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ArrowUp, Download, MapPin, Sparkles } from 'lucide-react';
+import { CornerDownLeft, Download, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useTypewriter } from '@/hooks';
 import { track } from '@/lib/analytics-client';
@@ -17,6 +17,9 @@ const TITLES = [
   'Full Stack Developer',
   'USC CS Graduate',
 ];
+
+// Slash-command labels for INITIAL_SUGGESTION_TOPICS, in the same order.
+const TOPIC_COMMANDS = ['/experience', '/skills', '/projects', '/education'];
 
 export default function Hero() {
   const { text } = useTypewriter({
@@ -128,46 +131,53 @@ export default function Hero() {
               transition={{ delay: 0.5, duration: 0.5 }}
               className="mt-7 w-full max-w-xl mx-auto lg:mx-0"
             >
+              {/* Theme colors come from CSS variables rather than dark: variants,
+                  because the site toggles .dark on <html> and Tailwind here
+                  follows the OS setting. */}
+              {/* Styled like a terminal prompt: monospace, a ">" caret, and the
+                  topics as slash commands underneath. */}
               <form
                 onSubmit={handleAsk}
-                className="rounded-2xl p-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-[0_0_48px_rgba(168,85,247,0.28)]"
+                className="rounded-xl border border-border bg-[var(--card)] font-mono text-left shadow-sm transition-colors focus-within:border-[var(--ring)]"
               >
-                <div className="flex items-center gap-3 rounded-[14px] bg-background py-2 pl-4 pr-2">
-                  <Sparkles className="w-5 h-5 shrink-0 text-purple-400" aria-hidden="true" />
-                  <label htmlFor="hero-ask" className="sr-only">
-                    Ask my AI about me
-                  </label>
+                <label htmlFor="hero-ask" className="flex items-center gap-2 px-4 pt-3 text-xs text-muted-foreground">
+                  <span className="text-sm leading-none text-[#D97757]" aria-hidden="true">✻</span>
+                  Ask my AI about my work
+                </label>
+                <div className="flex items-center gap-2 pl-4 pr-1.5 pb-1">
+                  <span className="text-[15px] text-muted-foreground" aria-hidden="true">&gt;</span>
                   <input
                     id="hero-ask"
                     type="text"
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     maxLength={2000}
-                    placeholder="Ask my AI anything about me…"
-                    className="min-w-0 flex-1 h-11 bg-transparent text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
+                    placeholder='Try "Tell me about Sigma"'
+                    className="min-w-0 flex-1 h-11 bg-transparent font-mono text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
                   />
                   <button
                     type="submit"
                     aria-label="Ask"
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-blue-500 to-purple-500 text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-[#D97757] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    <ArrowUp className="w-[18px] h-[18px]" />
+                    <CornerDownLeft className="w-4 h-4" />
                   </button>
                 </div>
               </form>
-              <div className="mt-3 flex flex-wrap items-center justify-center lg:justify-start gap-2">
-                <span className="text-[13px] text-muted-foreground">Try</span>
-                {INITIAL_SUGGESTION_TOPICS.map((topic) => (
+              <div className="mt-2 flex flex-wrap items-center justify-center lg:justify-start gap-x-1 px-1 font-mono text-xs text-muted-foreground">
+                <span className="pr-1">try</span>
+                {INITIAL_SUGGESTION_TOPICS.map((topic, i) => (
                   <button
                     key={topic}
                     type="button"
+                    title={topic}
                     onClick={() => {
                       track('chat_topic', `hero:${topic}`);
                       askAI(buildTopicQuestion(topic));
                     }}
-                    className="rounded-full border border-border bg-background px-3.5 py-1.5 text-[13px] text-foreground/80 transition-colors hover:border-purple-500/40 hover:text-foreground"
+                    className="rounded px-1.5 py-1 transition-colors hover:bg-accent hover:text-[#D97757]"
                   >
-                    {topic}
+                    {TOPIC_COMMANDS[i]}
                   </button>
                 ))}
               </div>
@@ -180,10 +190,6 @@ export default function Hero() {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="mt-7 flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4"
             >
-              <Button size="lg" className="w-full sm:w-auto" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
-                Get in Touch
-                <ArrowRight className="w-4 h-4" />
-              </Button>
               {/* A plain anchor, not next/link: Link prefetches its href as a
                   route, and /resume.pdf is a static file, so every homepage
                   load fired a 404 for /resume.pdf?_rsc=... */}
@@ -212,7 +218,7 @@ export default function Hero() {
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden border-4 border-border bg-muted">
               <Image
                 src="/myimg/me.jpg"
-                alt="Rutwik Patel - Software Engineer at Sigma Computing, USC MS Computer Science Graduate, Full-Stack Developer specializing in React, TypeScript, Python, and AI/ML"
+                alt="Rutwik Patel, Software Engineer at Sigma Computing, USC MS Computer Science Graduate, Full-Stack Developer specializing in React, TypeScript, Python, and AI/ML"
                 fill
                 className="object-cover"
                 priority
