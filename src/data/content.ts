@@ -259,19 +259,14 @@ export const projects: Project[] = [
       duration: 35,
     },
   },
-  // TEMPORARILY HIDDEN (2026-08-29): Street-Corner Radio is pulled from the
-  // public projects list while /radio is kept out of search. Uncomment the
-  // block below to bring the card and its /projects/street-corner-radio case
-  // study back.
-  /*
-  // Live on this site
+  // Live at music.rutwik.dev
   {
     title: 'Street-Corner Radio - Live Multi-Station Player',
     category: 'web development',
-    image: '/myimg/Project_Radio.svg',
+    image: '/myimg/Project_Radio.jpg',
     imageAlt: 'Street-Corner Radio - A four-station Indian music radio built with Next.js, the YouTube IFrame API, and Redis sorted-set presence for a real live-listener count, by Rutwik Patel',
-    link: 'https://rutwik.dev/radio',
-    description: 'A four-station always-on radio built into this site: cassette-era Hindi film music, garba and Gujarati folk, late-night melodies, and Indian hip-hop. It hosts no audio. Every track streams from its official YouTube upload, and a real live-listener count runs on Redis sorted sets instead of a WebSocket server.',
+    link: 'https://music.rutwik.dev',
+    description: 'A four-station always-on radio at music.rutwik.dev: cassette-era Hindi film music, garba and Gujarati folk, late-night melodies, and Indian hip-hop. It hosts no audio. Every track streams from its official YouTube upload, and a real live-listener count runs on Redis sorted sets instead of a WebSocket server.',
     tech: ['Next.js 14', 'TypeScript', 'YouTube IFrame API', 'Upstash Redis', 'Tailwind'],
     hasLiveDemo: true,
     slug: 'street-corner-radio',
@@ -293,7 +288,6 @@ export const projects: Project[] = [
       'Pausing heartbeats on hidden tabs matters, otherwise a background tab inflates the live count and the one number the whole page rests on stops being true',
     ],
   },
-  */
   // Live deployed projects
   /* Netflix Clone — commented out
   {

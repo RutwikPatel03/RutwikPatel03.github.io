@@ -41,9 +41,9 @@ export function useSmoothScrollControls() {
 
 // Routes that own the full viewport and scroll inside their own containers.
 // Lenis hijacks the wheel globally, so on these it stops nested panels (the
-// chat transcript, the radio song list) from scrolling at all — and it buys
-// nothing, because the page itself never scrolls.
-const NO_SMOOTH_SCROLL = ['/ai', '/radio'];
+// chat transcript) from scrolling at all — and it buys nothing, because the
+// page itself never scrolls.
+const NO_SMOOTH_SCROLL = ['/ai'];
 
 export default function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const lenisRef = useRef<Lenis | null>(null);
