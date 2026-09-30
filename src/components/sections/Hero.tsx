@@ -117,16 +117,19 @@ export default function Hero() {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4"
             >
-              <Button size="lg" className="w-full sm:w-auto" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
-                Get in Touch
-                <ArrowRight className="w-4 h-4" />
-              </Button>
               <Link href="/ai" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto h-12 rounded-xl px-7 font-semibold text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/40 hover:opacity-90"
+                >
                   <Sparkles className="w-4 h-4" />
                   Ask AI About Me
                 </Button>
               </Link>
+              <Button variant="outline" size="lg" className="w-full sm:w-auto h-12 rounded-xl" onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}>
+                Get in Touch
+                <ArrowRight className="w-4 h-4" />
+              </Button>
               {/* A plain anchor, not next/link: Link prefetches its href as a
                   route, and /resume.pdf is a static file, so every homepage
                   load fired a 404 for /resume.pdf?_rsc=... */}
@@ -137,12 +140,21 @@ export default function Hero() {
                 className="w-full sm:w-auto"
                 onClick={() => track('resume_download', 'hero')}
               >
-                <Button variant="ghost" size="lg" className="w-full sm:w-auto">
+                <Button variant="ghost" size="lg" className="w-full sm:w-auto h-12 rounded-xl">
                   <Download className="w-4 h-4" />
                   Resume
                 </Button>
               </a>
             </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+              className="mt-3 text-sm text-muted-foreground"
+            >
+              Got a question about my work? My AI assistant can answer it.
+            </motion.p>
           </motion.div>
 
           {/* Profile Image */}
