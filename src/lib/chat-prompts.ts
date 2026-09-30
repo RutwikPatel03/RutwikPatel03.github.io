@@ -17,6 +17,15 @@ export const INITIAL_SUGGESTION_TOPICS = [
 export const buildTopicQuestion = (topic: string) =>
   `Tell me about Rutwik's ${topic.toLowerCase()}`;
 
+/** Slash commands for INITIAL_SUGGESTION_TOPICS, in the same order. */
+export const TOPIC_COMMANDS = ['/experience', '/skills', '/projects', '/education'] as const;
+
+/** Turns a typed topic command into its canned question; anything else passes through. */
+export const resolveTopicCommand = (text: string): string => {
+  const index = (TOPIC_COMMANDS as readonly string[]).indexOf(text.trim().toLowerCase());
+  return index === -1 ? text : buildTopicQuestion(INITIAL_SUGGESTION_TOPICS[index]);
+};
+
 /** Suggestion chips offered after each answer. */
 export const FOLLOW_UP_QUESTIONS = [
   'What did he do at Sigma Computing?',

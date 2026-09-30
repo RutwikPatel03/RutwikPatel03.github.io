@@ -2,25 +2,24 @@
 
 import { useState, useRef, useEffect, FormEvent, KeyboardEvent, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Send, Sparkles, User, Bot, Briefcase, Code, FolderOpen, GraduationCap, Copy, Check } from 'lucide-react';
+import { CornerDownLeft, Copy, Check } from 'lucide-react';
 import type { ChatMessage } from '@/types';
 import {
   FOLLOW_UP_QUESTIONS,
   INITIAL_SUGGESTION_TOPICS,
+  TOPIC_COMMANDS,
   buildTopicQuestion,
+  resolveTopicCommand,
 } from '@/lib/chat-prompts';
 import { track } from '@/lib/analytics-client';
 
-// The question text lives in @/lib/chat-prompts so the server can recognize
-// these as self-contained and answer them from cache. Only the icons are local.
-const TOPIC_ICONS = [Briefcase, Code, FolderOpen, GraduationCap];
-
-const INITIAL_SUGGESTIONS = INITIAL_SUGGESTION_TOPICS.map((text, i) => ({
-  text,
-  icon: TOPIC_ICONS[i],
-}));
-
 const ALL_FOLLOW_UPS = FOLLOW_UP_QUESTIONS;
+
+// The page is styled like a terminal session; this is its one accent color.
+const ACCENT = 'text-[#D97757]';
+
+// Cycled while waiting for an answer, like a terminal spinner.
+const SPINNER_FRAMES = ['·', '✢', '✳', '✶', '✻', '✽'];
 
 // Matches MAX_HISTORY_MESSAGES on the server; sending more just wastes payload.
 const HISTORY_LIMIT = 4;
@@ -32,6 +31,7 @@ export default function ChatInterface() {
   const [usedSuggestions, setUsedSuggestions] = useState<Set<string>>(new Set());
   const [currentSuggestions, setCurrentSuggestions] = useState<string[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [spinnerFrame, setSpinnerFrame] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -76,6 +76,12 @@ export default function ChatInterface() {
       setCurrentSuggestions(shuffled.slice(0, 3));
     }
   }, [messages, usedSuggestions, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) return;
+    const id = setInterval(() => setSpinnerFrame((f) => (f + 1) % SPINNER_FRAMES.length), 120);
+    return () => clearInterval(id);
+  }, [isLoading]);
 
   const copyToClipboard = async (text: string, index: number) => {
     try {
@@ -134,178 +140,161 @@ export default function ChatInterface() {
     const question = new URLSearchParams(window.location.search).get('q')?.trim();
     if (!question) return;
     window.history.replaceState(null, '', window.location.pathname);
-    sendMessage(question.slice(0, 2000));
+    sendMessage(resolveTopicCommand(question.slice(0, 2000)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = (e: FormEvent) => { e.preventDefault(); sendMessage(input); };
+  // Typing a topic command like "/projects" asks its canned question.
+  const handleSubmit = (e: FormEvent) => { e.preventDefault(); sendMessage(resolveTopicCommand(input)); };
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input); }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(resolveTopicCommand(input)); }
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full overflow-hidden">
+    <div className="flex-1 flex flex-col w-full overflow-hidden font-mono">
       {/* Messages Area - Full width scroll container with scrollbar at page edge */}
       <div
         ref={messagesContainerRef}
         onScroll={handleScroll}
         className="flex-1 overflow-y-scroll"
       >
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
-        {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center px-2 sm:px-4">
-            <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center mb-4 sm:mb-6">
-              <Sparkles className="w-7 h-7 sm:w-10 sm:h-10 text-blue-500" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-2 sm:mb-3">Ask me about Rutwik</h2>
-            <p className="text-muted-foreground mb-6 sm:mb-10 max-w-lg text-sm sm:text-base leading-relaxed">
-              I can help you learn about his experience, skills, projects, and more. Ask me anything!
+        <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-8 text-sm sm:text-[15px] leading-relaxed">
+          {/* Welcome box, shown at the top of every session like a terminal banner */}
+          <div className="rounded-lg border border-[#D97757]/70 px-4 py-3 sm:px-5 sm:py-4">
+            <p className="text-foreground">
+              <span className={ACCENT} aria-hidden="true">✻ </span>
+              Welcome to <span className="font-semibold">Rutwik&apos;s AI</span>
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-lg">
-              {INITIAL_SUGGESTIONS.map(({ text, icon: Icon }, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    track('chat_topic', text);
-                    sendMessage(buildTopicQuestion(text));
-                  }}
-                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-border bg-card hover:bg-muted/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 text-left group"
-                >
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0">
-                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                  </div>
-                  <span className="text-sm sm:text-base font-medium text-foreground">{text}</span>
-                </button>
-              ))}
-            </div>
+            <p className="mt-2 text-muted-foreground">
+              Ask about his experience, skills, projects, and education.
+            </p>
+            <p className="text-muted-foreground">Type a question, or pick a command below.</p>
           </div>
-        ) : (
-          <div className="space-y-4 sm:space-y-8">
-            {messages.map((msg, index) => (
-              <div key={index} className={`flex gap-2 sm:gap-4 ${msg.role === 'user' ? 'justify-end' : ''}`}>
-                {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0 mt-1">
-                    <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
-                  </div>
-                )}
-                <div className={`group relative max-w-[90%] sm:max-w-[85%] ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-card border border-border'} rounded-xl sm:rounded-2xl px-3 sm:px-5 py-3 sm:py-4`}>
-                  {msg.role === 'assistant' ? (
-                    <>
-                      <div className="prose prose-neutral dark:prose-invert prose-sm sm:prose-base max-w-none
-                        [&>p]:mb-3 sm:[&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-foreground [&>p]:text-sm sm:[&>p]:text-base
-                        [&>ul]:mb-3 sm:[&>ul]:mb-4 [&>ul]:space-y-1 [&>ul]:list-disc [&>ul]:pl-4 sm:[&>ul]:pl-5
-                        [&>ol]:mb-3 sm:[&>ol]:mb-4 [&>ol]:space-y-1 [&>ol]:list-decimal [&>ol]:pl-4 sm:[&>ol]:pl-5
-                        [&_li]:text-foreground [&_li]:leading-relaxed [&_li]:text-sm sm:[&_li]:text-base
-                        [&>h1]:text-lg sm:[&>h1]:text-xl [&>h1]:font-bold [&>h1]:mb-3 sm:[&>h1]:mb-4 [&>h1]:text-foreground
-                        [&>h2]:text-base sm:[&>h2]:text-lg [&>h2]:font-semibold [&>h2]:mb-2 sm:[&>h2]:mb-3 [&>h2]:text-foreground
-                        [&>h3]:text-sm sm:[&>h3]:text-base [&>h3]:font-semibold [&>h3]:mb-2 [&>h3]:text-foreground
-                        [&>*:last-child]:mb-0
-                        [&_strong]:text-foreground [&_strong]:font-semibold
-                        [&_code]:bg-muted [&_code]:px-1 sm:[&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-xs sm:[&_code]:text-sm
-                        [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2">
-                        <ReactMarkdown>{msg.content || ''}</ReactMarkdown>
-                      </div>
-                      {/* Copy button */}
-                      {msg.content && (
-                        <button
-                          onClick={() => copyToClipboard(msg.content, index)}
-                          className="absolute -bottom-3 right-2 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity p-1 sm:p-1.5 rounded-lg bg-muted hover:bg-muted/80 border border-border"
-                          title="Copy to clipboard"
-                        >
-                          {copiedIndex === index ? (
-                            <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-green-500" />
-                          ) : (
-                            <Copy className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground" />
-                          )}
-                        </button>
-                      )}
-                    </>
-                  ) : (
-                    <p className="text-sm sm:text-base leading-relaxed">{msg.content}</p>
-                  )}
-                </div>
-                {msg.role === 'user' && (
-                  <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-primary flex items-center justify-center flex-shrink-0 mt-1">
-                    <User className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
-                  </div>
-                )}
-              </div>
-            ))}
-            {/* Loading indicator */}
-            {isLoading && (
-              <div className="flex gap-2 sm:gap-4">
-                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
-                </div>
-                <div className="bg-card border border-border rounded-xl sm:rounded-2xl px-3 sm:px-5 py-3 sm:py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:0ms]" />
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:150ms]" />
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:300ms]" />
-                    </div>
-                    <span className="text-xs sm:text-sm text-muted-foreground ml-1 sm:ml-2">Thinking...</span>
-                  </div>
-                </div>
-              </div>
-            )}
-            {/* Follow-up suggestions */}
-            {!isLoading && messages.length > 0 && messages[messages.length - 1].role === 'assistant' && messages[messages.length - 1].content && currentSuggestions.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 sm:gap-2 ml-9 sm:ml-[52px]">
-                {currentSuggestions.map((suggestion, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      track('chat_topic', 'follow_up');
-                      sendMessage(suggestion);
-                    }}
-                    className="text-xs sm:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-border bg-card hover:bg-muted hover:border-primary/30 transition-all duration-200 text-muted-foreground hover:text-foreground"
-                  >
-                    {suggestion}
-                  </button>
+
+          {messages.length === 0 ? (
+            <div className="mt-6">
+              <p className="mb-2 text-muted-foreground">Commands</p>
+              <ul>
+                {INITIAL_SUGGESTION_TOPICS.map((topic, i) => (
+                  <li key={topic}>
+                    <button
+                      onClick={() => {
+                        track('chat_topic', topic);
+                        sendMessage(buildTopicQuestion(topic));
+                      }}
+                      className="group -mx-2 flex w-full items-baseline gap-4 rounded px-2 py-1.5 text-left transition-colors hover:bg-accent"
+                    >
+                      <span className="w-28 shrink-0 text-foreground transition-colors group-hover:text-[#D97757]">
+                        {TOPIC_COMMANDS[i]}
+                      </span>
+                      <span className="text-muted-foreground">{topic}</span>
+                    </button>
+                  </li>
                 ))}
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-        )}
+              </ul>
+            </div>
+          ) : (
+            <div className="mt-6 space-y-5 sm:space-y-6">
+              {messages.map((msg, index) =>
+                msg.role === 'user' ? (
+                  <div key={index} className="flex gap-2 rounded bg-accent px-3 py-2 text-foreground">
+                    <span className="select-none text-muted-foreground" aria-hidden="true">&gt;</span>
+                    <p className="min-w-0 whitespace-pre-wrap break-words">{msg.content}</p>
+                  </div>
+                ) : (
+                  <div key={index} className="group relative flex gap-2">
+                    <span className={`select-none ${ACCENT}`} aria-hidden="true">●</span>
+                    <div className="min-w-0 flex-1 pr-8 text-foreground
+                      [&_p]:mb-3 [&_ul]:mb-3 [&_ol]:mb-3 [&>*:last-child]:mb-0
+                      [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mb-1 [&_li]:[list-style:inherit]
+                      [&_h1]:mb-2 [&_h1]:font-semibold [&_h2]:mb-2 [&_h2]:font-semibold [&_h3]:mb-2 [&_h3]:font-semibold
+                      [&_strong]:font-semibold [&_code]:rounded [&_code]:bg-accent [&_code]:px-1
+                      [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-[#D97757]">
+                      <ReactMarkdown>{msg.content || ''}</ReactMarkdown>
+                    </div>
+                    {msg.content && (
+                      <button
+                        onClick={() => copyToClipboard(msg.content, index)}
+                        className="absolute right-0 top-0 rounded p-1.5 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
+                        title="Copy to clipboard"
+                        aria-label="Copy answer"
+                      >
+                        {copiedIndex === index ? (
+                          <Check className="w-3.5 h-3.5 text-green-500" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )
+              )}
+              {/* Loading indicator */}
+              {isLoading && (
+                <div className={`flex gap-2 ${ACCENT}`} role="status">
+                  <span className="w-[1ch] select-none" aria-hidden="true">{SPINNER_FRAMES[spinnerFrame]}</span>
+                  <span>Thinking…</span>
+                </div>
+              )}
+              {/* Follow-up suggestions */}
+              {!isLoading && messages.length > 0 && messages[messages.length - 1].role === 'assistant' && messages[messages.length - 1].content && currentSuggestions.length > 0 && (
+                <div className="flex gap-2 pl-1 text-muted-foreground">
+                  <span className="select-none" aria-hidden="true">└</span>
+                  <div className="flex min-w-0 flex-col items-start gap-0.5">
+                    <span className="text-xs">try asking</span>
+                    {currentSuggestions.map((suggestion, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          track('chat_topic', 'follow_up');
+                          sendMessage(suggestion);
+                        }}
+                        className="text-left transition-colors hover:text-[#D97757]"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+          )}
         </div>
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-border bg-background p-2 sm:p-4 flex-shrink-0 relative z-10">
+      <div className="flex-shrink-0 relative z-10 bg-background px-2 pb-2 pt-2 sm:px-4 sm:pb-4">
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-          <div className="relative flex items-end gap-2 sm:gap-3 bg-card border border-border rounded-xl sm:rounded-2xl p-2 sm:p-3 focus-within:border-primary/50 focus-within:shadow-lg focus-within:shadow-primary/5 transition-all duration-200">
+          <div className="flex items-end gap-2 rounded-lg border border-border bg-background pl-3 pr-1.5 py-1 transition-colors focus-within:border-[var(--ring)]">
+            <span className="select-none py-2 text-sm sm:text-[15px] text-muted-foreground" aria-hidden="true">&gt;</span>
+            <label htmlFor="chat-input" className="sr-only">Ask about Rutwik</label>
             <textarea
+              id="chat-input"
               ref={inputRef}
-              placeholder="Ask about Rutwik..."
+              placeholder='Try "Tell me about Sigma"'
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={isLoading}
               rows={1}
-              className="flex-1 bg-transparent resize-none px-1 sm:px-2 py-1.5 sm:py-2 text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none max-h-[150px] sm:max-h-[200px] leading-relaxed"
+              className="flex-1 bg-transparent resize-none py-2 font-mono text-sm sm:text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none max-h-[150px] sm:max-h-[200px] leading-relaxed"
             />
             <button
               type="submit"
+              aria-label="Send"
               disabled={!input.trim() || isLoading}
-              className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-primary text-primary-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors flex-shrink-0"
+              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-accent hover:text-[#D97757] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground"
             >
-              <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+              <CornerDownLeft className="w-4 h-4" />
             </button>
           </div>
-          <div className="hidden sm:flex items-center justify-center gap-4 mt-3">
-            <p className="text-xs text-muted-foreground">
-              AI assistant powered by Groq
-            </p>
-            <span className="text-muted-foreground/30">•</span>
-            <p className="text-xs text-muted-foreground">
-              <kbd className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-mono">Enter</kbd> to send, <kbd className="px-1.5 py-0.5 rounded bg-muted text-[10px] font-mono">Shift+Enter</kbd> for new line
-            </p>
+          <div className="mt-1.5 flex justify-between gap-4 px-1 text-[11px] sm:text-xs text-muted-foreground">
+            <span className="hidden sm:inline">enter to send · shift+enter for new line</span>
+            <span className="ml-auto">powered by Groq</span>
           </div>
         </form>
       </div>
     </div>
   );
 }
-
