@@ -123,6 +123,21 @@ export default function ChatInterface() {
     }
   };
 
+  // The homepage hero hands off a question as /ai?q=... Read it straight from
+  // window.location (useSearchParams would force a Suspense boundary on this
+  // page), drop it from the URL so a refresh doesn't ask again, then send it.
+  // The ref keeps React Strict Mode's double-run from sending it twice.
+  const askedFromUrl = useRef(false);
+  useEffect(() => {
+    if (askedFromUrl.current) return;
+    askedFromUrl.current = true;
+    const question = new URLSearchParams(window.location.search).get('q')?.trim();
+    if (!question) return;
+    window.history.replaceState(null, '', window.location.pathname);
+    sendMessage(question.slice(0, 2000));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSubmit = (e: FormEvent) => { e.preventDefault(); sendMessage(input); };
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input); }
