@@ -9,13 +9,13 @@ slug: "natural-language-to-sql"
 
 Most "Text-to-SQL" demos you see online are deceptively simple. Type "show me top 10 customers by revenue" and get back `SELECT customer_name, SUM(revenue) ...`. Looks great in a tweet.
 
-Then you try it on a real schema with 40 tables, nullable foreign keys, and dialect-specific syntax — and it falls apart.
+Then you try it on a real schema with 40 tables, nullable foreign keys, and dialect-specific syntax, and it falls apart.
 
 I built [TalkToData](https://talktodata.vercel.app/) to see how far you can push a small LLM for SQL generation, and learned a few things worth sharing.
 
 ## The core problem: SQL is unforgiving
 
-Natural language is forgiving. "Show me recent orders" is valid even if "recent" is ambiguous. SQL is not forgiving. `WHERE created_at > NOW() - INTERVAL '7 days'` is either right or it throws an exception — and `NOW() - INTERVAL '7 days'` is PostgreSQL syntax, while MySQL wants `NOW() - INTERVAL 7 DAY`.
+Natural language is forgiving. "Show me recent orders" is valid even if "recent" is ambiguous. SQL is not forgiving. `WHERE created_at > NOW() - INTERVAL '7 days'` is either right or it throws an exception. And `NOW() - INTERVAL '7 days'` is PostgreSQL syntax, while MySQL wants `NOW() - INTERVAL 7 DAY`.
 
 This makes NL-to-SQL harder than most NL tasks. The output must be syntactically valid *and* semantically correct *and* match the target dialect.
 
@@ -75,7 +75,7 @@ async function generateSQL(question: string, schema: string, dialect: string) {
 }
 ```
 
-The error recovery prompt is different — it includes the broken SQL, the error message, and asks the model to fix *only* the problematic part. This works about 70% of the time, meaning overall success rate goes from 80% → ~94%.
+The error recovery prompt is different. It includes the broken SQL, the error message, and asks the model to fix *only* the problematic part. This works about 70% of the time, meaning overall success rate goes from 80% → ~94%.
 
 ## Multi-dialect support
 
@@ -87,7 +87,7 @@ Supporting 5 dialects (PostgreSQL, MySQL, SQLite, SQL Server, MongoDB) required 
 
 I built dialect-specific prompt templates and a thin validation layer that checks common anti-patterns per dialect (e.g., flagging `LIMIT` in SQL Server queries).
 
-MongoDB was the outlier — it's not SQL at all, so the output is aggregation pipeline JSON instead. The prompt for MongoDB is completely different, with different few-shot examples.
+MongoDB was the outlier. It's not SQL at all, so the output is aggregation pipeline JSON instead. The prompt for MongoDB is completely different, with different few-shot examples.
 
 ## What I'd do differently
 
@@ -99,6 +99,6 @@ MongoDB was the outlier — it's not SQL at all, so the output is aggregation pi
 
 ## The takeaway
 
-LLMs are good at SQL generation when you give them structure. Few-shot examples, error recovery, and dialect-specific prompts together make a usable tool from a 8B model running on free infrastructure. The hard part isn't the AI — it's the UX: making failure graceful and uncertainty invisible to the user.
+LLMs are good at SQL generation when you give them structure. Few-shot examples, error recovery, and dialect-specific prompts together make a usable tool from a 8B model running on free infrastructure. The hard part isn't the AI. It's the UX: making failure graceful and uncertainty invisible to the user.
 
 [Try TalkToData →](https://talktodata.vercel.app/)

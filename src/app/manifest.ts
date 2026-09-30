@@ -10,7 +10,7 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Rutwik Patel — Software & Infrastructure Engineer',
+    name: 'Rutwik Patel | Software & Infrastructure Engineer',
     short_name: 'Rutwik Patel',
     description:
       'Portfolio of Rutwik Patel: software and infrastructure engineering, backend and distributed systems, and published AI/ML research.',

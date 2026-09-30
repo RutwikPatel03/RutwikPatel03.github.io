@@ -39,10 +39,10 @@ export function generateMetadata({ params }: Props): Metadata {
   const project = getProject(params.slug);
   if (!project) return {};
   return {
-    title: `${project.title} — Case Study | Rutwik Patel`,
+    title: `${project.title} | Case Study | Rutwik Patel`,
     description: project.challenge,
     openGraph: {
-      title: `${project.title} — Case Study`,
+      title: `${project.title} | Case Study`,
       description: project.challenge,
       images: [{ url: `https://rutwik.dev${project.image}` }],
     },

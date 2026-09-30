@@ -33,7 +33,7 @@ export default function BlogPage() {
         </div>
 
         {posts.length === 0 ? (
-          <p className="text-muted-foreground">No posts yet — check back soon.</p>
+          <p className="text-muted-foreground">No posts yet. Check back soon.</p>
         ) : (
           <div className="space-y-4">
             {posts.map((post) => (

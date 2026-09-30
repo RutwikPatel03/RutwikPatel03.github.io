@@ -7,7 +7,7 @@ readTime: "8 min read"
 slug: "explainable-ai-cataract-detection"
 ---
 
-When we published our cataract detection research at IEEE PuneCon 2023, the headline number was 97% accuracy. But the part that actually mattered — and the part that took the most work — was making the model *explain itself*.
+When we published our cataract detection research at IEEE PuneCon 2023, the headline number was 97% accuracy. But the part that actually mattered, and the part that took the most work, was making the model *explain itself*.
 
 Here's what we built, what we learned, and why explainability isn't just a nice-to-have in medical AI.
 
@@ -18,7 +18,7 @@ Imagine a doctor using an AI tool that classifies a retinal image as "cataract d
 1. Trust the model and recommend surgery
 2. Ignore the model and rely on their own assessment
 
-If the model is a black box — no explanation, just a confidence score — most doctors will choose option 2. And they should. A confidence score of 97% doesn't tell you *why* the model thinks there's a cataract, which means the doctor can't verify whether the model is looking at the right part of the image.
+If the model is a black box with no explanation, just a confidence score, most doctors will choose option 2. And they should. A confidence score of 97% doesn't tell you *why* the model thinks there's a cataract, which means the doctor can't verify whether the model is looking at the right part of the image.
 
 This is the explainability problem in medical AI. Our research was specifically about solving it.
 
@@ -66,11 +66,11 @@ def compute_gradcam(model, image, layer_name, class_idx):
     return cv2.resize(heatmap.numpy(), (image.shape[2], image.shape[1]))
 ```
 
-For cataract detection, a well-trained model should produce heatmaps that highlight the lens region — the area where cataracts physically form. If the model highlights the optic disc or the sclera instead, something is wrong with the training data or the model's learned features.
+For cataract detection, a well-trained model should produce heatmaps that highlight the lens region, the area where cataracts physically form. If the model highlights the optic disc or the sclera instead, something is wrong with the training data or the model's learned features.
 
 ## What the heatmaps revealed
 
-When we first generated GradCAM heatmaps, about 15% of them highlighted regions that had nothing to do with the lens. The model was picking up on artifacts — image compression boundaries, metadata pixels, and even the retinal camera's reflection pattern.
+When we first generated GradCAM heatmaps, about 15% of them highlighted regions that had nothing to do with the lens. The model was picking up on artifacts: image compression boundaries, metadata pixels, and even the retinal camera's reflection pattern.
 
 This was invisible in the accuracy metric. The model could still classify correctly by chance or by learning spurious correlations. But the heatmaps made the problem obvious.
 
@@ -97,4 +97,4 @@ This is the core argument for explainability in medical AI: it shifts the decisi
 
 ## The published paper
 
-The full paper — "XAI meets Ophthalmology: An Explainable Approach to Cataract Detection using VGG-19 and Grad-CAM" — is available on [IEEE Xplore](https://ieeexplore.ieee.org/document/10450053). The live demo of the cataract detection system is at [cataractdetectionwithxai.streamlit.app](https://cataractdetectionwithxai.streamlit.app/).
+The full paper, "XAI meets Ophthalmology: An Explainable Approach to Cataract Detection using VGG-19 and Grad-CAM", is available on [IEEE Xplore](https://ieeexplore.ieee.org/document/10450053). The live demo of the cataract detection system is at [cataractdetectionwithxai.streamlit.app](https://cataractdetectionwithxai.streamlit.app/).
