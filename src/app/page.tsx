@@ -13,9 +13,10 @@ const Experience = dynamic(() => import('@/components/sections/Experience'), {
 const Projects = dynamic(() => import('@/components/sections/Projects'), {
   loading: () => <div className="min-h-[600px]" />,
 });
-const Testimonials = dynamic(() => import('@/components/sections/Testimonials'), {
-  loading: () => <div className="min-h-[400px]" />,
-});
+// Testimonials hidden for now; uncomment here, below, in navigation.ts and in CommandPalette.tsx to restore
+// const Testimonials = dynamic(() => import('@/components/sections/Testimonials'), {
+//   loading: () => <div className="min-h-[400px]" />,
+// });
 const Publications = dynamic(() => import('@/components/sections/Publications'), {
   loading: () => <div className="min-h-[400px]" />,
 });
@@ -32,7 +33,7 @@ export default function Home() {
         <About />
         <Experience />
         <Projects />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <Publications />
         <Contact />
       </main>

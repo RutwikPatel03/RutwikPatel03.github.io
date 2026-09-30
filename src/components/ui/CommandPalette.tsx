@@ -8,7 +8,8 @@ import { useScrollToSection } from '@/hooks';
 import { siteConfig, socialLinks, externalLinks } from '@/constants';
 import { track } from '@/lib/analytics-client';
 import {
-  User, Briefcase, FolderOpen, MessageSquare, BookOpen, Mail,
+  User, Briefcase, FolderOpen, BookOpen, Mail,
+  // MessageSquare, // testimonials entry below
   Moon, Sun, Download, Bot, Github, Linkedin, Copy, X,
 } from 'lucide-react';
 
@@ -42,7 +43,7 @@ export default function CommandPalette() {
         { id: 'about', label: 'About Me', icon: User, onSelect: () => go('#about') },
         { id: 'experience', label: 'Experience', icon: Briefcase, onSelect: () => go('#experience') },
         { id: 'projects', label: 'Projects', icon: FolderOpen, onSelect: () => go('#projects') },
-        { id: 'testimonials', label: 'Testimonials', icon: MessageSquare, onSelect: () => go('#testimonials') },
+        // { id: 'testimonials', label: 'Testimonials', icon: MessageSquare, onSelect: () => go('#testimonials') },
         { id: 'publications', label: 'Publications', icon: BookOpen, onSelect: () => go('#publications') },
         { id: 'contact', label: 'Contact', icon: Mail, onSelect: () => go('#contact') },
       ],
