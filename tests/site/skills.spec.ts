@@ -22,9 +22,13 @@ test.describe('toolkit', () => {
     await expect(panel.getByRole('link', { name: /RoomReserve/ })).toHaveAttribute('href', '/projects/roomreserve');
   });
 
-  test('a skill with nothing behind it is not clickable', async ({ page }) => {
-    await expect(page.locator('#about button[data-skill="Terraform"]')).toHaveCount(0);
-    await expect(page.locator('#about span', { hasText: /^Terraform$/ })).toBeVisible();
+  /**
+   * The Toolkit only lists skills something on the site backs up. A skill
+   * added without a project, role or degree citing it fails here.
+   */
+  test('every skill listed has something behind it', async ({ page }) => {
+    await expect(page.locator('#about button[data-skill]').first()).toBeVisible();
+    await expect(page.locator('#about [data-unbacked]')).toHaveCount(0);
   });
 
   /**

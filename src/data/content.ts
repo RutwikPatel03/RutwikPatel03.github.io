@@ -51,7 +51,7 @@ export const skillCategories: SkillCategory[] = [
       { name: 'Next.js', aliases: ['Next.js 14'] },
       { name: 'Angular' },
       { name: 'Tailwind CSS', aliases: ['Tailwind'] },
-      { name: 'Redux / Zustand', aliases: ['Redux', 'Zustand'] },
+      { name: 'Redux' },
     ],
   },
   {
@@ -103,25 +103,34 @@ export const skillCategories: SkillCategory[] = [
   },
 ];
 
+// This site is not a project card, but the Toolkit cites it as proof for the
+// stack it runs on. Keep `tech` in step with package.json.
+export const thisSite = {
+  title: 'This portfolio',
+  subtitle: 'Next.js site with Redis-backed analytics and an LLM chat assistant',
+  link: 'https://github.com/RutwikPatel03/RutwikPatel03.github.io',
+  tech: ['Next.js', 'React', 'TypeScript', 'Tailwind', 'Upstash Redis', 'Groq'],
+};
+
 export const experience: Experience[] = [
   {
     company: 'USC Marshall School of Business, Los Angeles, CA',
     title: 'Research Assistant',
     period: 'Jan 2026 - May 2026',
     description: [
-      'Built a RAG-based semantic search and chat platform over 10K+ vector embeddings, letting researchers query 500GB+ of structured and unstructured sustainability disclosures in natural language.',
+      'Built a RAG-based semantic search and chat platform in Python and LangChain over 10K+ OpenAI embeddings stored in Chroma, letting researchers query 500GB+ of structured and unstructured sustainability disclosures in natural language.',
       'Developed chunking and schema-guided LLM pipelines that extract structured ESG fields from unstructured disclosures.',
       'Shipped a React dashboard and chat interface for 30+ researchers, cutting 15+ hours per week of manual review.',
       'Integrated an LLM layer grounding answers in retrieved disclosures with citations to reduce hallucination, plus a feedback loop capturing researcher ratings to refine retrieval accuracy over time.',
     ],
-    stack: ['RAG', 'React', 'LLM APIs'],
+    stack: ['Python', 'LangChain', 'RAG', 'Chroma', 'OpenAI Embeddings', 'React', 'LLM APIs'],
   },
   {
     company: 'Sigma Computing, New York, NY',
     title: 'Software Engineer Intern',
     period: 'Sept 2025 - Dec 2025',
     description: [
-      'Delivered four production features end-to-end — owning implementation, testing, and deployment — including a condition-based formula visualization tool, Form v2, headers, and navigation used by 60+ enterprise organizations.',
+      'Delivered four production features end-to-end in React and TypeScript — owning implementation, testing, and deployment — including a condition-based formula visualization tool, Form v2, headers, and navigation used by 60+ enterprise organizations.',
       'Optimized rendering of large data grids with memoization and virtualization, improving dashboard responsiveness.',
       'Wrote Cypress end-to-end tests for critical workbook flows, catching regressions before they reached production.',
     ],
@@ -153,11 +162,12 @@ export const experience: Experience[] = [
     title: 'Research Assistant',
     period: 'Feb 2024 - May 2025',
     description: [
-      'Engineered fault-tolerant ETL pipelines chaining Selenium scraping, OCR, and indexing to ingest 15,000+ sustainability reports across 10 years of S&P 1500 filings into a unified research knowledge base.',
+      'Engineered fault-tolerant Python ETL pipelines chaining Selenium scraping, OCR, and indexing to ingest 15,000+ sustainability reports across 10 years of S&P 1500 filings into a unified research knowledge base.',
       'Modeled normalized PostgreSQL schemas with targeted indexing over 2M+ extracted data points, cutting query latency by 12% and powering fast downstream analytics, semantic retrieval, and reporting.',
       'Parallelized PDF extraction with multithreading, cutting processing time 30% over the prior sequential pipeline.',
+      'Containerized the pipelines with Docker and deployed them on AWS.',
     ],
-    stack: ['PostgreSQL'],
+    stack: ['Python', 'PostgreSQL', 'Docker', 'AWS'],
   },
 ];
 
@@ -166,13 +176,15 @@ export const education: Education[] = [
     school: 'University of Southern California',
     degree: 'Masters of Science in Computer Science | GPA: 3.81/4.0',
     period: 'August 2023 - May 2025',
-    description: 'Developed advanced technical expertise in algorithms, database systems, and web technologies while enhancing problem-solving skills and innovation.',
+    description: 'Developed advanced technical expertise in algorithms, database systems, and web technologies while enhancing problem-solving skills and innovation. Coursework and class projects in C++, Go, Django REST, Redux, Kubernetes, and Terraform.',
+    stack: ['C++', 'Go', 'Django REST', 'Redux', 'Kubernetes', 'Terraform'],
   },
   {
     school: 'University of Mumbai, Mumbai, India',
     degree: 'Bachelor of Technology in Information Technology | GPA: 3.8/4.0',
     period: 'August 2019 - May 2023',
-    description: 'Gained a solid foundation in operating systems, machine learning, software engineering, and computer networks.',
+    description: 'Gained a solid foundation in operating systems, machine learning, software engineering, and computer networks. Coursework and projects in C++, Django REST, PyTorch, and TensorFlow.',
+    stack: ['C++', 'Django REST', 'PyTorch', 'TensorFlow'],
   },
 ];
 
@@ -389,7 +401,7 @@ export const projects: Project[] = [
     imageAlt: 'Cataract Detection AI System - CNN-based medical imaging with GradCAM explainability achieving 97% accuracy, IEEE published research by Rutwik Patel',
     link: 'https://cataractdetectionwithxai.streamlit.app/',
     description: 'Led team of 3 to develop CNN-based cataract detection system achieving 97% accuracy with explainable AI integration. Integrated GradCAM for visualizing model decisions.',
-    tech: ['Streamlit', 'Python', 'CNN', 'GradCAM'],
+    tech: ['Streamlit', 'Python', 'PyTorch', 'CNN', 'GradCAM'],
     hasLiveDemo: true,
   },
   {

@@ -4,7 +4,7 @@ import { useMemo, useState, type CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, ArrowUpRight, Briefcase, FolderGit2 } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Briefcase, FolderGit2, GraduationCap } from 'lucide-react';
 import { BentoCard, BentoCardHeader, BentoCardTitle, BentoCardDescription, BentoCardContent } from '@/components/ui/BentoGrid';
 import { skillCategories } from '@/data/content';
 import { proofFor, type Proof } from '@/lib/skill-proof';
@@ -103,7 +103,7 @@ function SkillChip({ entry, active, onSelect }: { entry: Entry; active: boolean;
   // Nothing on the site backs this one up, so there is nothing to open.
   if (count === 0) {
     return (
-      <span className="rounded-full border border-border/60 px-3 py-1.5 text-sm text-muted-foreground">
+      <span data-unbacked={entry.name} className="rounded-full border border-border/60 px-3 py-1.5 text-sm text-muted-foreground">
         {entry.name}
       </span>
     );
@@ -190,6 +190,7 @@ function ProofLink({ proof, accent }: { proof: Proof; accent: string }) {
   // A thumbnail that fails to load falls back to the icon tile, not a broken image.
   const [imageFailed, setImageFailed] = useState(false);
   const Arrow = proof.external ? ArrowUpRight : ArrowRight;
+  const KindIcon = { role: Briefcase, education: GraduationCap, project: FolderGit2 }[proof.kind];
   const body = (
     <>
       <div className="relative h-11 w-16 shrink-0 overflow-hidden rounded-md border border-border bg-muted">
@@ -205,7 +206,7 @@ function ProofLink({ proof, accent }: { proof: Proof; accent: string }) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center" style={{ color: accent, backgroundColor: `${accent}1f` }}>
-            {proof.kind === 'role' ? <Briefcase className="h-5 w-5" /> : <FolderGit2 className="h-5 w-5" />}
+            <KindIcon className="h-5 w-5" />
           </div>
         )}
       </div>

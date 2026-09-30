@@ -1,13 +1,13 @@
-import { experience, projects } from '@/data/content';
+import { education, experience, projects, thisSite } from '@/data/content';
 import type { SkillItem } from '@/types';
 
 // Turns "I know PostgreSQL" into "here is where I used PostgreSQL", by matching
 // a skill against the `tech` of every visible project and the `stack` of every
-// role. Hidden projects are commented out of `projects`, so they drop out of
+// role and degree. Hidden projects are commented out of `projects`, so they drop out of
 // the proof too, and restoring one brings its skills back with it.
 
 export interface Proof {
-  kind: 'project' | 'role';
+  kind: 'project' | 'role' | 'education';
   title: string;
   subtitle: string;
   href: string;
@@ -56,5 +56,26 @@ export function proofFor(skill: SkillItem): Proof[] {
       };
     });
 
-  return [...roles, ...work];
+  if (uses(thisSite.tech)) {
+    work.push({
+      kind: 'project',
+      title: thisSite.title,
+      subtitle: thisSite.subtitle,
+      href: thisSite.link,
+      external: true,
+    });
+  }
+
+  // Coursework is the weakest evidence, so it is listed last.
+  const study: Proof[] = education
+    .filter((degree) => uses(degree.stack))
+    .map((degree) => ({
+      kind: 'education',
+      title: degree.school.split(',')[0],
+      subtitle: `${degree.degree.split('|')[0].trim()} · coursework`,
+      href: '#experience',
+      external: false,
+    }));
+
+  return [...roles, ...work, ...study];
 }

@@ -63,6 +63,9 @@ export interface Education {
   degree: string;
   period: string;
   description: string;
+  // Skills used in coursework and class projects, cited by the About section's
+  // Toolkit the same way as Experience['stack'].
+  stack?: string[];
 }
 
 export interface Project {
