@@ -20,10 +20,24 @@ export const buildTopicQuestion = (topic: string) =>
 /** Slash commands for INITIAL_SUGGESTION_TOPICS, in the same order. */
 export const TOPIC_COMMANDS = ['/experience', '/skills', '/projects', '/education'] as const;
 
-/** Turns a typed topic command into its canned question; anything else passes through. */
+/** Commands the /ai page offers beyond the four the homepage hero shares. */
+export const EXTRA_COMMANDS = [
+  {
+    command: '/github',
+    label: "What he's building right now, live from GitHub",
+    question: 'What has Rutwik been building lately on GitHub?',
+  },
+  { command: '/blog', label: 'What he writes about', question: 'What has Rutwik written on his blog?' },
+  { command: '/resume', label: 'His résumé', question: "Can I see Rutwik's résumé?" },
+  { command: '/contact', label: 'Get in touch', question: 'How can I contact Rutwik?' },
+] as const;
+
+/** Turns a typed command into its canned question; anything else passes through. */
 export const resolveTopicCommand = (text: string): string => {
-  const index = (TOPIC_COMMANDS as readonly string[]).indexOf(text.trim().toLowerCase());
-  return index === -1 ? text : buildTopicQuestion(INITIAL_SUGGESTION_TOPICS[index]);
+  const typed = text.trim().toLowerCase();
+  const index = (TOPIC_COMMANDS as readonly string[]).indexOf(typed);
+  if (index !== -1) return buildTopicQuestion(INITIAL_SUGGESTION_TOPICS[index]);
+  return EXTRA_COMMANDS.find((c) => c.command === typed)?.question ?? text;
 };
 
 /** Suggestion chips offered after each answer. */
@@ -47,6 +61,10 @@ export const FOLLOW_UP_QUESTIONS = [
   'How can I contact him?',
   'What AI/ML projects has he worked on?',
   'Tell me about his iOS development experience',
+  'What has he been building lately?',
+  'How does Restore Wellness prevent double-booking?',
+  'Walk me through the TalkToData architecture',
+  'What did he learn building cataract detection with XAI?',
 ] as const;
 
 /**
@@ -60,5 +78,6 @@ export function normalizeQuestion(question: string): string {
 /** Every prompt the UI can generate on its own, normalized for lookup. */
 export const CONTEXT_FREE_QUESTIONS: ReadonlySet<string> = new Set([
   ...INITIAL_SUGGESTION_TOPICS.map((t) => normalizeQuestion(buildTopicQuestion(t))),
+  ...EXTRA_COMMANDS.map((c) => normalizeQuestion(c.question)),
   ...FOLLOW_UP_QUESTIONS.map(normalizeQuestion),
 ]);
