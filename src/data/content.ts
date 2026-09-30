@@ -442,6 +442,37 @@ export const projects: Project[] = [
       duration: 30,
     },
   },
+  {
+    title: 'ReachOut (warmreach) - AI Job Outreach',
+    category: 'web development',
+    image: '/videos/reachout.jpg',
+    imageAlt: 'ReachOut (warmreach) - A Next.js app that finds the founder, engineering lead and recruiter at a company you applied to, has Claude write each a personalized email, and lands them as Gmail drafts, by Rutwik Patel',
+    link: 'https://github.com/RutwikPatel13/warmreach',
+    description: 'After you apply for a job, finds the founder, the engineering lead and the recruiter at the company, has Claude write each of them an email grounded in real company facts, tailors your résumé to the job, and lands everything as Gmail drafts. Follows up until someone replies and never emails the same person twice.',
+    tech: ['Next.js', 'TypeScript', 'Claude API', 'Gmail API', 'Apollo'],
+    video: {
+      src: '/videos/reachout.mp4',
+      preview: '/videos/reachout-preview.mp4',
+      poster: '/videos/reachout.jpg',
+      duration: 38,
+    },
+  },
+  {
+    title: 'Music - Personal Music Library',
+    category: 'web development',
+    image: '/videos/music.jpg',
+    imageAlt: 'Music (music.rutwik.dev) - A personal Indian music library built with Next.js and the YouTube IFrame API: curated collections that rotate with the hour, a reorderable queue and your own playlists, by Rutwik Patel',
+    link: 'https://music.rutwik.dev',
+    description: 'My own music app at music.rutwik.dev. Curated Hindi, Gujarati and Indian hip-hop collections that rotate with the hour in India, a queue you can reorder, and playlists built a song at a time or saved from YouTube. It hosts no audio: every song plays through YouTube, so each play counts for the artist. Read-only for visitors.',
+    tech: ['Next.js', 'TypeScript', 'YouTube IFrame API', 'Upstash Redis', 'Capacitor'],
+    hasLiveDemo: true,
+    video: {
+      src: '/videos/music.mp4',
+      preview: '/videos/music-preview.mp4',
+      poster: '/videos/music.jpg',
+      duration: 35,
+    },
+  },
 ];
 
 export const publications: Publication[] = [
