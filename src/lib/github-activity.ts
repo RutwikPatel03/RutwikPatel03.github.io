@@ -8,17 +8,27 @@ const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
 const GITHUB_LOGIN = 'RutwikPatel13';
 
 /** GitHub changes on the scale of hours; an hour keeps the API out of the hot path. */
-const CACHE_KEY = 'chat:github:v2';
+const CACHE_KEY = 'chat:github:v5';
 const CACHE_TTL_SECONDS = 60 * 60;
 
-// Public repos the assistant should not volunteer, matching what the site hides.
+// Public repos the assistant should not volunteer to visitors.
 // TEMPORARILY HIDDEN (2026-08-29): miniredis is off the public site.
-const HIDDEN_REPOS = new Set(['miniredis']);
+// netflix-clone's latest commit is about removing leaked API keys, which is
+// not what a recruiter should see first.
+const HIDDEN_REPOS = new Set(['miniredis', 'netflix-clone']);
+
+// Take-home assignments for a specific company (hiver-challenge,
+// securebank-challenge, healthcare-api-assessment) are not portfolio work.
+const isTakeHome = (name: string) => /-(challenge|assessment)$/i.test(name);
+
+// The profile README repo shares the login's name and holds no code.
+const isHidden = (name: string) =>
+  HIDDEN_REPOS.has(name) || isTakeHome(name) || name === GITHUB_LOGIN;
 
 const RECENT_DAYS = 84;
 const REPO_COUNT = 5;
 /** Fetched with headroom so hidden repos can be dropped and still leave REPO_COUNT. */
-const REPO_FETCH_COUNT = REPO_COUNT + HIDDEN_REPOS.size;
+const REPO_FETCH_COUNT = 20;
 const COMMITS_PER_REPO = 2;
 
 const query = `
@@ -85,7 +95,7 @@ async function fetchFromGitHub(token: string): Promise<GitHubActivity> {
   );
 
   const repos: GitHubRepo[] = (user.repositories.nodes as RepoNode[])
-    .filter((repo) => !HIDDEN_REPOS.has(repo.name))
+    .filter((repo) => !isHidden(repo.name))
     .slice(0, REPO_COUNT)
     .map((repo) => ({
       name: repo.name,
