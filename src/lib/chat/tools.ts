@@ -89,6 +89,13 @@ export function toolLabel(name: ToolName, args: Record<string, unknown>): string
   }
 }
 
+/** The card a call covers in depth, so the UI does not offer it as a follow-up. */
+export function toolSubject(name: ToolName, args: Record<string, unknown>): string | undefined {
+  if (name === 'get_project_details') return `project:${String(args.id ?? '')}`;
+  if (name === 'get_experience_details') return `experience:${String(args.id ?? '')}`;
+  return undefined;
+}
+
 function experienceDetails(id: string): ToolResult {
   const role = findExperience(id);
   if (!role) return { ok: false, content: `No role with id "${id}".`, summary: 'Not found' };

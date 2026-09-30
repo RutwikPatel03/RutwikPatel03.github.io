@@ -1,3 +1,6 @@
+import { experience, projects } from '@/data/content';
+import { experienceId, projectId } from './chat/cards';
+
 // Canned prompts shared by the chat UI and the answer cache.
 //
 // These live here rather than in the component because the server needs to know
@@ -67,6 +70,45 @@ export const FOLLOW_UP_QUESTIONS = [
   'What did he learn building cataract detection with XAI?',
 ] as const;
 
+// Follow-ups that pick up where an answer left off, one per card it showed.
+// A case study invites "how does it work"; a role invites the rest of what he
+// did there. Each names its subject, so it stands on its own and is cacheable.
+
+const shortTitle = (title: string) => title.split(':')[0].replace(/\s*\(.*\)/, '').trim();
+const shortCompany = (company: string) => company.split(',')[0].replace(/ School of Business$/, '');
+
+const CARD_FOLLOW_UPS: ReadonlyMap<string, string> = new Map([
+  ...projects
+    .filter((p) => p.caseStudy)
+    .map((p) => [`project:${projectId(p)}`, `How does ${shortTitle(p.title)} work under the hood?`] as const),
+  ...experience.map((e) => {
+    // USC Marshall appears twice, so a repeated company gets the start year.
+    const company = shortCompany(e.company);
+    const repeated = experience.filter((o) => shortCompany(o.company) === company).length > 1;
+    const year = e.period.match(/\d{4}/)?.[0];
+    const where = repeated && year ? `${company} in ${year}` : company;
+    return [`experience:${experienceId(e)}`, `What else did he do at ${where}?`] as const;
+  }),
+]);
+
+/** The name a question about a card would use, lowercased, e.g. "sigma computing". */
+export const cardSubjectName = (card: string): string | undefined => {
+  const [kind, id] = card.split(':');
+  if (kind === 'project') {
+    const project = projects.find((p) => projectId(p) === id);
+    return project && shortTitle(project.title).toLowerCase();
+  }
+  if (kind === 'experience') {
+    const role = experience.find((e) => experienceId(e) === id);
+    return role && shortCompany(role.company).toLowerCase();
+  }
+  return undefined;
+};
+
+/** Follow-ups for the cards an answer showed, given as `kind:id`. */
+export const followUpsForCards = (cards: string[]): string[] =>
+  cards.map((card) => CARD_FOLLOW_UPS.get(card)).filter((q): q is string => !!q);
+
 /**
  * Strips casing and punctuation so "What's his experience?" and
  * "whats his experience" resolve to the same cache entry.
@@ -80,4 +122,5 @@ export const CONTEXT_FREE_QUESTIONS: ReadonlySet<string> = new Set([
   ...INITIAL_SUGGESTION_TOPICS.map((t) => normalizeQuestion(buildTopicQuestion(t))),
   ...EXTRA_COMMANDS.map((c) => normalizeQuestion(c.question)),
   ...FOLLOW_UP_QUESTIONS.map(normalizeQuestion),
+  ...Array.from(CARD_FOLLOW_UPS.values(), normalizeQuestion),
 ]);
