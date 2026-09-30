@@ -41,6 +41,13 @@ const nextConfig = {
         destination: 'https://music.rutwik.dev/:path*',
         permanent: false,
       },
+      // The radio's case study is gone from this site; send its old link to
+      // the radio itself rather than a 404.
+      {
+        source: '/projects/street-corner-radio',
+        destination: 'https://music.rutwik.dev',
+        permanent: false,
+      },
     ];
   },
 
