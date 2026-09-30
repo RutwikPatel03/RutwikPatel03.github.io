@@ -8,14 +8,21 @@ const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
 const GITHUB_LOGIN = 'RutwikPatel13';
 
 /** GitHub changes on the scale of hours; an hour keeps the API out of the hot path. */
-const CACHE_KEY = 'chat:github:v5';
+const CACHE_KEY = 'chat:github:v7';
 const CACHE_TTL_SECONDS = 60 * 60;
 
 // Public repos the assistant should not volunteer to visitors.
 // TEMPORARILY HIDDEN (2026-08-29): miniredis is off the public site.
+// TEMPORARILY HIDDEN (2026-09-29): so is xbook.
 // netflix-clone's latest commit is about removing leaked API keys, which is
-// not what a recruiter should see first.
-const HIDDEN_REPOS = new Set(['miniredis', 'netflix-clone']);
+// not what a recruiter should see first. magistrala-choovio-pilot is a
+// submission for one company, named unlike the take-homes caught below.
+const HIDDEN_REPOS = new Set([
+  'miniredis',
+  'xbook',
+  'netflix-clone',
+  'magistrala-choovio-pilot',
+]);
 
 // Take-home assignments for a specific company (hiver-challenge,
 // securebank-challenge, healthcare-api-assessment) are not portfolio work.
