@@ -26,17 +26,20 @@ export const skills: Skills = {
   machineLearning: ['PyTorch', 'TensorFlow', 'LangChain', 'RAG Systems', 'OpenAI Embeddings'],
 } as const;
 
-export const skillsWithLevels: SkillCategory[] = [
+// Each skill's "where I used it" list is derived from the projects' `tech` and
+// the roles' `stack` below, so nothing here is a self-rating. A skill nothing
+// backs up still shows, just without a link to proof.
+export const skillCategories: SkillCategory[] = [
   {
-    title: 'Programming Languages',
+    title: 'Languages',
     icon: Code2,
     color: 'text-blue-500',
     skills: [
-      { name: 'Python', level: 92 },
-      { name: 'TypeScript', level: 90 },
-      { name: 'JavaScript', level: 88 },
-      { name: 'C++', level: 82 },
-      { name: 'Go', level: 80 },
+      { name: 'Python' },
+      { name: 'TypeScript' },
+      { name: 'JavaScript' },
+      { name: 'C++', aliases: ['C++17'] },
+      { name: 'Go' },
     ],
   },
   {
@@ -44,11 +47,11 @@ export const skillsWithLevels: SkillCategory[] = [
     icon: Globe,
     color: 'text-purple-500',
     skills: [
-      { name: 'React', level: 92 },
-      { name: 'Next.js', level: 90 },
-      { name: 'Angular', level: 75 },
-      { name: 'Tailwind CSS', level: 90 },
-      { name: 'Redux / Zustand', level: 78 },
+      { name: 'React' },
+      { name: 'Next.js', aliases: ['Next.js 14'] },
+      { name: 'Angular' },
+      { name: 'Tailwind CSS', aliases: ['Tailwind'] },
+      { name: 'Redux / Zustand', aliases: ['Redux', 'Zustand'] },
     ],
   },
   {
@@ -56,11 +59,11 @@ export const skillsWithLevels: SkillCategory[] = [
     icon: Layers,
     color: 'text-green-500',
     skills: [
-      { name: 'Node.js / Express', level: 85 },
-      { name: 'FastAPI', level: 82 },
-      { name: 'Django REST', level: 78 },
-      { name: 'REST APIs', level: 92 },
-      { name: 'Microservices', level: 75 },
+      { name: 'Node.js / Express', aliases: ['Node.js', 'Express', 'Express.js'] },
+      { name: 'FastAPI' },
+      { name: 'Django REST' },
+      { name: 'REST APIs' },
+      { name: 'Microservices' },
     ],
   },
   {
@@ -68,22 +71,22 @@ export const skillsWithLevels: SkillCategory[] = [
     icon: Database,
     color: 'text-orange-500',
     skills: [
-      { name: 'PostgreSQL', level: 88 },
-      { name: 'Redis', level: 82 },
-      { name: 'MongoDB', level: 82 },
-      { name: 'Chroma (Vector DB)', level: 72 },
+      { name: 'PostgreSQL' },
+      { name: 'Redis', aliases: ['Upstash Redis'] },
+      { name: 'MongoDB' },
+      { name: 'Chroma' },
     ],
   },
   {
-    title: 'Cloud & Infrastructure',
+    title: 'Cloud & Infra',
     icon: Cloud,
     color: 'text-cyan-500',
     skills: [
-      { name: 'AWS (EC2, S3, RDS)', level: 84 },
-      { name: 'Docker', level: 85 },
-      { name: 'CI/CD & GitHub Actions', level: 82 },
-      { name: 'Kubernetes', level: 72 },
-      { name: 'Terraform', level: 70 },
+      { name: 'AWS' },
+      { name: 'Docker' },
+      { name: 'CI/CD', aliases: ['GitHub Actions'] },
+      { name: 'Kubernetes' },
+      { name: 'Terraform' },
     ],
   },
   {
@@ -91,11 +94,11 @@ export const skillsWithLevels: SkillCategory[] = [
     icon: Brain,
     color: 'text-pink-500',
     skills: [
-      { name: 'LangChain / RAG', level: 88 },
-      { name: 'PyTorch', level: 80 },
-      { name: 'OpenAI Embeddings', level: 82 },
-      { name: 'TensorFlow', level: 75 },
-      { name: 'Groq / LLM APIs', level: 85 },
+      { name: 'LangChain / RAG', aliases: ['LangChain', 'RAG'] },
+      { name: 'LLM APIs', aliases: ['Groq', 'Groq AI', 'OpenAI'] },
+      { name: 'PyTorch' },
+      { name: 'TensorFlow' },
+      { name: 'OpenAI Embeddings' },
     ],
   },
 ];
@@ -111,6 +114,7 @@ export const experience: Experience[] = [
       'Shipped a React dashboard and chat interface for 30+ researchers, cutting 15+ hours per week of manual review.',
       'Integrated an LLM layer grounding answers in retrieved disclosures with citations to reduce hallucination, plus a feedback loop capturing researcher ratings to refine retrieval accuracy over time.',
     ],
+    stack: ['RAG', 'React', 'LLM APIs'],
   },
   {
     company: 'Sigma Computing, New York, NY',
@@ -137,6 +141,7 @@ export const experience: Experience[] = [
       'Refactored a monolithic backend into modular payment and event services, reducing request latency by 20%.',
       'Containerized and deployed applications on AWS using Docker, EC2, S3, and GitHub Actions CI/CD pipelines.',
     ],
+    stack: ['REST APIs', 'Microservices', 'AWS', 'Docker', 'CI/CD', 'OpenAI'],
     highlights: [
       { text: 'Main Website', link: 'https://www.world-salon.com' },
       { text: 'B2B Platform', link: 'https://b2b.world-salon.com' },
@@ -151,6 +156,7 @@ export const experience: Experience[] = [
       'Modeled normalized PostgreSQL schemas with targeted indexing over 2M+ extracted data points, cutting query latency by 12% and powering fast downstream analytics, semantic retrieval, and reporting.',
       'Parallelized PDF extraction with multithreading, cutting processing time 30% over the prior sequential pipeline.',
     ],
+    stack: ['PostgreSQL'],
   },
 ];
 
