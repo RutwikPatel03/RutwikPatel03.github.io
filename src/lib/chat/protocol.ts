@@ -42,6 +42,8 @@ export type ChatEvent =
       status: 'running' | 'done' | 'error';
       /** One line on what came back, once the call has finished. */
       summary?: string;
+      /** The card this call covered in depth, e.g. `project:restore-wellness`. */
+      subject?: string;
     }
   | { type: 'github'; activity: GitHubActivity }
   | { type: 'error'; message: string }
@@ -57,10 +59,12 @@ export type MessagePart =
       label: string;
       status: 'running' | 'done' | 'error';
       summary?: string;
+      subject?: string;
     };
 
 // Cards are placed by the model with a tag on its own line, like
-// [[project:restore-wellness]]. A tag costs a handful of tokens where a tool
+// [[project:restore-wellness]]. The GitHub card is the exception: it follows
+// the tool call that fetched its data, with or without a tag. A tag costs a handful of tokens where a tool
 // call costs a second model round, which matters on an 8K tokens/minute budget.
 export const CARD_KINDS = ['project', 'experience', 'blog', 'resume', 'contact', 'github'] as const;
 export type CardKind = (typeof CARD_KINDS)[number];
