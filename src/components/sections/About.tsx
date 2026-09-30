@@ -3,8 +3,7 @@
 import { motion } from 'motion/react';
 import { BentoGrid, BentoCard, BentoCardHeader, BentoCardTitle, BentoCardDescription, BentoCardContent } from '@/components/ui/BentoGrid';
 import GitHubActivity from '@/components/ui/GitHubActivity';
-import SkillBar from '@/components/ui/SkillBar';
-import { skillsWithLevels } from '@/data/content';
+import SkillProof from '@/components/ui/SkillProof';
 
 const stats = [
   // TEMPORARILY HIDDEN (2026-08-29): miniredis is off the public site for now.
@@ -79,33 +78,8 @@ export default function About() {
           {/* GitHub Activity Card */}
           <GitHubActivity />
 
-          {/* Skills Cards */}
-          {skillsWithLevels.map((category) => (
-            <BentoCard key={category.title}>
-              <BentoCardHeader className="flex flex-row items-center gap-2 mb-3">
-                <category.icon className={`w-5 h-5 ${category.color}`} />
-                <BentoCardTitle>{category.title}</BentoCardTitle>
-              </BentoCardHeader>
-              <BentoCardContent>
-                <div className="space-y-3">
-                  {category.skills.map((skill, i) => (
-                    <SkillBar
-                      key={skill.name}
-                      name={skill.name}
-                      level={skill.level}
-                      color={category.color}
-                      delay={i * 0.08}
-                    />
-                  ))}
-                </div>
-              </BentoCardContent>
-            </BentoCard>
-          ))}
+          <SkillProof />
         </BentoGrid>
-
-        <p className="mt-6 text-center text-xs text-muted-foreground/60 italic">
-          * Proficiency levels are AI-estimated based on project experience, internship work, and research contributions.
-        </p>
       </div>
     </section>
   );

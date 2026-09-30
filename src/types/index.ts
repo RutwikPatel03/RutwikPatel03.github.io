@@ -30,7 +30,9 @@ export interface Skills {
 
 export interface SkillItem {
   name: string;
-  level: number; // 0–100
+  // Other spellings of this skill in a project's `tech` or a role's `stack`,
+  // e.g. 'Tailwind' for 'Tailwind CSS'. Matching is case-insensitive.
+  aliases?: string[];
 }
 
 export interface SkillCategory {
@@ -51,6 +53,9 @@ export interface Experience {
   period: string;
   description: string[];
   highlights?: ExperienceHighlight[];
+  // Skills this role used, named as in skillCategories (or an alias). The About
+  // section cites the role as proof, so only list what was really used there.
+  stack?: string[];
 }
 
 export interface Education {
@@ -58,6 +63,9 @@ export interface Education {
   degree: string;
   period: string;
   description: string;
+  // Skills used in coursework and class projects, cited by the About section's
+  // Toolkit the same way as Experience['stack'].
+  stack?: string[];
 }
 
 export interface Project {
