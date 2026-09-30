@@ -42,14 +42,14 @@ export default function About() {
             </BentoCardHeader>
             <BentoCardContent>
               <BentoCardDescription className="text-sm sm:text-base leading-relaxed">
-                I&apos;m a Software Engineer and USC Master&apos;s graduate who works close to the systems layer — backend services, infrastructure, and applied AI — and enjoys making complex things fast and reliable.
+                I&apos;m a Software Engineer and USC Master&apos;s graduate who works close to the systems layer (backend services, infrastructure, and applied AI) and enjoys making complex things fast and reliable.
                 <br /><br />
                 At Sigma Computing I shipped four production features used by 60+ enterprise organizations, and optimized rendering of large data grids with memoization and virtualization. At World Salon I refactored a monolithic backend into modular payment and event services (cutting request latency by 20%), built OpenAI-powered pipelines that processed 58,000+ profiles end-to-end, and containerized and deployed everything on AWS with Docker, EC2, S3, and GitHub Actions.
                 <br /><br />
                 As a Research Assistant at USC Marshall, I engineered fault-tolerant ETL pipelines and RAG semantic-search systems over 500GB+ of sustainability disclosures, indexing 2M+ data points in PostgreSQL for 30+ researchers.
                 <br /><br />
                 {/* TEMPORARILY HIDDEN (2026-08-29): miniredis paragraph. Restore with:
-                For fun and depth, I build systems from scratch — like <span className="font-medium text-foreground">miniredis</span>, a Redis-compatible in-memory store written in C++17 with a non-blocking epoll/kqueue reactor and a hand-written skip list, reaching 984K+ ops/sec.
+                For fun and depth, I build systems from scratch, like <span className="font-medium text-foreground">miniredis</span>, a Redis-compatible in-memory store written in C++17 with a non-blocking epoll/kqueue reactor and a hand-written skip list, reaching 984K+ ops/sec.
                 <br /><br /> */}
                 I&apos;m open to full-time roles in Software, Infrastructure, Backend, and AI Engineering. Happy to connect with engineers, founders, and recruiters.
               </BentoCardDescription>

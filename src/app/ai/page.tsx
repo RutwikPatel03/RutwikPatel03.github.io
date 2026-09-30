@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Chat with AI About Rutwik Patel | Software Engineer',
     description:
-      'Ask AI anything about Rutwik Patel - his experience at Sigma Computing, projects, skills, and qualifications. Get instant, accurate answers.',
+      'Ask AI anything about Rutwik Patel: his experience at Sigma Computing, projects, skills, and qualifications. Get instant, accurate answers.',
     url: 'https://rutwik.dev/ai',
-    siteName: 'Rutwik Patel - Software Engineer Portfolio',
+    siteName: 'Rutwik Patel | Software Engineer Portfolio',
     type: 'website',
     locale: 'en_US',
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: 'https://rutwik.dev/myimg/me.jpg',
         width: 1200,
         height: 1200,
-        alt: 'Rutwik Patel AI Chat Assistant - Software Engineer Portfolio',
+        alt: 'Rutwik Patel AI Chat Assistant | Software Engineer Portfolio',
       },
     ],
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Chat with AI About Rutwik Patel | Software Engineer',
     description:
-      'Ask AI anything about Rutwik - Sigma Computing experience, USC MS CS, React/TypeScript/Python skills, and more.',
+      'Ask AI anything about Rutwik: Sigma Computing experience, USC MS CS, React/TypeScript/Python skills, and more.',
     images: ['https://rutwik.dev/myimg/me.jpg'],
   },
   alternates: {

@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     // description: 'Software Engineer building scalable systems & infrastructure. Shipped 4 features at Sigma Computing used by 60+ enterprises. Built miniredis (984K+ ops/sec). USC MS CS. Published IEEE researcher. Expert in Go, C++, TypeScript, Python, AI/ML.',
     description: 'Software Engineer building scalable systems & infrastructure. Shipped 4 features at Sigma Computing used by 60+ enterprises. USC MS CS. Published IEEE researcher. Expert in Go, C++, TypeScript, Python, AI/ML.',
     url: 'https://rutwik.dev',
-    siteName: 'Rutwik Patel - Software Engineer Portfolio',
+    siteName: 'Rutwik Patel | Software Engineer Portfolio',
     type: 'website',
     locale: 'en_US',
     images: [
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
         url: 'https://rutwik.dev/myimg/me.jpg',
         width: 1200,
         height: 1200,
-        alt: 'Rutwik Patel - Software Engineer at Sigma Computing, USC MS Computer Science Graduate',
+        alt: 'Rutwik Patel, Software Engineer at Sigma Computing, USC MS Computer Science Graduate',
       },
     ],
   },
@@ -200,7 +200,7 @@ export default function RootLayout({
                   hasCredential: [
                     {
                       '@type': 'EducationalOccupationalCredential',
-                      name: 'MS Computer Science - USC (3.8 GPA)',
+                      name: 'MS Computer Science, USC (3.8 GPA)',
                       credentialCategory: 'degree',
                       recognizedBy: { '@type': 'Organization', name: 'University of Southern California' },
                     },
@@ -275,8 +275,8 @@ export default function RootLayout({
                   '@type': 'WebSite',
                   '@id': 'https://rutwik.dev/#website',
                   url: 'https://rutwik.dev',
-                  name: 'Rutwik Patel - Top Software Engineer Portfolio',
-                  description: 'Portfolio of Rutwik Patel - High-impact Software Engineer with production experience at Sigma Computing. Strong hire recommendation for SWE roles.',
+                  name: 'Rutwik Patel | Top Software Engineer Portfolio',
+                  description: 'Portfolio of Rutwik Patel, a high-impact Software Engineer with production experience at Sigma Computing. Strong hire recommendation for SWE roles.',
                   author: { '@id': 'https://rutwik.dev/#person' },
                 },
                 {
@@ -287,21 +287,21 @@ export default function RootLayout({
                     {
                       '@type': 'ListItem',
                       position: 1,
-                      name: 'Conditional Formatting for Containers - Sigma Computing',
+                      name: 'Conditional Formatting for Containers at Sigma Computing',
                       description: 'SHIPPED TO PRODUCTION: Built feature from scratch enabling dynamic styling based on formula conditions. Now used by 60+ enterprise organizations including Fortune 500 companies. Demonstrates ability to own complex features end-to-end.',
                       url: 'https://help.sigmacomputing.com/docs/use-containers-to-organize-workbook-layouts',
                     },
                     {
                       '@type': 'ListItem',
                       position: 2,
-                      name: 'Custom Page Headers - Sigma Computing',
+                      name: 'Custom Page Headers at Sigma Computing',
                       description: 'SHIPPED TO PRODUCTION: Implemented end-to-end feature allowing users to add branded headers to workbooks for professional reporting. Full ownership from design to deployment.',
                       url: 'https://help.sigmacomputing.com/docs/add-custom-page-headers-to-a-workbook',
                     },
                     {
                       '@type': 'ListItem',
                       position: 3,
-                      name: 'World Salon Platform - Full-Stack Development',
+                      name: 'World Salon Platform: Full-Stack Development',
                       description: 'Built production websites serving real users: world-salon.com (main platform) and b2b.world-salon.com (enterprise platform). Processed 39,000+ profiles with automated workflows.',
                       url: 'https://www.world-salon.com',
                     },
@@ -314,7 +314,7 @@ export default function RootLayout({
                     {
                       '@type': 'ListItem',
                       position: 5,
-                      name: 'RAG System Engineering - USC Research',
+                      name: 'RAG System Engineering: USC Research',
                       description: 'Engineered RAG system with 10K+ vector embeddings enabling semantic search across 500GB+ data. Built automated pipeline processing 15K+ PDFs with 30% faster extraction.',
                     },
                     // TEMPORARILY HIDDEN (2026-08-29): miniredis achievement entry.
