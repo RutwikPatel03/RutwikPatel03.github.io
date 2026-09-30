@@ -252,6 +252,12 @@ export const projects: Project[] = [
       'Row Level Security is worth the upfront effort because it makes the database the source of truth for authorization, so a missed client-side check can\'t leak another user\'s data',
       'Pushing every payment and email call into Supabase edge functions kept Stripe and Resend secrets off the device entirely, which the client app has no business holding',
     ],
+    video: {
+      src: '/videos/restore-wellness.mp4',
+      preview: '/videos/restore-wellness-preview.mp4',
+      poster: '/videos/restore-wellness.jpg',
+      duration: 35,
+    },
   },
   // TEMPORARILY HIDDEN (2026-08-29): Street-Corner Radio is pulled from the
   // public projects list while /radio is kept out of search. Uncomment the
@@ -321,12 +327,18 @@ export const projects: Project[] = [
   {
     title: 'TalkToData - Natural Language SQL',
     category: 'web development',
-    image: '/myimg/Project_TalkToData.png',
+    image: '/myimg/Project_TalkToData.jpg',
     imageAlt: 'TalkToData - AI-powered SQL query interface converting natural language to SQL, supporting PostgreSQL, MySQL, SQLite, SQL Server, and MongoDB by Rutwik Patel',
     link: 'https://talktodata.vercel.app/',
     description: 'AI-powered SQL query interface that converts plain English to SQL. Supports PostgreSQL, MySQL, SQLite, SQL Server, and MongoDB with AI-driven query explanations and error fixing.',
     tech: ['Next.js', 'TypeScript', 'Groq AI', 'Tailwind'],
     hasLiveDemo: true,
+    video: {
+      src: '/videos/talk-to-data.mp4',
+      preview: '/videos/talk-to-data-preview.mp4',
+      poster: '/videos/talk-to-data.jpg',
+      duration: 34,
+    },
     slug: 'talk-to-data',
     caseStudy: true,
     challenge: 'Non-technical users need database insights but SQL is a barrier. Existing solutions are expensive (Text-to-SQL SaaS tools) or require complex setup. The goal was a lightweight, self-service tool that handles the 5 most common database dialects with zero configuration.',
@@ -346,21 +358,27 @@ export const projects: Project[] = [
     ],
   },
   {
-    title: 'RoomReserve - Hotel Booking API',
+    title: 'RoomReserve (AirbnbLite) - Hotel Booking API',
     category: 'web development',
     image: '/myimg/Project_Airbnb-Lite.png',
-    imageAlt: 'RoomReserve API - Full-featured hotel booking backend with FastAPI, PostgreSQL, JWT auth, room management, and payment integration by Rutwik Patel',
+    imageAlt: 'RoomReserve (AirbnbLite) API - Full-featured hotel booking backend with FastAPI, PostgreSQL, JWT auth, room management, and payment integration by Rutwik Patel',
     link: 'https://airbnblite-api.onrender.com/api/v1/docs',
-    description: 'Full-featured hotel booking backend API with user authentication, hotel/room management, booking lifecycle, and mock payment integration — 20+ REST endpoints on a normalized relational schema with concurrency-safe double-booking prevention.',
+    description: 'Full-featured hotel booking backend API with user authentication, hotel/room management, booking lifecycle, and mock payment integration — 37 REST endpoints on a normalized relational schema with concurrency-safe double-booking prevention.',
     tech: ['FastAPI', 'PostgreSQL', 'SQLAlchemy', 'JWT'],
     hasLiveDemo: true,
+    video: {
+      src: '/videos/roomreserve.mp4',
+      preview: '/videos/roomreserve-preview.mp4',
+      poster: '/videos/roomreserve.jpg',
+      duration: 38,
+    },
     slug: 'roomreserve',
     caseStudy: true,
     challenge: 'A hotel booking system has tricky consistency requirements: two users booking the same room at the same time must not both succeed. Building this correctly — with proper auth, availability windows, and payment flow — from scratch is a systems design exercise that surfaces real database and API design decisions.',
-    solution: 'Designed a layered FastAPI backend with 20+ REST endpoints: route handlers → service layer → SQLAlchemy repository. Booking conflicts are prevented using database-level row locking (SELECT FOR UPDATE) inside a transaction, ensuring only one booking can claim a room for overlapping dates. JWT tokens (access + refresh) handle auth with role-based access control. Auto-generated OpenAPI docs via FastAPI serve as live documentation.',
+    solution: 'Designed a layered FastAPI backend with 37 REST endpoints: route handlers → service layer → SQLAlchemy repository. Booking conflicts are prevented using database-level row locking (SELECT FOR UPDATE) inside a transaction, ensuring only one booking can claim a room for overlapping dates. JWT tokens (access + refresh) handle auth with role-based access control. Auto-generated OpenAPI docs via FastAPI serve as live documentation.',
     architecture: 'FastAPI routers → Pydantic schemas for validation → Service layer for business logic → SQLAlchemy ORM with PostgreSQL → Alembic for migrations. JWT auth middleware with role-based access control. Row-level locking for booking conflict prevention. Mock Stripe integration in the payment service layer.',
     impact: [
-      'Live Swagger UI with 20+ REST endpoints — fully interactive documentation',
+      'Live Swagger UI with 37 REST endpoints — fully interactive documentation',
       'Zero double-booking bugs: row-level locking prevents race conditions under concurrent load',
       'Full booking lifecycle: search → reserve → pay → cancel with status transitions',
       'Role-based access control separates guest, host, and admin capabilities',
@@ -382,6 +400,12 @@ export const projects: Project[] = [
     description: 'Full-stack stock trading platform with real-time data from Finnhub and Polygon APIs. Features portfolio management, watchlists, and interactive charts with responsive Angular Material design.',
     tech: ['Angular', 'Express', 'MongoDB', 'GCP'],
     hasLiveDemo: true,
+    video: {
+      src: '/videos/stock-insight.mp4',
+      preview: '/videos/stock-insight-preview.mp4',
+      poster: '/videos/stock-insight.jpg',
+      duration: 35,
+    },
   },
   {
     title: 'World Salon Website',
@@ -392,6 +416,12 @@ export const projects: Project[] = [
     description: 'Built during my internship at World Salon. Event creation platform with JWT authentication, role-based access control, and integrated payment workflows.',
     tech: ['React', 'Node.js', 'MongoDB', 'AWS'],
     hasLiveDemo: true,
+    video: {
+      src: '/videos/world-salon.mp4',
+      preview: '/videos/world-salon-preview.mp4',
+      poster: '/videos/world-salon.jpg',
+      duration: 35,
+    },
   },
   // Other projects
   {
@@ -403,7 +433,17 @@ export const projects: Project[] = [
     description: 'Led team of 3 to develop CNN-based cataract detection system achieving 97% accuracy with explainable AI integration. Integrated GradCAM for visualizing model decisions.',
     tech: ['Streamlit', 'Python', 'PyTorch', 'CNN', 'GradCAM'],
     hasLiveDemo: true,
+    video: {
+      src: '/videos/cataract.mp4',
+      preview: '/videos/cataract-preview.mp4',
+      poster: '/videos/cataract.jpg',
+      duration: 38,
+    },
   },
+  // TEMPORARILY HIDDEN (2026-09-29): Fake News Detection and XBook are pulled
+  // from the public projects list for now. Uncomment the block below to
+  // restore both cards.
+  /*
   {
     title: 'Fake News Detection',
     category: 'data science',
@@ -421,6 +461,7 @@ export const projects: Project[] = [
     description: 'Platform for buying and selling second-hand books.',
     tech: ['Web Development'],
   },
+  */
   {
     title: 'Stock Insight Application (iOS)',
     category: 'ios',
@@ -429,6 +470,12 @@ export const projects: Project[] = [
     link: 'https://www.youtube.com/watch?v=ePcyn-KFkc0',
     description: 'Complementary iOS app built in Swift replicating core web features for seamless cross-platform experience.',
     tech: ['Swift', 'iOS'],
+    video: {
+      src: '/videos/stock-insight-ios.mp4',
+      preview: '/videos/stock-insight-ios-preview.mp4',
+      poster: '/videos/stock-insight-ios.jpg',
+      duration: 30,
+    },
   },
 ];
 

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ExternalLink, CheckCircle, Lightbulb, Zap, Code2 } from 'lucide-react';
 import { projects } from '@/data/content';
 import { Badge } from '@/components/ui/Badge';
+import { CaseStudyVideo } from './CaseStudyVideo';
 
 interface Props {
   params: { slug: string };
@@ -52,6 +53,16 @@ export default function ProjectCaseStudy({ params }: Props) {
   const project = getProject(params.slug);
   if (!project) notFound();
 
+  const liveBadge = (project.hasLiveDemo || project.isLive) && (
+    <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30">
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+      </span>
+      <span className="text-xs font-medium text-emerald-400">Live</span>
+    </div>
+  );
+
   return (
     <main id="main-content" className="min-h-screen bg-background py-24 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
@@ -66,22 +77,25 @@ export default function ProjectCaseStudy({ params }: Props) {
 
         {/* Hero */}
         <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-border mb-8">
-          <Image
-            src={getHeroImage(project)}
-            alt={project.imageAlt || project.title}
-            fill
-            className="object-cover"
-            priority
-            unoptimized={(project.hasLiveDemo && !!project.link) || project.image.endsWith('.svg')}
-          />
-          {(project.hasLiveDemo || project.isLive) && (
-            <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-sm border border-emerald-500/30">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              <span className="text-xs font-medium text-emerald-400">Live</span>
-            </div>
+          {project.video ? (
+            <CaseStudyVideo
+              video={project.video}
+              alt={project.imageAlt || project.title}
+              trackingId={project.slug || project.title}
+              badge={liveBadge}
+            />
+          ) : (
+            <>
+              <Image
+                src={getHeroImage(project)}
+                alt={project.imageAlt || project.title}
+                fill
+                className="object-cover"
+                priority
+                unoptimized={(project.hasLiveDemo && !!project.link) || project.image.endsWith('.svg')}
+              />
+              {liveBadge}
+            </>
           )}
         </div>
 

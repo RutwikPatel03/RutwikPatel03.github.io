@@ -1,11 +1,13 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { Eye, BookOpen } from 'lucide-react';
+import { VideoLightbox } from '@/components/ui/VideoLightbox';
+import { Eye, BookOpen, Play } from 'lucide-react';
 import { track } from '@/lib/analytics-client';
 import type { Project } from '@/types';
 
@@ -26,22 +28,64 @@ function getLiveScreenshotUrl(url: string): string {
   return `https://api.microlink.io/?${params.toString()}`;
 }
 
+function formatDuration(seconds: number): string {
+  return `${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
+}
+
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
-  // Use live screenshot for projects with hasLiveDemo and a valid link
-  const imageSrc = project.hasLiveDemo && project.link
-    ? getLiveScreenshotUrl(project.link)
-    : project.image;
+  const { video } = project;
+  const useLiveScreenshot = !video && project.hasLiveDemo && !!project.link;
+
+  // A video's poster wins over the live screenshot; otherwise use the live
+  // screenshot for projects with hasLiveDemo and a valid link.
+  const imageSrc = video
+    ? video.poster
+    : useLiveScreenshot
+      ? getLiveScreenshotUrl(project.link!)
+      : project.image;
 
   // SVGs (e.g. the miniredis thumbnail) and live microlink screenshots bypass
   // the Next.js image optimizer — SVGs can't be re-encoded by it.
-  const isUnoptimized = (project.hasLiveDemo && !!project.link) || imageSrc.endsWith('.svg');
+  const isUnoptimized = useLiveScreenshot || imageSrc.endsWith('.svg');
 
   // Not every project has a case-study slug, so the title is the fallback
   // dimension; the ingest route lowercases and slugifies whatever arrives.
   const trackingId = project.slug || project.title;
 
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
+
+  // The preview loop plays whenever the card is on screen, and pauses off it
+  // so a page of cards is not decoding video nobody can see. Reduced motion
+  // keeps the poster still.
+  const previewRef = useRef<HTMLVideoElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [previewPlaying, setPreviewPlaying] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const previewEnabled = !!video && !reduceMotion;
+
+  useEffect(() => {
+    const preview = previewRef.current;
+    if (!previewEnabled || !preview || !cardRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // play() rejects if a pause lands before it resolves, which is
+        // expected when a card is scrolled straight past.
+        if (entry.isIntersecting) preview.play().catch(() => {});
+        else preview.pause();
+      },
+      { threshold: 0.25 }
+    );
+    observer.observe(cardRef.current);
+    return () => {
+      observer.disconnect();
+      preview.pause();
+    };
+  }, [previewEnabled]);
+
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -69,6 +113,22 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           quality={80}
           unoptimized={isUnoptimized}
         />
+        {previewEnabled && (
+          <video
+            ref={previewRef}
+            src={video.preview}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden="true"
+            onPlaying={() => setPreviewPlaying(true)}
+            onPause={() => setPreviewPlaying(false)}
+            className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-300 group-hover:scale-105 ${
+              previewPlaying ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
           {project.link && (
@@ -96,7 +156,31 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </Link>
           )}
         </div>
+        {video && (
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            aria-label={`Watch the ${project.title} video, ${formatDuration(video.duration)}`}
+            className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-neutral-900 shadow-lg shadow-black/30 ring-1 ring-black/5 transition-transform hover:scale-105 active:scale-95"
+          >
+            <Play className="w-3.5 h-3.5 fill-current" />
+            Watch
+            <span className="font-normal text-neutral-500 tabular-nums">
+              {formatDuration(video.duration)}
+            </span>
+          </button>
+        )}
       </div>
+
+      {video && (
+        <VideoLightbox
+          open={lightboxOpen}
+          onClose={closeLightbox}
+          video={video}
+          title={project.title}
+          trackingId={trackingId}
+        />
+      )}
 
       {/* Project Info */}
       <div className="p-3 sm:p-4">

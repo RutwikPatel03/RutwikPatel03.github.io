@@ -80,6 +80,10 @@ export interface Project {
   // Shows the "Live" badge without swapping the thumbnail for a microlink
   // screenshot. Used for App Store / native apps whose image is a custom graphic.
   isLive?: boolean;
+  // A launch video. When present, its poster replaces the live screenshot on
+  // the card and the case study, since a frame of the video is a better
+  // thumbnail than whatever the live site happens to render.
+  video?: ProjectVideo;
   // Case study fields
   slug?: string;
   caseStudy?: boolean;
@@ -88,6 +92,16 @@ export interface Project {
   architecture?: string;
   impact?: string[];
   lessons?: string[];
+}
+
+export interface ProjectVideo {
+  /** The full video, with sound. */
+  src: string;
+  /** A few silent seconds that loop on the card. */
+  preview: string;
+  poster: string;
+  /** In seconds, for the label on the play button. */
+  duration: number;
 }
 
 export interface Publication {

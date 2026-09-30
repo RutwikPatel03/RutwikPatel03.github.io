@@ -197,6 +197,7 @@ export interface AnalyticsSnapshot {
   topPaths: Ranked[];
   topReferrers: Ranked[];
   topProjects: Ranked[];
+  topVideos: Ranked[];
   topSections: Ranked[];
   topCommands: Ranked[];
   topQuestions: Ranked[];
@@ -234,6 +235,7 @@ function mergeRanked(lists: Ranked[][], limit: number): Ranked[] {
 /** The per-event sorted sets worth ranking, in snapshot field order. */
 const RANKED_EVENT_PROPS = [
   'project_open',
+  'project_video',
   'section_view',
   'command_selected',
   'scroll_depth',
@@ -317,6 +319,7 @@ async function buildSnapshot(days: number): Promise<AnalyticsSnapshot> {
     topPaths: mergeRanked(pathLists, TOP_N),
     topReferrers: mergeRanked(referrerLists, TOP_N),
     topProjects: mergeRanked(propLists.project_open, TOP_N),
+    topVideos: mergeRanked(propLists.project_video, TOP_N),
     topSections: mergeRanked(propLists.section_view, TOP_N),
     topCommands: mergeRanked(propLists.command_selected, TOP_N),
     topQuestions: mergeRanked(questionLists, TOP_N),
