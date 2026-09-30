@@ -5,8 +5,9 @@ import { ArrowLeft } from 'lucide-react';
 import ChatInterface from '@/components/chat/ChatInterface';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import { useVisualViewport } from '@/hooks';
+import type { PostMeta } from '@/lib/blog';
 
-export default function AIPageClient() {
+export default function AIPageClient({ posts }: { posts: PostMeta[] }) {
   const viewport = useVisualViewport();
 
   return (
@@ -43,7 +44,7 @@ export default function AIPageClient() {
       </header>
 
       {/* Chat Interface */}
-      <ChatInterface />
+      <ChatInterface posts={posts} />
     </div>
   );
 }

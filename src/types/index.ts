@@ -7,15 +7,6 @@ import type React from 'react';
 export type PageType = 'About' | 'ExperienceEducation' | 'Portfolio' | 'Publication' | 'Blog' | 'Contact';
 
 // ===========================================
-// Chat Types
-// ===========================================
-
-export interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
-// ===========================================
 // Content Types
 // ===========================================
 

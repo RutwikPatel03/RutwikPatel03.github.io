@@ -95,7 +95,7 @@ export const skillCategories: SkillCategory[] = [
     color: 'text-pink-500',
     skills: [
       { name: 'LangChain / RAG', aliases: ['LangChain', 'RAG'] },
-      { name: 'LLM APIs', aliases: ['Groq', 'Groq AI', 'OpenAI'] },
+      { name: 'LLM APIs', aliases: ['Gemini', 'Groq', 'Groq AI', 'OpenAI'] },
       { name: 'PyTorch' },
       { name: 'TensorFlow' },
       { name: 'OpenAI Embeddings' },
@@ -107,9 +107,9 @@ export const skillCategories: SkillCategory[] = [
 // stack it runs on. Keep `tech` in step with package.json.
 export const thisSite = {
   title: 'This portfolio',
-  subtitle: 'Next.js site with Redis-backed analytics and an LLM chat assistant',
+  subtitle: 'Next.js site with Redis-backed analytics and an AI agent that answers with live cards',
   link: 'https://github.com/RutwikPatel03/RutwikPatel03.github.io',
-  tech: ['Next.js', 'React', 'TypeScript', 'Tailwind', 'Upstash Redis', 'Groq'],
+  tech: ['Next.js', 'React', 'TypeScript', 'Tailwind', 'Upstash Redis', 'Gemini', 'Groq'],
 };
 
 export const experience: Experience[] = [

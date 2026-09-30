@@ -1,6 +1,7 @@
 import { createHash } from 'crypto';
 import { redis } from './redis';
 import { CONTEXT_FREE_QUESTIONS, normalizeQuestion } from './chat-prompts';
+import type { MessagePart } from './chat/protocol';
 
 // Groq's free tier reserves `prompt + max_tokens` against an 8K tokens/minute
 // budget, and that budget is per organization rather than per visitor. With a
@@ -45,17 +46,26 @@ export function cacheKey(fingerprint: string, message: string): string {
   return `chat:answer:${digest}`;
 }
 
+/**
+ * A whole assistant turn: its text and the tool calls it made along the way,
+ * so a cached answer replays with the same transcript as the original.
+ */
+export interface CachedReply {
+  parts: MessagePart[];
+}
+
 /** Redis being unavailable must never take the chat down; we just pay for a call. */
-export async function readCachedReply(key: string): Promise<string | null> {
+export async function readCachedReply(key: string): Promise<CachedReply | null> {
   try {
-    return await redis.get<string>(key);
+    const cached = await redis.get<CachedReply>(key);
+    return Array.isArray(cached?.parts) ? cached : null;
   } catch (error) {
     console.error('Chat cache read failed, falling through to Groq:', error);
     return null;
   }
 }
 
-export async function writeCachedReply(key: string, reply: string): Promise<void> {
+export async function writeCachedReply(key: string, reply: CachedReply): Promise<void> {
   try {
     await redis.set(key, reply, { ex: CACHE_TTL_SECONDS });
   } catch (error) {

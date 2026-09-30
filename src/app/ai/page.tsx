@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getAllPosts } from '@/lib/blog';
 import AIPageClient from './AIPageClient';
 
 export const metadata: Metadata = {
@@ -86,7 +87,9 @@ const jsonLd = {
     'Learn about technical skills (React, TypeScript, Python, Go)',
     'Explore projects and publications',
     'Get information about education and qualifications',
-    'Instant AI-powered responses',
+    'Plays project launch videos and shows case studies inline',
+    'Reads his blog posts and live GitHub activity',
+    'Streaming AI-powered responses',
   ],
 };
 
@@ -97,7 +100,7 @@ export default function AIPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <AIPageClient />
+      <AIPageClient posts={getAllPosts()} />
     </>
   );
 }
