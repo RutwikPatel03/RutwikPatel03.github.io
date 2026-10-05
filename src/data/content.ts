@@ -389,6 +389,22 @@ export const projects: Project[] = [
     },
   },
   // Other projects
+  // The opening sentence names it a personal rebuild because the chat assistant
+  // reads only that far, and must not credit it to the USC Marshall role.
+  {
+    title: 'ESG Report Search: Cited Answers from Sustainability Reports',
+    category: 'data science',
+    image: '/videos/esg-report-search.jpg',
+    imageAlt: 'ESG Report Search, a RAG app that answers questions about S&P 1500 sustainability reports and cites the report page behind each fact, built with Python, FastAPI, Postgres + pgvector and React by Rutwik Patel',
+    description: 'A personal project that rebuilds my USC Marshall research pipeline: ask S&P 1500 sustainability reports a question and get an answer citing the exact page each fact came from. Hybrid keyword and vector search with a reranker runs over 289 reports (27,928 passages), and a checker removes any citation the model makes up before the answer is shown. Retrieval is measured against 50 hand-labelled questions.',
+    tech: ['Python', 'FastAPI', 'PostgreSQL', 'pgvector', 'RAG', 'React', 'TypeScript', 'Docker'],
+    video: {
+      src: '/videos/esg-report-search.mp4',
+      preview: '/videos/esg-report-search-preview.mp4',
+      poster: '/videos/esg-report-search.jpg',
+      duration: 22,
+    },
+  },
   {
     title: 'Cataract Detection with Explainable AI (XAI)',
     category: 'data science',
