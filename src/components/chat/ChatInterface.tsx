@@ -8,10 +8,13 @@ import {
   INITIAL_SUGGESTION_TOPICS,
   TOPIC_COMMANDS,
   buildTopicQuestion,
+  cardSubjectName,
+  followUpsForCards,
+  normalizeQuestion,
   resolveTopicCommand,
 } from '@/lib/chat-prompts';
 import { ChatHttpError, streamChat } from '@/lib/chat/client';
-import type { ChatEvent, GitHubActivity, MessagePart } from '@/lib/chat/protocol';
+import { CARD_TAG, type ChatEvent, type GitHubActivity, type MessagePart } from '@/lib/chat/protocol';
 import type { PostMeta } from '@/lib/blog';
 import { track } from '@/lib/analytics-client';
 import { ACCENT, AssistantMessage, plainText, useSpinner } from './AssistantMessage';
@@ -63,8 +66,8 @@ function applyEvent(turn: AssistantTurn, event: ChatEvent): AssistantTurn {
       return { ...turn, parts };
     }
     case 'tool': {
-      const { id, name, label, status, summary } = event;
-      const part: MessagePart = { kind: 'tool', id, name, label, status, summary };
+      const { id, name, label, status, summary, subject } = event;
+      const part: MessagePart = { kind: 'tool', id, name, label, status, summary, subject };
       const index = turn.parts.findIndex((p) => p.kind === 'tool' && p.id === id);
       const parts =
         index === -1 ? [...turn.parts, part] : turn.parts.map((p, i) => (i === index ? part : p));
@@ -136,11 +139,27 @@ export default function ChatInterface({ posts }: { posts: PostMeta[] }) {
   const last = messages[messages.length - 1];
   const lastAnswered = !isLoading && last?.role === 'assistant' && last.status === 'done';
 
+  // Follow-ups about what the answer just showed come first; general ones fill
+  // the rest. Nothing is picked while an answer is still streaming.
   useEffect(() => {
-    if (!lastAnswered) return;
-    const available = FOLLOW_UP_QUESTIONS.filter((s) => !usedSuggestions.has(s));
-    setCurrentSuggestions([...available].sort(() => Math.random() - 0.5).slice(0, 3));
-  }, [lastAnswered, usedSuggestions]);
+    if (!lastAnswered || last?.role !== 'assistant') return;
+    const text = last.parts.map((p) => (p.kind === 'text' ? p.text : '')).join('\n');
+    const cards = Array.from(text.matchAll(CARD_TAG), (m) => (m[2] ? `${m[1]}:${m[2]}` : m[1]));
+    // A card the answer already went deep on needs no "tell me more".
+    const covered = new Set(last.parts.map((p) => (p.kind === 'tool' ? p.subject : undefined)));
+    const asked = new Set(Array.from(usedSuggestions, normalizeQuestion));
+    const fresh = (q: string) => !asked.has(normalizeQuestion(q));
+    const specific = Array.from(new Set(followUpsForCards(cards.filter((c) => !covered.has(c)))))
+      .filter(fresh)
+      .slice(0, 2);
+    // A general question about something the answer just covered would repeat it.
+    const shown = cards.map(cardSubjectName).filter((n): n is string => !!n);
+    const general = FOLLOW_UP_QUESTIONS.filter(
+      (q) => fresh(q) && !shown.some((name) => q.toLowerCase().includes(name))
+    );
+    const shuffled = [...general].sort(() => Math.random() - 0.5);
+    setCurrentSuggestions([...specific, ...shuffled].slice(0, 3));
+  }, [lastAnswered, last, usedSuggestions]);
 
   const stop = useCallback(() => abortRef.current?.abort(), []);
 
