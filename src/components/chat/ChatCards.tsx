@@ -17,7 +17,7 @@ import type { Experience, Project } from '@/types';
 // The rich cards the assistant places in its answers. They are drawn as boxes
 // in the terminal session: monospace, hairline borders, one accent color.
 
-const ACCENT = 'text-[#D97757]';
+const ACCENT = 'text-[#C8102E]';
 
 function Box({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -32,7 +32,7 @@ function Box({ label, children }: { label: string; children: React.ReactNode }) 
 
 function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
   const external = /^https?:/.test(href);
-  const className = 'underline-offset-2 transition-colors hover:text-[#D97757] hover:underline';
+  const className = 'underline-offset-2 transition-colors hover:text-[#C8102E] hover:underline';
   return external ? (
     <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
       {children} ↗
@@ -97,7 +97,7 @@ export function ProjectChatCard({ project }: { project: Project }) {
           className="h-full w-full object-cover"
         />
       )}
-      <span className="absolute bottom-2 left-2 flex items-center gap-1 rounded bg-black/70 px-1.5 py-0.5 text-[11px] text-white transition-colors group-hover:bg-[#D97757]">
+      <span className="absolute bottom-2 left-2 flex items-center gap-1 rounded bg-black/70 px-1.5 py-0.5 text-[11px] text-white transition-colors group-hover:bg-[#C8102E]">
         <Play className="h-3 w-3 fill-current" /> {formatDuration(video.duration)}
       </span>
     </button>
@@ -201,7 +201,7 @@ export function ResumeChatCard() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => track('chat_topic', 'resume_open')}
-            className="rounded px-2 py-1.5 text-[13px] text-foreground transition-colors hover:bg-accent hover:text-[#D97757]"
+            className="rounded px-2 py-1.5 text-[13px] text-foreground transition-colors hover:bg-accent hover:text-[#C8102E]"
           >
             open ↗
           </a>
@@ -210,7 +210,7 @@ export function ResumeChatCard() {
             download="Rutwik_Patel_Resume.pdf"
             aria-label="Download résumé"
             onClick={() => track('chat_topic', 'resume_download')}
-            className="flex items-center rounded px-2 py-1.5 text-foreground transition-colors hover:bg-accent hover:text-[#D97757]"
+            className="flex items-center rounded px-2 py-1.5 text-foreground transition-colors hover:bg-accent hover:text-[#C8102E]"
           >
             <Download className="h-4 w-4" />
           </a>
@@ -249,7 +249,7 @@ export function ContactChatCard() {
                 target={row.key === 'email' ? undefined : '_blank'}
                 rel="noopener noreferrer"
                 onClick={() => track('chat_topic', `contact:${row.key}`)}
-                className="truncate text-foreground underline-offset-2 transition-colors hover:text-[#D97757] hover:underline"
+                className="truncate text-foreground underline-offset-2 transition-colors hover:text-[#C8102E] hover:underline"
               >
                 {row.value}
               </a>
@@ -278,7 +278,7 @@ export function ContactChatCard() {
 }
 
 // Four shades of the accent, from an empty day to a busy one.
-const HEAT = ['bg-accent', 'bg-[#D97757]/35', 'bg-[#D97757]/65', 'bg-[#D97757]'];
+const HEAT = ['bg-accent', 'bg-[#C8102E]/35', 'bg-[#C8102E]/65', 'bg-[#C8102E]'];
 const heatLevel = (count: number) => (count === 0 ? 0 : count < 3 ? 1 : count < 8 ? 2 : 3);
 
 export function GitHubChatCard({ activity }: { activity: GitHubActivity }) {
@@ -292,7 +292,7 @@ export function GitHubChatCard({ activity }: { activity: GitHubActivity }) {
               href={activity.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-foreground underline-offset-2 hover:text-[#D97757] hover:underline"
+              className="font-semibold text-foreground underline-offset-2 hover:text-[#C8102E] hover:underline"
             >
               github.com/{activity.login}
             </a>
@@ -319,7 +319,7 @@ export function GitHubChatCard({ activity }: { activity: GitHubActivity }) {
                   href={repo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground underline-offset-2 hover:text-[#D97757] hover:underline"
+                  className="text-foreground underline-offset-2 hover:text-[#C8102E] hover:underline"
                 >
                   {repo.name}
                 </a>
