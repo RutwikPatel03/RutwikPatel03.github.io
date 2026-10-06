@@ -2,86 +2,81 @@
 
 import { motion } from 'motion/react';
 import Image from 'next/image';
+import { ArrowUpRight } from 'lucide-react';
 import { publications } from '@/data/content';
-import { Badge } from '@/components/ui/Badge';
-import { ExternalLink, Calendar, BookOpen } from 'lucide-react';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { PunchSlot } from '@/components/ui/Lanyard';
+import { cn } from '@/lib/utils';
+
+// Each paper is a press pass. IEEE gets the black band; the rest alternate
+// cardinal and gold so neighbors differ.
+const OTHER_BANDS = ['bg-cardinal text-white', 'bg-gold text-ink'];
+const TILTS = ['-rotate-[1.5deg]', 'rotate-1 lg:mt-9', '-rotate-[0.8deg]', 'rotate-[1.6deg] lg:mt-9'];
+
+const yearOf = (date: string) => date.match(/\d{4}/)?.[0] ?? date;
 
 export default function Publications() {
-  return (
-    <section id="publications" className="py-24 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
-            Publications
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Peer-reviewed research papers I&apos;ve authored
-          </p>
-        </motion.div>
+  const ieeeCount = publications.filter((p) => p.publisher === 'IEEE').length;
+  let other = 0;
 
-        {/* Publications Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {publications.map((pub, index) => (
-            <motion.a
-              key={pub.title}
-              href={pub.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-xl border border-border bg-muted/30 backdrop-blur-sm hover:border-border/80 transition-all"
-            >
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-3 sm:p-4">
-                {/* Publication Image */}
-                <div className="relative w-full sm:w-32 h-32 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+  return (
+    <section id="publications" className="bg-paper px-4 py-24 sm:px-6">
+      <div className="mx-auto max-w-[1320px]">
+        <SectionHeader
+          eyebrow="04 Publications"
+          title="Press"
+          accent="passes."
+          subtitle={`${publications.length} peer-reviewed papers on explainable AI, privacy and learning tools. ${ieeeCount} are in IEEE.`}
+        />
+
+        <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {publications.map((pub, index) => {
+            const isIeee = pub.publisher === 'IEEE';
+            const band = isIeee ? 'bg-ink text-paper' : OTHER_BANDS[other++ % OTHER_BANDS.length];
+            return (
+              <motion.a
+                key={pub.title}
+                href={pub.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                className={cn(
+                  'group flex flex-col overflow-hidden rounded-3xl bg-white shadow-[0_18px_40px_rgba(16,16,18,0.1)] transition-transform duration-300 hover:-translate-y-2',
+                  TILTS[index % TILTS.length]
+                )}
+              >
+                <PunchSlot />
+                <span className={cn('mx-3.5 flex items-center justify-between rounded-xl px-3.5 py-2.5', band)}>
+                  <span className="font-display text-lg font-extrabold">PRESS</span>
+                  <span className={cn('font-mono text-xs', isIeee && 'text-gold')}>
+                    {pub.publisher.toUpperCase()} · {yearOf(pub.date)}
+                  </span>
+                </span>
+                <span className="relative mx-3.5 mt-3 h-[150px] overflow-hidden rounded-xl border border-[#E2DCCD]">
                   <Image
                     src={pub.image}
-                    alt={pub.title}
+                    alt={`First page of ${pub.title}`}
                     fill
-                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover object-top"
                   />
-                </div>
-
-                {/* Publication Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <Badge variant="outline" className="text-[10px] sm:text-xs">
-                      {pub.publisher}
-                    </Badge>
-                    <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
-                      <Calendar className="w-3 h-3" />
-                      {pub.date}
-                    </div>
-                  </div>
-
-                  <h3 className="font-heading text-sm sm:text-base font-semibold text-foreground group-hover:text-blue-500 transition-colors line-clamp-2">
-                    {pub.title}
-                  </h3>
-
-                  <div className="mt-2 flex items-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
-                    <BookOpen className="w-3 h-3 shrink-0" />
-                    <span className="line-clamp-1">{pub.publishedIn}</span>
-                  </div>
-
-                  <div className="mt-2 flex items-center gap-1 text-xs text-blue-500 group-hover:text-blue-400">
-                    Read paper <ExternalLink className="w-3 h-3" />
-                  </div>
-                </div>
-              </div>
-            </motion.a>
-          ))}
+                </span>
+                <span className="flex flex-col gap-2 px-[18px] pb-5 pt-4">
+                  <span className="font-display text-xl font-extrabold leading-[1.15] tracking-[-0.02em] text-ink">{pub.title}</span>
+                  <span className="text-[13px] text-taupe">{pub.publishedIn}</span>
+                  <span className="mt-1.5 inline-flex items-center gap-1.5 text-sm font-semibold text-cardinal">
+                    {isIeee ? 'Read on IEEE Xplore' : 'Read the paper'}
+                    <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </span>
+                </span>
+              </motion.a>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
-
