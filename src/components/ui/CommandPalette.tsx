@@ -3,14 +3,15 @@
 import { useCallback, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { useCommandPalette } from '@/providers/CommandPaletteProvider';
-import { useTheme } from '@/providers/ThemeProvider';
+// import { useTheme } from '@/providers/ThemeProvider'; // theme action below
 import { useScrollToSection } from '@/hooks';
 import { siteConfig, socialLinks, externalLinks } from '@/constants';
 import { track } from '@/lib/analytics-client';
 import {
   User, Briefcase, FolderOpen, BookOpen, Mail,
   // MessageSquare, // testimonials entry below
-  Moon, Sun, Download, Bot, Github, Linkedin, Copy, X,
+  // Moon, Sun, // theme action below
+  Download, Bot, Github, Linkedin, Copy, X,
 } from 'lucide-react';
 
 type CommandItem = {
@@ -28,7 +29,7 @@ type CommandGroup = {
 
 export default function CommandPalette() {
   const { open, setOpen } = useCommandPalette();
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme(); // theme action below
   const scrollToSection = useScrollToSection();
 
   const go = useCallback((href: string) => {
@@ -51,12 +52,15 @@ export default function CommandPalette() {
     {
       heading: 'Actions',
       items: [
-        {
-          id: 'theme',
-          label: theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode',
-          icon: theme === 'dark' ? Sun : Moon,
-          onSelect: () => { toggleTheme(); setOpen(false); },
-        },
+        // TEMPORARILY HIDDEN (2026-10-06): dark mode is off while the site uses
+        // the ID badge design (see PINNED_THEME in ThemeProvider). Restore with
+        // the useTheme and Moon/Sun imports above.
+        // {
+        //   id: 'theme',
+        //   label: theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+        //   icon: theme === 'dark' ? Sun : Moon,
+        //   onSelect: () => { toggleTheme(); setOpen(false); },
+        // },
         {
           id: 'copy-email',
           label: 'Copy Email Address',

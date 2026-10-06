@@ -71,7 +71,7 @@ export function BentoCard({
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
       className={cn(
-        'relative overflow-hidden rounded-xl border border-border bg-muted/30 p-6 backdrop-blur-sm transition-colors hover:border-border/80',
+        'relative overflow-hidden rounded-3xl border border-line bg-white p-6 shadow-[0_10px_24px_rgba(16,16,18,0.06)] transition-colors hover:border-[#C9C1B0]',
         colSpanClasses[colSpan],
         rowSpanClasses[rowSpan],
         className
