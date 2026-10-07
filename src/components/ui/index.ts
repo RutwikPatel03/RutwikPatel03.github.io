@@ -20,6 +20,9 @@ export { Spinner, LoadingOverlay } from './Spinner';
 export { CopyButton } from './CopyButton';
 export { VisitorStats } from './VisitorStats';
 export { default as GitHubActivity } from './GitHubActivity';
+export { Barcode, code128Modules } from './Barcode';
+export { Lanyard, PunchSlot } from './Lanyard';
+export { IdBadge } from './IdBadge';
 
 // Re-export types
 export type { BadgeProps } from './Badge';

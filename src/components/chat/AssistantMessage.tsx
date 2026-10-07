@@ -15,7 +15,7 @@ import {
 } from './ChatCards';
 
 // The page is styled like a terminal session; this is its one accent color.
-export const ACCENT = 'text-[#D97757]';
+export const ACCENT = 'text-[#C8102E]';
 
 // Cycled while something is running, like a terminal spinner.
 const SPINNER_FRAMES = ['·', '✢', '✳', '✶', '✻', '✽'];
@@ -35,7 +35,7 @@ const PROSE = `text-foreground
   [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mb-1 [&_li]:[list-style:inherit]
   [&_h1]:mb-2 [&_h1]:font-semibold [&_h2]:mb-2 [&_h2]:font-semibold [&_h3]:mb-2 [&_h3]:font-semibold
   [&_strong]:font-semibold [&_code]:rounded [&_code]:bg-accent [&_code]:px-1
-  [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-[#D97757]`;
+  [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-[#C8102E]`;
 
 type Segment = { kind: 'text'; text: string } | { kind: 'card'; card: CardKind; id?: string };
 

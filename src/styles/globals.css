@@ -6,25 +6,27 @@
   #CSS VARIABLES - Theme System
 \*-----------------------------------*/
 
-/* Light Theme (Default) */
+/* Light Theme (Default). These are the ID badge colors: warm paper, ink, and
+   USC cardinal. Components that read the tokens (the chat, the admin
+   dashboard, blog prose) pick the look up without their own changes. */
 :root, .light {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+  --background: #F3F0E8;
+  --foreground: #101012;
 
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --muted: #E9E4D8;
+  --muted-foreground: #5E5950;
 
-  --accent: #f4f4f5;
-  --accent-foreground: #0a0a0a;
+  --accent: #E9E4D8;
+  --accent-foreground: #101012;
 
-  --border: #e4e4e7;
-  --ring: #a1a1aa;
+  --border: #D8D1C2;
+  --ring: #8C867B;
 
-  --primary: #3b82f6;
+  --primary: #C8102E;
   --primary-foreground: #ffffff;
 
   --card: #ffffff;
-  --card-foreground: #0a0a0a;
+  --card-foreground: #101012;
 }
 
 /* Dark Theme */
@@ -95,6 +97,38 @@
   }
   .skip-to-content:focus {
     transform: translateY(0);
+  }
+}
+
+/*-----------------------------------*\
+  #ID BADGE DETAILS
+\*-----------------------------------*/
+@layer components {
+  /* Dotted paper behind the hero and the 404. */
+  .bg-dots {
+    background-image: radial-gradient(#D8D1C2 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* The slot a lanyard clip goes through, punched into the top of a card. */
+  .punch-slot {
+    display: block;
+    width: 3.25rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background-color: #E9E4D8;
+    box-shadow: inset 0 2px 3px rgba(16, 16, 18, 0.25);
+  }
+
+  /* Both faces of a flipping card. */
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .card-face-back {
+    transform: rotateY(180deg);
   }
 }
 

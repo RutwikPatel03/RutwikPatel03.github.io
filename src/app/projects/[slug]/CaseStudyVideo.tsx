@@ -45,11 +45,11 @@ export function CaseStudyVideo({ video, alt, trackingId, badge }: CaseStudyVideo
       <Image src={video.poster} alt={alt} fill className="object-cover" priority />
       <span className="absolute inset-0 bg-black/25 transition-colors group-hover:bg-black/10" />
       <span className="absolute inset-0 flex items-center justify-center">
-        <span className="flex items-center gap-3 rounded-full bg-white pl-5 pr-6 py-3.5 text-neutral-900 shadow-2xl shadow-black/40 transition-transform duration-200 group-hover:scale-105 group-active:scale-95">
+        <span className="flex items-center gap-3 rounded-full bg-gold pl-5 pr-6 py-3.5 text-ink shadow-2xl shadow-black/40 transition-transform duration-200 group-hover:scale-105 group-active:scale-95">
           <Play className="w-6 h-6 fill-current" />
           <span className="text-sm sm:text-base font-semibold">
             Watch the demo
-            <span className="ml-2 font-normal text-neutral-500 tabular-nums">
+            <span className="ml-2 font-normal text-ink/60 tabular-nums">
               {Math.round(video.duration)}s
             </span>
           </span>

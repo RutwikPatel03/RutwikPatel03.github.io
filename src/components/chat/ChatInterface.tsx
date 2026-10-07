@@ -306,7 +306,7 @@ export default function ChatInterface({ posts }: { posts: PostMeta[] }) {
       <div ref={messagesContainerRef} onScroll={handleScroll} className="flex-1 overflow-y-scroll">
         <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-8 text-sm sm:text-[15px] leading-relaxed">
           {/* Welcome box, shown at the top of every session like a terminal banner */}
-          <div className="rounded-lg border border-[#D97757]/70 px-4 py-3 sm:px-5 sm:py-4">
+          <div className="rounded-lg border border-[#C8102E]/70 px-4 py-3 sm:px-5 sm:py-4">
             <p className="text-foreground">
               <span className={ACCENT} aria-hidden="true">✻ </span>
               Welcome to <span className="font-semibold">Rutwik&apos;s AI</span>
@@ -329,7 +329,7 @@ export default function ChatInterface({ posts }: { posts: PostMeta[] }) {
                       onClick={() => runCommand(c)}
                       className="group -mx-2 flex w-full items-baseline gap-4 rounded px-2 py-1.5 text-left transition-colors hover:bg-accent"
                     >
-                      <span className="w-28 shrink-0 text-foreground transition-colors group-hover:text-[#D97757]">
+                      <span className="w-28 shrink-0 text-foreground transition-colors group-hover:text-[#C8102E]">
                         {c.command}
                       </span>
                       <span className="text-muted-foreground">{c.label}</span>
@@ -399,7 +399,7 @@ export default function ChatInterface({ posts }: { posts: PostMeta[] }) {
                           track('chat_topic', 'follow_up');
                           sendMessage(suggestion);
                         }}
-                        className="text-left transition-colors hover:text-[#D97757]"
+                        className="text-left transition-colors hover:text-[#C8102E]"
                       >
                         {suggestion}
                       </button>
@@ -459,7 +459,7 @@ export default function ChatInterface({ posts }: { posts: PostMeta[] }) {
                 type="button"
                 onClick={stop}
                 aria-label="Stop"
-                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded text-[#D97757] transition-colors hover:bg-accent"
+                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded text-[#C8102E] transition-colors hover:bg-accent"
               >
                 <Square className="w-3.5 h-3.5 fill-current" />
               </button>
@@ -468,7 +468,7 @@ export default function ChatInterface({ posts }: { posts: PostMeta[] }) {
                 type="submit"
                 aria-label="Send"
                 disabled={!input.trim()}
-                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-accent hover:text-[#D97757] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground"
+                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-accent hover:text-[#C8102E] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground"
               >
                 <CornerDownLeft className="w-4 h-4" />
               </button>

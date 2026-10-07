@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Menu, X, Download, Sparkles, Search } from 'lucide-react';
-import ThemeToggle from '@/components/ui/ThemeToggle';
+import { Menu, X, Download, MessageCircle, Search } from 'lucide-react';
+// TEMPORARILY HIDDEN (2026-10-06): the theme toggle is off while the site uses
+// the ID badge design (see PINNED_THEME in ThemeProvider). Restore the import
+// and the two <ThemeToggle /> spots below.
+// import ThemeToggle from '@/components/ui/ThemeToggle';
 import { VisitorStats } from '@/components/ui/VisitorStats';
-import { navItems, externalLinks, siteConfig } from '@/constants';
+import { navItems, externalLinks } from '@/constants';
 import { useScrollToSection, useScrolled } from '@/hooks';
 import { useCommandPalette } from '@/providers/CommandPaletteProvider';
 import { useSmoothScrollControls } from '@/providers/SmoothScrollProvider';
@@ -57,78 +60,88 @@ export default function Header() {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled
-          ? 'bg-background/80 backdrop-blur-lg border-b border-border'
-          : isMenuOpen
-            ? 'bg-background backdrop-blur-lg border-b border-border'
-            : 'bg-transparent'
+        isScrolled || isMenuOpen
+          ? 'bg-paper/90 backdrop-blur-lg border-b border-line'
+          : 'bg-transparent'
       )}
     >
       {/* Progress bar */}
       <motion.div
-        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+        className="absolute bottom-0 left-0 h-[3px] bg-cardinal"
         style={{ width: progressWidth }}
       />
 
-      <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+      <nav className="mx-auto max-w-[1320px] px-4 sm:px-6">
+        <div className="flex h-[72px] items-center justify-between gap-4">
+          {/* Wordmark */}
           <Link
             href="/"
-            className="-ml-2 flex min-h-11 items-center gap-2 px-2 font-heading text-xl font-semibold text-foreground hover:opacity-80 transition-opacity"
+            className="-ml-2 flex min-h-11 flex-col justify-center px-2 hover:opacity-80 transition-opacity"
             aria-label="Home"
           >
-            <span className="text-2xl">{siteConfig.logo}</span>
+            <span className="font-display text-[17px] font-extrabold leading-none tracking-[-0.02em] text-ink">
+              rutwik.dev
+            </span>
+            <span className="mt-1 font-mono text-[11px] leading-none tracking-[0.12em] text-taupe">ALL ACCESS</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1 rounded-full border border-line bg-white p-[5px]">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => handleNavClick(item.href)}
-                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent"
+                className="rounded-full px-4 py-2.5 text-sm text-ink transition-colors hover:bg-ink hover:text-paper"
               >
                 {item.name}
               </button>
             ))}
           </div>
 
-          {/* Desktop CTA Buttons */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Desktop CTA Buttons. Search and Resume only fit beside the nav
+              from xl up; below that they are in the menu and the palette. */}
+          <div className="hidden lg:flex items-center gap-3">
             <button
               onClick={togglePalette}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-muted-foreground border border-border rounded-lg hover:bg-accent hover:text-foreground transition-colors"
+              className="hidden xl:flex items-center gap-1.5 rounded-full border border-line px-3 py-2 text-xs text-taupe transition-colors hover:border-ink hover:text-ink"
               aria-label="Open command palette"
             >
+              <Search className="h-3.5 w-3.5" />
               <span>Search</span>
-              <kbd className="font-mono text-[10px] bg-muted px-1 py-0.5 rounded">⌘K</kbd>
+              <kbd className="rounded bg-paper-deep px-1 py-0.5 font-mono text-[10px]">⌘K</kbd>
             </button>
-            <div className="w-px h-4 bg-border" />
-            <VisitorStats variant="minimal" />
-            <div className="w-px h-4 bg-border" />
-            <ThemeToggle />
+            <span className="hidden xl:inline-flex">
+              <VisitorStats variant="minimal" />
+            </span>
+            {/* <ThemeToggle /> */}
             <a
               href={externalLinks.resume}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track('resume_download', 'header')}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
+              className="hidden xl:flex items-center gap-2 rounded-full border-[1.5px] border-ink px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-paper"
             >
-              <Download className="w-4 h-4" />
+              <Download className="h-4 w-4" />
               Resume
             </a>
+            <Link
+              href={externalLinks.aiChat}
+              className="flex items-center gap-2 rounded-full bg-cardinal px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cardinal-deep"
+            >
+              Ask my AI
+              <MessageCircle className="h-4 w-4" />
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+            className="lg:hidden flex h-11 w-11 items-center justify-center rounded-[14px] border border-line bg-white text-ink"
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
@@ -139,14 +152,14 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden absolute top-16 left-0 right-0 bg-background backdrop-blur-lg border-b border-border shadow-lg"
+            className="lg:hidden absolute top-[72px] left-0 right-0 border-b border-line bg-paper shadow-lg"
           >
-            <div className="flex flex-col gap-2 p-4">
+            <div className="flex flex-col gap-1 p-4">
               {navItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => handleNavClick(item.href)}
-                  className="px-4 py-3 text-left text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                  className="rounded-xl px-4 py-3 text-left font-display text-lg font-semibold text-ink transition-colors hover:bg-paper-deep"
                 >
                   {item.name}
                 </button>
@@ -158,23 +171,24 @@ export default function Header() {
                   setIsMenuOpen(false);
                   togglePalette();
                 }}
-                className="flex items-center gap-2 px-4 py-3 text-left text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                className="flex items-center gap-2 rounded-xl px-4 py-3 text-left text-taupe transition-colors hover:bg-paper-deep hover:text-ink"
               >
-                <Search className="w-4 h-4" />
+                <Search className="h-4 w-4" />
                 Search
               </button>
+              {/* TEMPORARILY HIDDEN (2026-10-06): theme row, see the import above.
               <div className="flex items-center justify-between mt-4 px-4 pt-4 border-t border-border">
                 <span className="text-sm text-muted-foreground">Theme</span>
                 <ThemeToggle />
-              </div>
-              <div className="flex gap-2 mt-4 px-4">
+              </div> */}
+              <div className="mt-3 flex gap-2 border-t border-line px-1 pt-4">
                 <Link
                   href={externalLinks.aiChat}
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm text-muted-foreground border border-border rounded-lg hover:bg-accent transition-colors"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-cardinal px-4 py-3 text-sm font-semibold text-white"
                 >
-                  <Sparkles className="w-4 h-4" />
-                  Ask AI
+                  <MessageCircle className="h-4 w-4" />
+                  Ask my AI
                 </Link>
                 <a
                   href={externalLinks.resume}
@@ -184,9 +198,9 @@ export default function Header() {
                     track('resume_download', 'mobile_menu');
                     setIsMenuOpen(false);
                   }}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium bg-foreground text-background rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full border-[1.5px] border-ink px-4 py-3 text-sm font-medium text-ink"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="h-4 w-4" />
                   Resume
                 </a>
               </div>
@@ -197,4 +211,3 @@ export default function Header() {
     </header>
   );
 }
-

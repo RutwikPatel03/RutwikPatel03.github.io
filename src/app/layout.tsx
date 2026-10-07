@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Poppins } from 'next/font/google';
+import { Bricolage_Grotesque, Instrument_Serif } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import Script from 'next/script';
 import { MotionConfig } from 'motion/react';
 import { Analytics } from '@vercel/analytics/react';
@@ -11,19 +13,26 @@ import CommandPalette from '@/components/ui/CommandPalette';
 import SiteAnalytics from '@/components/analytics/SiteAnalytics';
 import '@/styles/globals.css';
 
-const inter = Inter({
+// Geist (body and mono) comes from the geist package, which self-hosts it
+// through next/font/local; Next 14's Google font list does not include it.
+
+// Display face for headings and the big badge type.
+const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['400', '600', '800'],
+  variable: '--font-bricolage',
   display: 'swap', // Prevent FOIT (Flash of Invisible Text)
   preload: true,
 });
 
-const poppins = Poppins({
+// Only ever set in italic, for the one accent word in each heading.
+const instrumentSerif = Instrument_Serif({
   subsets: ['latin'],
-  weight: ['400', '500', '600'], // Removed 300 - rarely used, saves ~12KB
-  variable: '--font-poppins',
-  display: 'swap', // Prevent FOIT
-  preload: true,
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-instrument',
+  display: 'swap',
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -112,10 +121,14 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
-  ],
+  // TEMPORARILY HIDDEN (2026-10-06): dark mode is off while the site uses the
+  // ID badge design, so the browser bar matches the paper in both OS modes.
+  // Original:
+  // themeColor: [
+  //   { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+  //   { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  // ],
+  themeColor: '#F3F0E8',
 };
 
 export default function RootLayout({
@@ -332,7 +345,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${poppins.variable} font-sans antialiased`}>
+      <body
+        className={`${GeistSans.variable} ${GeistMono.variable} ${bricolage.variable} ${instrumentSerif.variable} font-sans antialiased`}
+      >
         <a href="#main-content" className="skip-to-content">Skip to content</a>
         <MotionConfig reducedMotion="user">
           <ThemeProvider>
