@@ -146,7 +146,9 @@ export default function BlogPost({ params }: Props) {
             )}
 
             {/* MDX Content */}
-            <article className="prose prose-neutral min-w-0 max-w-[720px] flex-[999_1_560px] text-[#24221F]
+            {/* overflow-wrap:anywhere lets long bare URLs in a post break
+                instead of running off a narrow phone. */}
+            <article className="prose prose-neutral min-w-0 max-w-[720px] flex-[999_1_560px] text-[#24221F] [overflow-wrap:anywhere]
               prose-p:text-[19px] prose-p:leading-[1.7] prose-li:text-[18px]
               prose-headings:font-display prose-headings:font-extrabold prose-headings:tracking-[-0.03em] prose-headings:text-ink
               prose-h2:text-[34px] prose-h2:leading-[1.05]

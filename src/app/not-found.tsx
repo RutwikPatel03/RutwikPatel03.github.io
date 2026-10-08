@@ -13,8 +13,9 @@ export default function NotFound() {
     >
       <div className="mx-auto flex w-full max-w-[1120px] flex-wrap items-center justify-center gap-16">
         {/* A voided badge */}
-        <div className="relative w-[300px] shrink-0">
-          <div className="flex h-[440px] w-[300px] -rotate-[4deg] flex-col overflow-hidden rounded-[26px] bg-white shadow-[0_40px_80px_rgba(16,16,18,0.18)]">
+        {/* Fluid up to 300px, so the tilted card fits a 320px phone. */}
+        <div className="relative w-full max-w-[300px] shrink-0">
+          <div className="flex h-[440px] w-full -rotate-[4deg] flex-col overflow-hidden rounded-[26px] bg-white shadow-[0_40px_80px_rgba(16,16,18,0.18)]">
             <PunchSlot />
             <div className="mx-3.5 flex items-center justify-between rounded-[14px] bg-ink px-3.5 py-3 text-paper">
               <span className="font-display text-xl font-extrabold">ERROR</span>
