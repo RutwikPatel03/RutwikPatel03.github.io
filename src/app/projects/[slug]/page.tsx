@@ -104,7 +104,9 @@ export default function ProjectCaseStudy({ params }: Props) {
               <span className="self-start rounded-full bg-cardinal px-3 py-1.5 font-mono text-xs tracking-[0.1em] text-white">
                 {CATEGORY_LABELS[project.category] ?? project.category.toUpperCase()} · CASE STUDY
               </span>
-              <h1 className="font-display text-[clamp(52px,7vw,104px)] font-extrabold leading-[0.88] tracking-[-0.055em] text-ink">
+              {/* 40px floor and break-words: one-word names like "RoomReserve"
+                  are wider than a 320px phone at larger sizes. */}
+              <h1 className="break-words font-display text-[clamp(40px,7vw,104px)] font-extrabold leading-[0.88] tracking-[-0.055em] text-ink">
                 {name}
               </h1>
               {subtitle && (
@@ -132,9 +134,10 @@ export default function ProjectCaseStudy({ params }: Props) {
               </div>
             </div>
 
-            <div className="mx-auto flex flex-[0_0_320px] flex-col items-center">
+            {/* Fluid up to 320px, so it fits a 320px phone inside the page padding. */}
+            <div className="mx-auto flex w-full max-w-[320px] flex-[0_1_320px] flex-col items-center">
               <Lanyard color="#C8102E" length={70} />
-              <div className="mt-1 w-[320px] rotate-2 overflow-hidden rounded-[26px] bg-white shadow-[0_36px_70px_rgba(16,16,18,0.18)]">
+              <div className="mt-1 w-full rotate-2 overflow-hidden rounded-[26px] bg-white shadow-[0_36px_70px_rgba(16,16,18,0.18)]">
                 <PunchSlot />
                 <div className="mx-3.5 flex items-center justify-between rounded-[14px] bg-ink px-3.5 py-3 text-paper">
                   <span className="font-display text-lg font-extrabold">PROJECT PASS</span>

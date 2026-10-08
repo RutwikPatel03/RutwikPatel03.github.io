@@ -33,7 +33,10 @@ export function SectionHeader({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      // A page title (h1) is there on arrival, so it skips the fade-in: the
+      // fade starts at opacity 0 in the server HTML, leaving the title hidden
+      // until scripts run.
+      initial={Heading === 'h1' ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}

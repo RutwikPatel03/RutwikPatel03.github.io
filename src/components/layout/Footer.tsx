@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Linkedin, Github, Mail } from 'lucide-react';
+import { useCurrentYear } from '@/hooks/useCurrentYear';
 
 const socialLinks = [
   { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/rutwikpatel13' },
@@ -19,7 +20,9 @@ const navLinks = [
 ];
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  // Read after mount: the footer is prerendered, so a render-time year would
+  // be the build year and mismatch on hydration once the year turns.
+  const currentYear = useCurrentYear();
 
   return (
     <footer className="border-t border-white/10 bg-ink text-paper">
@@ -29,7 +32,7 @@ export default function Footer() {
             rutwik.dev
           </Link>
           <p className="font-mono text-xs tracking-[0.08em] text-[#A8A296]">
-            © {currentYear} RUTWIK PATEL · FOCUSED ON IMPACT, NOT JUST CODE
+            © {currentYear && `${currentYear} `}RUTWIK PATEL · FOCUSED ON IMPACT, NOT JUST CODE
           </p>
         </div>
 

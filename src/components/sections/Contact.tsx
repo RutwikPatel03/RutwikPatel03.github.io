@@ -177,9 +177,10 @@ export default function Contact() {
 
           {/* The visitor badge, filled in live */}
           <div className="mx-auto flex flex-[0_1_340px] flex-col items-center pt-5">
-            <div className="flex animate-swing flex-col items-center [transform-origin:50%_-120px]">
+            <div className="flex w-full animate-swing flex-col items-center [transform-origin:50%_-120px]">
               <Lanyard color="#FFCC00" length={120} />
-              <div className="mt-1 w-[300px] overflow-hidden rounded-3xl bg-white text-ink shadow-[0_40px_80px_rgba(0,0,0,0.55)]">
+              {/* Fluid up to 300px, so the swinging badge fits a 320px phone. */}
+              <div className="mt-1 w-full max-w-[300px] overflow-hidden rounded-3xl bg-white text-ink shadow-[0_40px_80px_rgba(0,0,0,0.55)]">
                 <PunchSlot />
                 <div className="mx-3.5 flex items-center justify-between rounded-[14px] bg-gold p-3.5">
                   <span className="font-display text-[26px] font-extrabold tracking-[-0.01em]">VISITOR</span>

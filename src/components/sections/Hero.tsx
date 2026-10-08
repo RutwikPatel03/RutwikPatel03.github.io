@@ -46,8 +46,7 @@ export default function Hero() {
           {/* Hangs from the bottom edge of the header rather than through it. */}
           <Lanyard length={120} label="RUTWIK.DEV · ALL ACCESS" className="-mt-6" />
           <div className="-mt-1 animate-sway [transform-origin:50%_-200px]">
-            <IdBadge compact className="sm:hidden" />
-            <IdBadge className="hidden sm:block" />
+            <IdBadge />
           </div>
           <span className="mt-5 font-mono text-xs uppercase tracking-[0.12em] text-taupe">
             <span className="hidden md:inline">Move to tilt · </span>Click to flip
