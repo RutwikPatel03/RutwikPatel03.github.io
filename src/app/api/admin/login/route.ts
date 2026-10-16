@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   try {
     const { token } = await request.json();
     if (!isValidToken(token)) {
-      return ApiErrors.unauthorized('Incorrect token');
+      return ApiErrors.unauthorized('Incorrect password');
     }
 
     const response = NextResponse.json({ success: true });

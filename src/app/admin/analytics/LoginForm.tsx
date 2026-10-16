@@ -24,7 +24,7 @@ export default function LoginForm({ configured }: { configured: boolean }) {
         return;
       }
       const data = await response.json().catch(() => ({}));
-      setError(data.error || 'Incorrect token');
+      setError(data.error || 'Incorrect password');
     } catch {
       setError('Could not reach the server');
     } finally {
@@ -51,7 +51,7 @@ export default function LoginForm({ configured }: { configured: boolean }) {
               type="password"
               value={token}
               onChange={(e) => setToken(e.target.value)}
-              placeholder="Access token"
+              placeholder="Password"
               autoFocus
               className="w-full px-4 py-3 rounded-lg border border-border bg-muted/30 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
             />
@@ -62,7 +62,7 @@ export default function LoginForm({ configured }: { configured: boolean }) {
           </form>
         ) : (
           <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
-            <p className="text-sm text-foreground font-medium">No access token configured</p>
+            <p className="text-sm text-foreground font-medium">No password configured</p>
             <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
               Set <code className="font-mono text-amber-500">ANALYTICS_ADMIN_TOKEN</code> in your
               environment and redeploy. Until then this dashboard stays closed rather than open.
