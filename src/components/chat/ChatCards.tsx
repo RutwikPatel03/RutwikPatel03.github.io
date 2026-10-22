@@ -58,6 +58,7 @@ function Chips({ items }: { items: readonly string[] }) {
 
 function linkLabel(url: string): string {
   if (url.includes('apps.apple.com')) return 'App Store';
+  if (url.includes('chromewebstore.google.com')) return 'Chrome Web Store';
   if (url.includes('github.com')) return 'code';
   if (url.includes('youtube.com')) return 'demo video';
   if (url.includes('/docs')) return 'live API docs';

@@ -264,9 +264,10 @@ export const projects: Project[] = [
     category: 'web development',
     image: '/videos/pr-lens.jpg',
     imageAlt: 'PR Lens, a Chrome extension that opens a side panel on a GitHub pull request with a summary, a review order, risk flags that jump to the exact line, and answers about the change, built with React, TypeScript, Hono and Cloudflare Workers by Rutwik Patel',
-    link: 'https://github.com/RutwikPatel13/pr-lens',
-    description: 'A Chrome extension for reviewing GitHub pull requests: a side panel with a plain-English summary, a suggested review order, risk flags that jump to the exact line, and answers to questions about the change with clickable sources. A rule engine flags migrations, destructive drops, auth code and possible secrets on every file, then free LLM tiers (Groq, Gemini and OpenRouter, with fallback) write the summary on a Hono backend on Cloudflare Workers, cached by head commit. Every line the model cites is checked against the diff, and it never posts to GitHub.',
+    link: 'https://chromewebstore.google.com/detail/pr-lens/kpnecmaddfhjedpoohbndleebhepokdo',
+    description: 'A Chrome extension, live on the Chrome Web Store, for reviewing GitHub pull requests: a side panel with a plain-English summary, a suggested review order, risk flags that jump to the exact line, and answers to questions about the change with clickable sources. A rule engine flags migrations, destructive drops, auth code and possible secrets on every file, then free LLM tiers (Groq, Gemini and OpenRouter, with fallback) write the summary on a Hono backend on Cloudflare Workers, cached by head commit. Every line the model cites is checked against the diff, and it never posts to GitHub.',
     tech: ['TypeScript', 'React', 'Chrome Extension', 'Hono', 'Cloudflare Workers', 'LLM', 'Zod'],
+    isLive: true,
     video: {
       src: '/videos/pr-lens.mp4',
       preview: '/videos/pr-lens-preview.mp4',
